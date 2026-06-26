@@ -775,7 +775,7 @@ function renderWeek() {
   let html = '';
   for(let i=0;i<7;i++){
     const dd = new Date(mon); dd.setDate(mon.getDate()+i);
-    const ds = dd.toISOString().slice(0,10);
+    const ds = dd.getFullYear()+'-'+String(dd.getMonth()+1).padStart(2,'0')+'-'+String(dd.getDate()).padStart(2,'0');
     const w = DB.workouts.find(x=>x.date===ds);
     const isTd = ds===TODAY;
     // 記録済みならその種別、なければ予定プランの色
@@ -793,9 +793,8 @@ function renderWeek() {
     </div>`;
   }
   document.getElementById('wgrid').innerHTML = html;
-  // 今日のセルを初期選択
-  const _todayGi = [6,0,1,2,3,4,5][todayDow];
-  document.querySelectorAll('#wgrid .day')[_todayGi]?.classList.add('viewing');
+  // 今日のセルを初期選択（todayDow未定義でも動くよう .today クラスで特定）
+  document.getElementById('wgrid').querySelector('.day.today')?.classList.add('viewing');
 }
 renderWeek();
 
