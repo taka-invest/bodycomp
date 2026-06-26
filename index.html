@@ -582,6 +582,29 @@ async function syncPush(){
     setSyncDot(r.ok?'ok':'err');
   }catch(e){ setSyncDot('err'); }
 }
+async function syncImgPush(){
+  const images={};
+  for(const k of Object.keys(localStorage)){
+    if(k.startsWith('ex_img_v1_')) images[k.slice(10)]=localStorage.getItem(k);
+  }
+  try{
+    await fetch(SB_URL+'/rest/v1/sync_data',{
+      method:'POST',
+      headers:{...sbH(),'Prefer':'resolution=merge-duplicates'},
+      body:JSON.stringify({id:'taka-images',payload:{images},synced_at:new Date().toISOString()})
+    });
+  }catch(e){}
+}
+async function syncImgPull(){
+  try{
+    const r=await fetch(SB_URL+'/rest/v1/sync_data?id=eq.taka-images&select=payload',{headers:sbH()});
+    const data=await r.json();
+    if(!data.length) return;
+    const images=data[0].payload?.images||{};
+    Object.entries(images).forEach(([name,b64])=>{ try{ localStorage.setItem('ex_img_v1_'+name,b64); }catch(e){} });
+    loadExImgs();
+  }catch(e){}
+}
 async function syncPull(){
   setSyncDot('busy');
   try{
@@ -610,7 +633,8 @@ async function syncPull(){
 }
 
 // ── UTILS ─────────────────────────────────────────────
-const TODAY = '2026-06-26';
+const _d = new Date();
+const TODAY = _d.getFullYear()+'-'+String(_d.getMonth()+1).padStart(2,'0')+'-'+String(_d.getDate()).padStart(2,'0');
 const fd = d => { const x=new Date(d+'T00:00:00'); return (x.getMonth()+1)+'/'+x.getDate(); };
 const isDark = () => matchMedia('(prefers-color-scheme: dark)').matches;
 const gc = () => isDark() ? '#8e8e93' : '#8e8e93';
@@ -631,9 +655,10 @@ function go(s) {
   cur = s;
   if(s==='train'){ renderProgram(); renderVol(); }
 }
-document.getElementById('hdate').textContent = '2026年6月26日（木）';
+document.getElementById('hdate').textContent = `${_d.getFullYear()}年${_d.getMonth()+1}月${_d.getDate()}日（${'日月火水木金土'[_d.getDay()]}）`;
 document.getElementById('hbtn').style.display = 'block';
 syncPull();
+syncImgPull();
 
 // ── LATEST MEASUREMENT ────────────────────────────────
 function latestM() {
@@ -1552,6 +1577,7 @@ function exImgApply(name, file){
       const dataUrl = cv.toDataURL('image/jpeg', 0.82);
       try{ localStorage.setItem(exImgKey(name), dataUrl); }catch(e){}
       exImgDisplay(name, dataUrl);
+      syncImgPush();
     };
     tmp.src = ev.target.result;
   };
