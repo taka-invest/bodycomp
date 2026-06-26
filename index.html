@@ -56,6 +56,11 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 .header h1{font-size:17px;font-weight:600;letter-spacing:-0.02em;}
 .header .hdate{font-size:12px;color:var(--text3);margin-top:1px;}
 .header .hbtn{position:absolute;right:16px;top:calc(var(--safe-top) + 10px);font-size:13px;color:var(--blue);background:none;border:none;padding:4px 0;cursor:pointer;}
+.sync-dot{position:absolute;left:16px;top:calc(var(--safe-top) + 17px);width:8px;height:8px;border-radius:50%;background:var(--border);transition:background .4s;}
+.sync-ok{background:#34c759!important;}
+.sync-busy{background:#ff9500!important;animation:sblink .6s infinite alternate;}
+.sync-err{background:#ff3b30!important;}
+@keyframes sblink{from{opacity:1}to{opacity:.2}}
 
 .content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px calc(var(--nav-h) + 8px);}
 
@@ -314,6 +319,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
 
 <!-- Header -->
 <div class="header">
+  <span id="sync-dot" class="sync-dot" title="同期待機中"></span>
   <h1 id="htitle">BodyComp</h1>
   <div class="hdate" id="hdate"></div>
   <button class="hbtn" id="hbtn" onclick="headerAction()" style="display:none">書き出し</button>
@@ -549,7 +555,58 @@ const SEED = {
   workouts:[],meals:[],sleep:[],shopping:[],todayProgress:{date:'',checked:{}}
 };
 let DB = JSON.parse(localStorage.getItem('bc_db')||'null') || JSON.parse(JSON.stringify(SEED));
-const save = () => localStorage.setItem('bc_db', JSON.stringify(DB));
+const save = () => { DB._ts=Date.now(); localStorage.setItem('bc_db',JSON.stringify(DB)); syncSchedule(); };
+
+// ── SUPABASE SYNC ──────────────────────────────────────
+const SB_URL='https://lsmghehgpqizbvthgxil.supabase.co';
+const SB_KEY='sb_publishable_6sryVP8-c2kYE6mdXuEHOg_ayabv7X7';
+const SB_ID='taka';
+const sbH=()=>({'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY});
+let _syncT=null;
+function setSyncDot(s){
+  const el=document.getElementById('sync-dot');
+  if(!el) return;
+  el.className='sync-dot'+(s==='ok'?' sync-ok':s==='busy'?' sync-busy':s==='err'?' sync-err':'');
+  el.title=s==='ok'?'同期済み':s==='busy'?'同期中...':s==='err'?'同期エラー（オフライン？）':'同期待機中';
+}
+function syncSchedule(){ clearTimeout(_syncT); _syncT=setTimeout(syncPush,1500); }
+async function syncPush(){
+  setSyncDot('busy');
+  try{
+    const r=await fetch(SB_URL+'/rest/v1/sync_data',{
+      method:'POST',
+      headers:{...sbH(),'Prefer':'resolution=merge-duplicates'},
+      body:JSON.stringify({id:SB_ID,payload:{...DB},synced_at:new Date().toISOString()})
+    });
+    setSyncDot(r.ok?'ok':'err');
+  }catch(e){ setSyncDot('err'); }
+}
+async function syncPull(){
+  setSyncDot('busy');
+  try{
+    const r=await fetch(SB_URL+'/rest/v1/sync_data?id=eq.'+SB_ID+'&select=payload,synced_at',{headers:sbH()});
+    const data=await r.json();
+    if(!data.length){ syncPush(); return; }
+    const rem=data[0].payload||{};
+    // 体組成記録は日付単位でマージ（両デバイスのデータを保持、リモート優先）
+    const mMap={};
+    (DB.measurements||[]).forEach(m=>mMap[m.date]=m);
+    (rem.measurements||[]).forEach(m=>mMap[m.date]=m);
+    DB.measurements=Object.values(mMap).sort((a,b)=>a.date.localeCompare(b.date));
+    // その他の配列はリモートが新しければ上書き
+    if((rem._ts||0)>(DB._ts||0)){
+      if(rem.workouts?.length)  DB.workouts=rem.workouts;
+      if(rem.meals?.length)     DB.meals=rem.meals;
+      if(rem.sleep?.length)     DB.sleep=rem.sleep;
+      if(rem.shopping?.length)  DB.shopping=rem.shopping;
+      if(rem.todayProgress?.date===TODAY) DB.todayProgress=rem.todayProgress;
+    }
+    DB._ts=Math.max(DB._ts||0,rem._ts||0);
+    localStorage.setItem('bc_db',JSON.stringify(DB));
+    refreshMetrics?.();
+    setSyncDot('ok');
+  }catch(e){ setSyncDot('err'); }
+}
 
 // ── UTILS ─────────────────────────────────────────────
 const TODAY = '2026-06-26';
@@ -575,6 +632,7 @@ function go(s) {
 }
 document.getElementById('hdate').textContent = '2026年6月26日（木）';
 document.getElementById('hbtn').style.display = 'block';
+syncPull();
 
 // ── LATEST MEASUREMENT ────────────────────────────────
 function latestM() {
