@@ -149,6 +149,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
 .day.hiit{background:rgba(255,149,0,.15);color:var(--orange);}
 .day.cardio{background:rgba(90,200,250,.15);color:#5ac8fa;}
 .day.today{border:2px solid var(--blue);}
+.day.viewing{outline:2px solid var(--text2);outline-offset:-2px;}
 
 /* ── Progress bar ── */
 .pbar{height:7px;background:var(--border);border-radius:99px;overflow:hidden;margin-top:6px;}
@@ -792,10 +793,14 @@ function renderWeek() {
     </div>`;
   }
   document.getElementById('wgrid').innerHTML = html;
+  // 今日のセルを初期選択
+  const _todayGi = [6,0,1,2,3,4,5][todayDow];
+  document.querySelectorAll('#wgrid .day')[_todayGi]?.classList.add('viewing');
 }
 renderWeek();
 
 function showDayPlan(gridIdx) {
+  document.querySelectorAll('#wgrid .day').forEach((el,j)=>el.classList.toggle('viewing',j===gridIdx));
   const jsDow = [1,2,3,4,5,6,0][gridIdx];
   const PROGS = {2:PROGRAM_TUE, 3:PROGRAM_WED, 5:PROGRAM_FRI, 6:PROGRAM_SAT};
   const prog = PROGS[jsDow];
@@ -1615,6 +1620,8 @@ function getTodayProg() {
 function renderProgram() {
   const el = document.getElementById('prog-card-inner');
   if(!el) return;
+  const _todayGi = [6,0,1,2,3,4,5][todayDow];
+  document.querySelectorAll('#wgrid .day').forEach((e,j)=>e.classList.toggle('viewing',j===_todayGi));
   const prog = getTodayProg();
 
   if(!prog) {
