@@ -953,7 +953,8 @@ const ROTATION = [
 
 const PRESETS = [
   // P=タンパク質 F=脂質 C=炭水化物 Fb=食物繊維 Na=ナトリウム(mg)
-  {name:'ナイトオーツ（朝食）',          cal:480,prot:34,fat:12,carbs:67,fiber:11,na:180, emoji:'🌾',cat:'朝食'},
+  {name:'ナイトオーツ（朝食）',          cal:480,prot:34,fat:12,carbs:67,fiber:11,na:180, emoji:'🌾',cat:'朝食',
+   recipe:'オートミール 50g・プロテイン 1スクープ（30g）・チアシード 15g・バナナ 1本｜豆乳 or 水 150ml を加えて前夜に容器で混ぜ冷蔵。翌朝そのまま食べる（加熱不要）'},
   {name:'セブン昼食（休養日）',           cal:545,prot:65,fat:14,carbs:40,fiber:1, na:2100,emoji:'🏪',cat:'昼食'},
   {name:'セブン昼食（トレ日）',           cal:725,prot:69,fat:15,carbs:78,fiber:1, na:2550,emoji:'🏪',cat:'昼食'},
   {name:'プロテイン 2スクープ（15:00）',  cal:270,prot:50,fat:4, carbs:8, fiber:0, na:250, emoji:'💪',cat:'15:00補完'},
@@ -1081,24 +1082,28 @@ function renderNutrition() {
     return `<div class="preset-cat">${cat}</div>` +
       items.map(p=>{
         const rot = cat==='夕食' ? ROTATION.find(r=>p.name.includes('（'+r.day)) : null;
+        const rawRecipe = rot ? rot.recipe : (p.recipe||'');
+        const hasDetail = !!rawRecipe;
         let detailHtml = '';
-        if(rot && rot.recipe){
-          const [ing, sea] = rot.recipe.split('｜');
+        if(hasDetail){
+          const [part1, part2] = rawRecipe.split('｜');
+          const label1 = cat==='夕食' ? '🥩 食材' : '📋 材料';
+          const label2 = cat==='夕食' ? '🧂 調味料' : '📝 作り方';
           detailHtml = `<div id="pd-${p.i}" class="preset-detail" style="display:none;">
-            <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">🥩 食材</div>
-            <div style="color:var(--text3);margin-bottom:7px;padding-left:4px;">${(ing||'').replace(/・/g,' · ')}</div>
-            <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">🧂 調味料</div>
-            <div style="color:var(--text3);padding-left:4px;">${(sea||'').replace(/・/g,' · ')}</div>
+            <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">${label1}</div>
+            <div style="color:var(--text3);margin-bottom:7px;padding-left:4px;">${(part1||'').replace(/・/g,' · ')}</div>
+            <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">${label2}</div>
+            <div style="color:var(--text3);padding-left:4px;">${part2||''}</div>
           </div>`;
         }
         return `
-          <div class="preset-row" onclick="${rot?'togglePresetDetail('+p.i+')':'addPreset('+p.i+')'}">
+          <div class="preset-row" onclick="${hasDetail?'togglePresetDetail('+p.i+')':'addPreset('+p.i+')'}">
             <span style="font-size:20px;margin-right:8px;">${p.emoji||'🍽'}</span>
             <div class="pt">
               <div class="pn">${p.name}</div>
               <div class="pm">P${p.prot}g · ${p.cal}kcal</div>
             </div>
-            ${rot?`<span id="pdarr-${p.i}" style="color:var(--text3);font-size:10px;margin-right:10px;display:inline-block;transition:transform .2s;">▼</span>`:''}
+            ${hasDetail?`<span id="pdarr-${p.i}" style="color:var(--text3);font-size:10px;margin-right:10px;display:inline-block;transition:transform .2s;">▼</span>`:''}
             <button class="preset-add-btn" onclick="event.stopPropagation();addPreset(${p.i})">追加</button>
           </div>
           ${detailHtml}`;
