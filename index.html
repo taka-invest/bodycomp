@@ -416,11 +416,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
   <!-- ③栄養 -->
   <div id="sc-food" class="screen">
     <div class="seg-ctrl">
-      <button id="tab-meals" class="seg-btn active" onclick="switchFoodTab('meals')">今日の食事</button>
-      <button id="tab-shop" class="seg-btn" onclick="switchFoodTab('shop')">🛒 まとめ買い</button>
+      <button id="tab-meals" class="seg-btn active" onclick="switchFoodTab('meals')">食事</button>
+      <button id="tab-shop" class="seg-btn" onclick="switchFoodTab('shop')">🛒 買い物リスト</button>
     </div>
 
-    <!-- 今日の食事ビュー -->
+    <!-- 食事ビュー -->
     <div id="view-meals">
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
@@ -439,23 +439,23 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
         <div id="mpresets"></div>
       </div>
       <div class="card">
+        <div class="card-title" style="margin-bottom:8px;">今週の献立</div>
+        <div id="week-menu"></div>
+      </div>
+      <div class="card">
         <div class="card-title">サプリカバレッジ</div>
         <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">現在の4製品で充足する栄養素</div>
         <div id="supp-coverage"></div>
       </div>
     </div>
 
-    <!-- まとめ買いビュー -->
+    <!-- 買い物リストビュー -->
     <div id="view-shop" style="display:none;">
       <div class="card">
-        <div class="card-title">週1まとめ買いリスト</div>
+        <div class="card-title">買い物リスト</div>
         <div style="font-size:12px;color:var(--text3);margin-bottom:8px;">日曜日に一括購入 — 14食分（昼・夜 × 7日）</div>
         <div id="shop-list"></div>
         <button class="shop-reset" onclick="resetShopping()">✗ チェックをすべてリセット</button>
-      </div>
-      <div class="card">
-        <div class="card-title" style="margin-bottom:8px;">今週の献立</div>
-        <div id="week-menu"></div>
       </div>
     </div>
   </div>
