@@ -926,13 +926,27 @@ const CAL_TGT  = IS_TRAIN ? 2200 : 1850;
 const PROT_TGT = 160;
 
 const ROTATION = [
-  {day:'日',name:'タイ風チキン',   emoji:'🍗',cal:570,prot:57,season:'ナンプラー・レモン・唐辛子',  train:false},
-  {day:'月',name:'和風生姜チキン', emoji:'🍗',cal:585,prot:57,season:'醤油・みりん・生姜',          train:false},
-  {day:'火',name:'韓国風サーモン', emoji:'🐟',cal:550,prot:51,season:'コチュジャン・ごま油・いりごま',train:true},
-  {day:'水',name:'中華オイスター', emoji:'🍗',cal:580,prot:57,season:'オイスターソース・ごま油・ねぎ',train:false},
-  {day:'木',name:'照り焼きチキン', emoji:'🍗',cal:578,prot:57,season:'醤油・はちみつ・にんにく',    train:false},
-  {day:'金',name:'地中海サーモン', emoji:'🐟',cal:555,prot:51,season:'トマト缶・オレガノ・オリーブオイル',train:true},
-  {day:'土',name:'カレーチキン',   emoji:'🍗',cal:592,prot:57,season:'カレー粉・ヨーグルト',         train:false},
+  {day:'日',name:'タイ風チキン',   emoji:'🍗',cal:570,prot:57,train:false,
+   season:'ナンプラー・レモン・唐辛子',
+   recipe:'鶏もも250g・卵2個｜ナンプラー大1.5・レモン汁大2・唐辛子1本・にんにく1片・はちみつ小1'},
+  {day:'月',name:'和風生姜チキン', emoji:'🍗',cal:585,prot:57,train:false,
+   season:'醤油・みりん・生姜',
+   recipe:'鶏もも250g・卵2個｜醤油大2・みりん大2・生姜1片（すりおろし）・ごま油小1'},
+  {day:'火',name:'韓国風サーモン', emoji:'🐟',cal:550,prot:51,train:true,
+   season:'コチュジャン・ごま油・いりごま',
+   recipe:'鮭200g・卵2個｜コチュジャン大1・ごま油大1・醤油小1・いりごま小2・にんにく1片'},
+  {day:'水',name:'中華オイスター', emoji:'🍗',cal:580,prot:57,train:false,
+   season:'オイスターソース・ごま油・ねぎ',
+   recipe:'鶏もも250g・卵2個｜オイスターソース大2・ごま油小1・ねぎ1/2本・水大2'},
+  {day:'木',name:'照り焼きチキン', emoji:'🍗',cal:578,prot:57,train:false,
+   season:'醤油・はちみつ・にんにく',
+   recipe:'鶏もも250g・卵2個｜醤油大2・みりん大2・はちみつ大1・にんにく1片'},
+  {day:'金',name:'地中海サーモン', emoji:'🐟',cal:555,prot:51,train:true,
+   season:'トマト缶・オレガノ・オリーブオイル',
+   recipe:'鮭200g・卵2個｜トマト缶1/2缶・オリーブオイル大1・にんにく1片・オレガノ小1・塩少々'},
+  {day:'土',name:'カレーチキン',   emoji:'🍗',cal:592,prot:57,train:false,
+   season:'カレー粉・ヨーグルト',
+   recipe:'鶏もも250g・卵2個｜カレー粉大1・無糖ヨーグルト大3・にんにく1片・生姜1片・塩少々'},
 ];
 
 const PRESETS = [
@@ -1147,7 +1161,7 @@ function renderShopping(){
       <span style="font-size:18px;">${r.emoji}</span>
       <div style="flex:1;">
         <div style="font-size:14px;font-weight:500;">${r.name}</div>
-        <div style="font-size:11px;color:var(--text3);">${r.season}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px;">${r.recipe}</div>
       </div>
       <div style="text-align:right;font-size:11px;color:var(--text3);">P${r.prot}g<br>${r.cal}kcal</div>
     </div>`).join('');
@@ -1454,8 +1468,8 @@ const PROGRAM_FRI = {
   blocks:[
     { name:'メイン（トレーナー主導）',
       exercises:[
-        {id:'p1',name:'スクワット / レッグプレス', sets:'4',reps:'6-10', weight:'トレーナーと相談',muscle:'大腿四頭筋・臀部'},
-        {id:'p2',name:'ルンジ or ブルガリアンSQT', sets:'3',reps:'10-12',weight:'トレーナーと相談',muscle:'大腿・臀部'},
+        {id:'p1',name:'バーベルスクワット', sets:'4',reps:'6-10', weight:'トレーナーと相談',muscle:'大腿四頭筋・臀部'},
+        {id:'p2',name:'ランジ or ブルガリアンSQT', sets:'3',reps:'10-12',weight:'トレーナーと相談',muscle:'大腿・臀部'},
       ]},
     { name:'追加提案（残り10分）', note:'トレーナーへ提案してみよう 💬',
       exercises:[
@@ -1535,8 +1549,8 @@ const EX_MEDIA = {
   'アブローラー':                           {img:null,                                                                                                ph:'🎯', ytq:'アブローラー やり方 フォーム 腹筋'},
   'レッグカール（マシン）':                 {img:W+'c/c6/LyingLegCurlMachineExercise.JPG/330px-LyingLegCurlMachineExercise.JPG',                     ph:'🦵', ytq:'レッグカール マシン やり方 ハムストリング'},
   'ルーマニアンデッドリフト':               {img:W+'6/63/Deadlift-phase_1.JPG/330px-Deadlift-phase_1.JPG',                                           ph:'🏋️', ytq:'ルーマニアンデッドリフト フォーム やり方'},
-  'スクワット / レッグプレス':              {img:W+'8/82/Squats.svg/330px-Squats.svg.png',                                                            ph:'🦵', ytq:'バーベルスクワット やり方 フォーム 基本'},
-  'ルンジ or ブルガリアンSQT':              {img:W+'2/29/Airman_performing_lunge.jpg/330px-Airman_performing_lunge.jpg',                              ph:'🦵', ytq:'ブルガリアンスクワット やり方 フォーム'},
+  'バーベルスクワット':              {img:W+'8/82/Squats.svg/330px-Squats.svg.png',                                                            ph:'🦵', ytq:'バーベルスクワット やり方 フォーム 基本'},
+  'ランジ or ブルガリアンSQT':              {img:W+'2/29/Airman_performing_lunge.jpg/330px-Airman_performing_lunge.jpg',                              ph:'🦵', ytq:'ブルガリアンスクワット やり方 フォーム'},
   'トライセップスディップ':                 {img:null,                                                                                                ph:'💪', ytq:'ディップス やり方 フォーム 三頭筋'},
   'ジャンプスクワット':                     {img:W+'8/82/Squats.svg/330px-Squats.svg.png',                                                            ph:'⬆️', ytq:'ジャンプスクワット やり方 HIIT フォーム'},
   'ジャンピングランジ（左右交互）':         {img:W+'6/60/USMC-05301.jpg/330px-USMC-05301.jpg',                                                        ph:'⚡', ytq:'ジャンピングランジ やり方 HIIT フォーム'},
