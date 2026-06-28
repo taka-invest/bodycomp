@@ -237,12 +237,13 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
 .shop-reset{width:100%;border:1px solid var(--border);background:none;color:var(--text3);border-radius:10px;padding:10px;font-size:14px;margin-top:14px;cursor:pointer;}
 
 /* ── Macro bars ── */
-.mbrow{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
+.mbrow{margin-bottom:12px;}
 .mbrow:last-child{margin-bottom:0;}
-.mblbl{font-size:12px;width:54px;flex-shrink:0;color:var(--text2);font-weight:500;}
-.mbtrack{flex:1;height:7px;background:var(--surface2);border-radius:4px;overflow:hidden;}
+.mbhdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
+.mblbl{font-size:12px;color:var(--text2);font-weight:600;}
+.mbval{font-size:12px;color:var(--text2);font-weight:500;}
+.mbtrack{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;}
 .mbfill{height:100%;border-radius:4px;transition:width .4s ease;}
-.mbval{font-size:11px;color:var(--text3);width:80px;text-align:right;flex-shrink:0;}
 .mbrow.done .mblbl,.mbrow.done .mbval{color:var(--green);}
 
 /* ── Supplement coverage ── */
@@ -1049,9 +1050,11 @@ function renderNutrition() {
     const pct  = Math.min(100, m.tgt>0 ? m.val/m.tgt*100 : 0);
     const done = m.val >= m.tgt;
     return `<div class="mbrow${done?' done':''}">
-      <div class="mblbl">${m.lbl}</div>
+      <div class="mbhdr">
+        <span class="mblbl">${m.lbl}</span>
+        <span class="mbval">${Math.round(m.val)} / ${m.tgt} ${m.unit}</span>
+      </div>
       <div class="mbtrack"><div class="mbfill" style="width:${pct.toFixed(1)}%;background:${m.color};"></div></div>
-      <div class="mbval">${Math.round(m.val)}/${m.tgt} ${m.unit}</div>
     </div>`;
   }).join('');
 
