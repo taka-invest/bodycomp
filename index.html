@@ -245,6 +245,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
 .mbtrack{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;}
 .mbfill{height:100%;border-radius:4px;transition:width .4s ease;}
 .mbrow.done .mblbl,.mbrow.done .mbval{color:var(--green);}
+.mbsec-title{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--surface2);}
+.mbsec-title:first-child{margin-top:0;padding-top:0;border-top:none;}
+.mbsupp{font-size:10px;color:var(--text3);margin-left:3px;font-weight:400;}
 
 /* ── Supplement coverage ── */
 .scov-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border);}
@@ -953,36 +956,37 @@ const ROTATION = [
 ];
 
 const PRESETS = [
-  // P=タンパク質 F=脂質 C=炭水化物 Fb=食物繊維 Na=ナトリウム(mg)
-  {name:'ナイトオーツ（朝食）',          cal:480,prot:34,fat:12,carbs:67,fiber:11,na:180, emoji:'🌾',cat:'朝食',
+  // macro: cal prot fat carbs fiber na(mg)
+  // micro: ca(mg) mg2(mg) k(mg) fe(mg) cu(mg) vitE(mg)
+  {name:'ナイトオーツ（朝食）',          cal:480,prot:34,fat:12,carbs:67,fiber:11,na:180, ca:260,mg2:190,k:900, fe:5.0,cu:0.60,vitE:1.0, emoji:'🌾',cat:'朝食',
    recipe:'オートミール 50g・プロテイン 1スクープ（30g）・チアシード 15g・バナナ 1本｜豆乳 or 水 150ml を加えて前夜に容器で混ぜ冷蔵。翌朝そのまま食べる（加熱不要）'},
-  {name:'アーモンド 素焼き 20g（トレ日）',cal:116,prot:4, fat:10,carbs:3, fiber:3, na:0,   emoji:'🥜',cat:'朝食',
+  {name:'アーモンド 素焼き 20g（トレ日）',cal:116,prot:4, fat:10,carbs:3, fiber:3, na:0,   ca:50, mg2:54, k:130, fe:0.7,cu:0.18,vitE:5.5, emoji:'🥜',cat:'朝食',
    recipe:'素焼きアーモンド 20g｜ナイトオーツに前夜混ぜて準備。ビタミンE・銅・マンガン・食物繊維を補完（休養日はかぼちゃで代替）'},
-  {name:'セブン昼食（休養日）',           cal:545,prot:65,fat:14,carbs:40,fiber:1, na:2100,emoji:'🏪',cat:'昼食'},
-  {name:'セブン昼食（トレ日）',           cal:725,prot:69,fat:15,carbs:78,fiber:1, na:2550,emoji:'🏪',cat:'昼食'},
-  {name:'納豆 1パック（昼食セット）',     cal:95, prot:8, fat:5, carbs:6, fiber:3, na:300, emoji:'🫘',cat:'昼食',
+  {name:'セブン昼食（休養日）',           cal:545,prot:65,fat:14,carbs:40,fiber:1, na:2100,ca:100,mg2:35, k:400, fe:1.5,cu:0.15,vitE:1.0, emoji:'🏪',cat:'昼食'},
+  {name:'セブン昼食（トレ日）',           cal:725,prot:69,fat:15,carbs:78,fiber:1, na:2550,ca:120,mg2:40, k:500, fe:2.0,cu:0.20,vitE:1.0, emoji:'🏪',cat:'昼食'},
+  {name:'納豆 1パック（昼食セット）',     cal:95, prot:8, fat:5, carbs:6, fiber:3, na:300, ca:45, mg2:45, k:330, fe:1.7,cu:0.18,vitE:0.5, emoji:'🫘',cat:'昼食',
    recipe:'納豆 1パック（45g）・付属タレ・からし｜よく混ぜて昼食に追加。K2・葉酸・マンガンを補完'},
-  {name:'もち麦 150g（休養日・昼）',      cal:233,prot:4, fat:1, carbs:48,fiber:5, na:0,   emoji:'🌾',cat:'昼食',
+  {name:'もち麦 150g（休養日・昼）',      cal:233,prot:4, fat:1, carbs:48,fiber:5, na:0,   ca:5,  mg2:20, k:70,  fe:0.5,cu:0.10,vitE:0,   emoji:'🌾',cat:'昼食',
    recipe:'もち麦 150g（炊き）・前日夜に炊いてタッパーへ｜β-グルカン約4.8g。血糖値スパイク抑制・低GI。プロテイン鍋残り＋納豆とセット'},
-  {name:'もち麦 250g（トレ日・昼）',      cal:388,prot:7, fat:1, carbs:80,fiber:8, na:0,   emoji:'🌾',cat:'昼食',
+  {name:'もち麦 250g（トレ日・昼）',      cal:388,prot:7, fat:1, carbs:80,fiber:8, na:0,   ca:7,  mg2:30, k:115, fe:0.8,cu:0.10,vitE:0,   emoji:'🌾',cat:'昼食',
    recipe:'もち麦 250g（炊き）・前日夜に炊いてタッパーへ｜β-グルカン約8g。トレ日の炭水化物補充。プロテイン鍋残り＋納豆とセット'},
-  {name:'プロテイン 2スクープ（15:00）',  cal:270,prot:50,fat:4, carbs:8, fiber:0, na:250, emoji:'💪',cat:'15:00補完'},
-  {name:'タイ風チキン（日）',             cal:570,prot:57,fat:33,carbs:14,fiber:5, na:550, emoji:'🍗',cat:'夕食'},
-  {name:'和風生姜チキン（月）',           cal:585,prot:57,fat:33,carbs:18,fiber:5, na:950, emoji:'🍗',cat:'夕食'},
-  {name:'韓国風サーモン（火🏋️）',        cal:550,prot:51,fat:34,carbs:14,fiber:5, na:500, emoji:'🐟',cat:'夕食'},
-  {name:'中華オイスターチキン（水）',      cal:580,prot:57,fat:34,carbs:16,fiber:5, na:530, emoji:'🍗',cat:'夕食'},
-  {name:'照り焼きチキン（木）',           cal:578,prot:57,fat:33,carbs:18,fiber:5, na:950, emoji:'🍗',cat:'夕食'},
-  {name:'地中海サーモン（金🏋️）',        cal:555,prot:51,fat:35,carbs:15,fiber:5, na:250, emoji:'🐟',cat:'夕食'},
-  {name:'カレーチキン（土）',             cal:592,prot:57,fat:34,carbs:17,fiber:5, na:150, emoji:'🍗',cat:'夕食'},
-  {name:'かぼちゃ 80g（休養日・鍋追加）', cal:73, prot:2, fat:0, carbs:17,fiber:3, na:1,   emoji:'🎃',cat:'追加',
+  {name:'プロテイン 2スクープ（15:00）',  cal:270,prot:50,fat:4, carbs:8, fiber:0, na:250, ca:150,mg2:30, k:150, fe:0.5,cu:0.00,vitE:0,   emoji:'💪',cat:'15:00補完'},
+  {name:'タイ風チキン（日）',             cal:570,prot:57,fat:33,carbs:14,fiber:5, na:550, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, emoji:'🍗',cat:'夕食'},
+  {name:'和風生姜チキン（月）',           cal:585,prot:57,fat:33,carbs:18,fiber:5, na:950, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, emoji:'🍗',cat:'夕食'},
+  {name:'韓国風サーモン（火🏋️）',        cal:550,prot:51,fat:34,carbs:14,fiber:5, na:500, ca:150,mg2:120,k:1690,fe:4.2,cu:0.32,vitE:10.0,emoji:'🐟',cat:'夕食'},
+  {name:'中華オイスターチキン（水）',      cal:580,prot:57,fat:34,carbs:16,fiber:5, na:530, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, emoji:'🍗',cat:'夕食'},
+  {name:'照り焼きチキン（木）',           cal:578,prot:57,fat:33,carbs:18,fiber:5, na:950, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, emoji:'🍗',cat:'夕食'},
+  {name:'地中海サーモン（金🏋️）',        cal:555,prot:51,fat:35,carbs:15,fiber:5, na:250, ca:150,mg2:120,k:1690,fe:4.2,cu:0.32,vitE:10.0,emoji:'🐟',cat:'夕食'},
+  {name:'カレーチキン（土）',             cal:592,prot:57,fat:34,carbs:17,fiber:5, na:150, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, emoji:'🍗',cat:'夕食'},
+  {name:'かぼちゃ 80g（休養日・鍋追加）', cal:73, prot:2, fat:0, carbs:17,fiber:3, na:1,   ca:12, mg2:20, k:344, fe:0.4,cu:0.06,vitE:3.9, emoji:'🎃',cat:'追加',
    recipe:'かぼちゃ 80g（蒸し or 電子レンジ3分）｜プロテイン鍋に投入。ビタミンE約2mg・β-カロテン・カリウム340mgを補完。アーモンドの休養日代替'},
-  {name:'もち麦 150g（休養日・夕）',      cal:233,prot:4, fat:1, carbs:48,fiber:5, na:0,   emoji:'🌾',cat:'追加',
+  {name:'もち麦 150g（休養日・夕）',      cal:233,prot:4, fat:1, carbs:48,fiber:5, na:0,   ca:5,  mg2:20, k:70,  fe:0.5,cu:0.10,vitE:0,   emoji:'🌾',cat:'追加',
    recipe:'もち麦 150g（炊き）｜プロテイン鍋と一緒に。β-グルカン約4.8g'},
-  {name:'もち麦 250g（トレ日・夕）',      cal:388,prot:7, fat:1, carbs:80,fiber:8, na:0,   emoji:'🌾',cat:'追加',
+  {name:'もち麦 250g（トレ日・夕）',      cal:388,prot:7, fat:1, carbs:80,fiber:8, na:0,   ca:7,  mg2:30, k:115, fe:0.8,cu:0.10,vitE:0,   emoji:'🌾',cat:'追加',
    recipe:'もち麦 250g（炊き）｜プロテイン鍋と一緒に。β-グルカン約8g。トレ日の炭水化物補充'},
-  {name:'乾燥わかめ 5g',                  cal:8,  prot:1, fat:0, carbs:1, fiber:1, na:370, emoji:'🌊',cat:'追加',
+  {name:'乾燥わかめ 5g',                  cal:8,  prot:1, fat:0, carbs:1, fiber:1, na:370, ca:41, mg2:55, k:245, fe:0.2,cu:0.02,vitE:0.4, emoji:'🌊',cat:'追加',
    recipe:'乾燥わかめ 5g｜水で戻してプロテイン鍋に投入。ヨウ素約200mcg（1日RDA 130mcg超）を補完'},
-  {name:'こんにゃく 100g（食物繊維）',    cal:5,  prot:0, fat:0, carbs:3, fiber:2, na:10,  emoji:'🌿',cat:'追加'},
+  {name:'こんにゃく 100g（食物繊維）',    cal:5,  prot:0, fat:0, carbs:3, fiber:2, na:10,  ca:43, mg2:2,  k:33,  fe:0.4,cu:0.02,vitE:0,   emoji:'🌿',cat:'追加'},
 ];
 
 const SHOPPING = [
@@ -1032,6 +1036,14 @@ function renderNutrition() {
   const fat   = today.reduce((a,m)=>a+(m.fat  ||0),0);
   const carbs = today.reduce((a,m)=>a+(m.carbs||0),0);
   const fiber = today.reduce((a,m)=>a+(m.fiber||0),0);
+  const na    = today.reduce((a,m)=>a+(m.na   ||0),0);
+  const fca   = today.reduce((a,m)=>a+(m.ca   ||0),0);
+  const fmg   = today.reduce((a,m)=>a+(m.mg2  ||0),0);
+  const fk    = today.reduce((a,m)=>a+(m.k    ||0),0);
+  const ffe   = today.reduce((a,m)=>a+(m.fe   ||0),0);
+  const fcu   = today.reduce((a,m)=>a+(m.cu   ||0),0);
+  const fvitE = today.reduce((a,m)=>a+(m.vitE ||0),0);
+  const salt  = parseFloat((na*2.54/1000).toFixed(1));
 
   const badge = document.getElementById('train-day-badge');
   if(badge){
@@ -1039,24 +1051,41 @@ function renderNutrition() {
     badge.style.background = IS_TRAIN ? 'rgba(52,199,89,.1)' : 'rgba(0,122,255,.1)';
     badge.style.color = IS_TRAIN ? 'var(--green)' : 'var(--blue)';
   }
+  function barHtml(rows){
+    return rows.map(m=>{
+      const pct  = Math.min(100, m.tgt>0 ? m.val/m.tgt*100 : 0);
+      const done = m.val >= m.tgt;
+      const valStr = m.dec
+        ? `${m.val.toFixed(1)} / ${m.tgt} ${m.unit}`
+        : `${Math.round(m.val)} / ${m.tgt} ${m.unit}`;
+      return `<div class="mbrow${done?' done':''}">
+        <div class="mbhdr">
+          <span class="mblbl">${m.lbl}</span>
+          <span class="mbval">${valStr}${m.note?'<span class="mbsupp">'+m.note+'</span>':''}</span>
+        </div>
+        <div class="mbtrack"><div class="mbfill" style="width:${pct.toFixed(1)}%;background:${m.color};"></div></div>
+      </div>`;
+    }).join('');
+  }
   const MACROS = [
-    {lbl:'カロリー',  val:cal,   tgt:CAL_TGT,  unit:'kcal',color:'#ff9500'},
-    {lbl:'タンパク質',val:prot,  tgt:PROT_TGT, unit:'g',   color:'#007aff'},
-    {lbl:'脂質',      val:fat,   tgt:FAT_TGT,  unit:'g',   color:'#ff9f0a'},
-    {lbl:'炭水化物',  val:carbs, tgt:CARB_TGT, unit:'g',   color:'#34c759'},
-    {lbl:'食物繊維',  val:fiber, tgt:FIBER_TGT,unit:'g',   color:'#5856d6'},
+    {lbl:'カロリー',   val:cal,        tgt:CAL_TGT,  unit:'kcal',color:'#ff9500'},
+    {lbl:'タンパク質', val:prot,       tgt:PROT_TGT, unit:'g',   color:'#007aff'},
+    {lbl:'脂質',       val:fat,        tgt:FAT_TGT,  unit:'g',   color:'#ff9f0a'},
+    {lbl:'炭水化物',   val:carbs,      tgt:CARB_TGT, unit:'g',   color:'#34c759'},
+    {lbl:'食物繊維',   val:fiber,      tgt:25,       unit:'g',   color:'#5856d6'},
+    {lbl:'塩分',       val:salt,       tgt:7.5,      unit:'g',   color:'#af52de',dec:true},
   ];
-  document.getElementById('macro-bars').innerHTML = MACROS.map(m=>{
-    const pct  = Math.min(100, m.tgt>0 ? m.val/m.tgt*100 : 0);
-    const done = m.val >= m.tgt;
-    return `<div class="mbrow${done?' done':''}">
-      <div class="mbhdr">
-        <span class="mblbl">${m.lbl}</span>
-        <span class="mbval">${Math.round(m.val)} / ${m.tgt} ${m.unit}</span>
-      </div>
-      <div class="mbtrack"><div class="mbfill" style="width:${pct.toFixed(1)}%;background:${m.color};"></div></div>
-    </div>`;
-  }).join('');
+  const MICROS = [
+    {lbl:'カリウム',    val:fk,          tgt:3000, unit:'mg',color:'#32ade6'},
+    {lbl:'鉄',          val:ffe,         tgt:7.5,  unit:'mg',color:'#ff6b6b',dec:true},
+    {lbl:'ビタミンE',   val:fvitE,       tgt:6.5,  unit:'mg',color:'#f7b731',dec:true},
+    {lbl:'カルシウム',  val:fca+1200,    tgt:750,  unit:'mg',color:'#a8e063',note:'(+サプリ)'},
+    {lbl:'マグネシウム',val:fmg+600,     tgt:370,  unit:'mg',color:'#56ccf2',note:'(+サプリ)'},
+    {lbl:'銅',          val:fcu,         tgt:0.9,  unit:'mg',color:'#e67e22',dec:true},
+  ];
+  document.getElementById('macro-bars').innerHTML =
+    '<div class="mbsec-title">マクロ栄養素</div>' + barHtml(MACROS) +
+    '<div class="mbsec-title">ミネラル・ビタミン</div>' + barHtml(MICROS);
 
   const ml = document.getElementById('mlist');
   if(!today.length){ ml.innerHTML='<div style="text-align:center;padding:20px;color:var(--text3);font-size:14px;">食事を追加してください</div>'; }
@@ -1138,7 +1167,9 @@ function togglePresetDetail(i){
 }
 function addPreset(i){
   const p=PRESETS[i];
-  DB.meals.push({date:TODAY,name:p.name,cal:p.cal,prot:p.prot||0,fat:p.fat||0,carbs:p.carbs||0,fiber:p.fiber||0});
+  DB.meals.push({date:TODAY,name:p.name,
+    cal:p.cal,prot:p.prot||0,fat:p.fat||0,carbs:p.carbs||0,fiber:p.fiber||0,na:p.na||0,
+    ca:p.ca||0,mg2:p.mg2||0,k:p.k||0,fe:p.fe||0,cu:p.cu||0,vitE:p.vitE||0});
   save(); renderNutrition(); renderToday();
 }
 
