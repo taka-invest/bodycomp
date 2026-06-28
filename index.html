@@ -248,6 +248,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
 .mbsec-title{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--surface2);}
 .mbsec-title:first-child{margin-top:0;padding-top:0;border-top:none;}
 .mbsupp{font-size:10px;color:var(--text3);margin-left:3px;font-weight:400;}
+.supp-row{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--surface2);cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.supp-row:last-child{border-bottom:none;}
+.supp-row:active{opacity:.7;}
+.supp-toggle{font-size:11px;font-weight:600;padding:5px 11px;border-radius:20px;background:var(--surface2);color:var(--text3);flex-shrink:0;transition:background .2s,color .2s;}
+.supp-toggle.taken{background:rgba(52,199,89,.15);color:var(--green);}
 
 /* ── Supplement coverage ── */
 .scov-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--border);}
@@ -436,6 +441,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
       <div class="card">
         <div class="card-title">今日の食事</div>
         <div id="mlist"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">💊 本日のサプリ</div>
+        <div id="supp-checklist"></div>
       </div>
       <div class="card">
         <div id="rot-banner-wrap"></div>
@@ -1080,9 +1089,9 @@ function renderNutrition() {
   const MINERALS = [
     {lbl:'カリウム',    val:fk,           tgt:3000,  unit:'mg'},
     {lbl:'鉄',          val:ffe,          tgt:7.5,   unit:'mg', dec:true},
-    {lbl:'亜鉛',        val:fzn+25,       tgt:11,    unit:'mg', dec:true, note:'(+サプリ)'},
-    {lbl:'カルシウム',  val:fca+1200,     tgt:750,   unit:'mg', note:'(+サプリ)'},
-    {lbl:'マグネシウム',val:fmg+600,      tgt:370,   unit:'mg', note:'(+サプリ)'},
+    {lbl:'亜鉛',        val:fzn,          tgt:11,    unit:'mg', dec:true},
+    {lbl:'カルシウム',  val:fca,          tgt:750,   unit:'mg'},
+    {lbl:'マグネシウム',val:fmg,          tgt:370,   unit:'mg'},
     {lbl:'銅',          val:fcu,          tgt:0.9,   unit:'mg', dec:true},
   ];
   const VITAMINS = [
@@ -1090,8 +1099,8 @@ function renderNutrition() {
     {lbl:'ビタミンB1',  val:fvitB1,       tgt:1.4,   unit:'mg', dec:true},
     {lbl:'ビタミンB2',  val:fvitB2,       tgt:1.6,   unit:'mg', dec:true},
     {lbl:'ビタミンB6',  val:fvitB6,       tgt:1.4,   unit:'mg', dec:true},
-    {lbl:'ビタミンC',   val:fvitC+1470,   tgt:100,   unit:'mg', note:'(+サプリ)'},
-    {lbl:'ビタミンD',   val:fvitD+50,     tgt:8.5,   unit:'mcg',dec:true, note:'(+サプリ)'},
+    {lbl:'ビタミンC',   val:fvitC,        tgt:100,   unit:'mg'},
+    {lbl:'ビタミンD',   val:fvitD,        tgt:8.5,   unit:'mcg',dec:true},
     {lbl:'ビタミンE',   val:fvitE,        tgt:6.5,   unit:'mg', dec:true},
   ];
   document.getElementById('macro-bars').innerHTML =
@@ -1201,6 +1210,62 @@ const SUPP = [
   {name:'カリウム',     got:50,   tgt:3000, unit:'mg', src:'❌ サプリほぼゼロ — 食事から全量',ok:false},
   {name:'鉄',           got:0,    tgt:7.5,  unit:'mg', src:'❌ 男性用Multi鉄なし — 食事から全量',ok:false},
 ];
+const SUPP_ITEMS = [
+  {name:'Two-Per-Day（マルチビタミン）',  emoji:'💊', cover:'D3·C·E·A·Zn·B群',
+   cal:5, prot:0,fat:0, carbs:1,fiber:0,na:0, ca:200,mg2:100,k:0,fe:0,cu:0,vitE:67,
+   satFat:0,vitA:750,vitB1:125,vitB2:50,vitC:470,zn:25,vitD:50,vitB6:75},
+  {name:'Gold C 1,000mg',               emoji:'🍊', cover:'ビタミンC 1,000mg',
+   cal:4, prot:0,fat:0, carbs:1,fiber:0,na:0, ca:0,mg2:0,k:0,fe:0,cu:0,vitE:0,
+   satFat:0,vitA:0,vitB1:0,vitB2:0,vitC:1000,zn:0,vitD:0,vitB6:0},
+  {name:'ビタミンK1 1,000mcg',           emoji:'💊', cover:'K1 1,000mcg',
+   cal:0, prot:0,fat:0, carbs:0,fiber:0,na:0, ca:0,mg2:0,k:0,fe:0,cu:0,vitE:0,
+   satFat:0,vitA:0,vitB1:0,vitB2:0,vitC:0,zn:0,vitD:0,vitB6:0},
+  {name:'ビタミンK2(MK-7) 100mcg',       emoji:'💊', cover:'K2(MK-7) 100mcg',
+   cal:0, prot:0,fat:0, carbs:0,fiber:0,na:0, ca:0,mg2:0,k:0,fe:0,cu:0,vitE:0,
+   satFat:0,vitA:0,vitB1:0,vitB2:0,vitC:0,zn:0,vitD:0,vitB6:0},
+  {name:'メチルコバラミン B12 300mcg',   emoji:'💊', cover:'B12 300mcg',
+   cal:0, prot:0,fat:0, carbs:0,fiber:0,na:0, ca:0,mg2:0,k:0,fe:0,cu:0,vitE:0,
+   satFat:0,vitA:0,vitB1:0,vitB2:0,vitC:0,zn:0,vitD:0,vitB6:0},
+  {name:'Cal/Mag（カルシウム・マグネシウム）',emoji:'🦴', cover:'Ca 1,000mg · Mg 500mg',
+   cal:0, prot:0,fat:0, carbs:0,fiber:0,na:0, ca:1000,mg2:500,k:0,fe:0,cu:0,vitE:0,
+   satFat:0,vitA:0,vitB1:0,vitB2:0,vitC:0,zn:0,vitD:0,vitB6:0},
+  {name:'Super Omega-3（EPA+DHA）',      emoji:'🐟', cover:'EPA+DHA 1,200mg',
+   cal:10,prot:0,fat:1.2,carbs:0,fiber:0,na:0, ca:0,mg2:0,k:0,fe:0,cu:0,vitE:0,
+   satFat:0.3,vitA:0,vitB1:0,vitB2:0,vitC:0,zn:0,vitD:0,vitB6:0},
+];
+function toggleSupp(i){
+  const s=SUPP_ITEMS[i];
+  const idx=DB.meals.findIndex(m=>m.date===TODAY&&m.name===s.name);
+  if(idx===-1){
+    DB.meals.push({date:TODAY,name:s.name,
+      cal:s.cal||0,prot:0,fat:s.fat||0,carbs:s.carbs||0,fiber:0,na:0,
+      ca:s.ca||0,mg2:s.mg2||0,k:0,fe:0,cu:0,vitE:s.vitE||0,
+      satFat:s.satFat||0,vitA:s.vitA||0,vitB1:s.vitB1||0,vitB2:s.vitB2||0,
+      vitC:s.vitC||0,zn:s.zn||0,vitD:s.vitD||0,vitB6:s.vitB6||0});
+  }else{
+    DB.meals.splice(idx,1);
+  }
+  save(); renderNutrition(); renderToday(); renderSuppChecklist();
+}
+function renderSuppChecklist(){
+  const el=document.getElementById('supp-checklist');
+  if(!el) return;
+  const taken_count=SUPP_ITEMS.filter(s=>DB.meals.some(m=>m.date===TODAY&&m.name===s.name)).length;
+  el.innerHTML=`<div style="font-size:11px;color:var(--text3);margin-bottom:8px;">${taken_count} / ${SUPP_ITEMS.length} 服用済</div>`+
+    SUPP_ITEMS.map((s,i)=>{
+      const taken=DB.meals.some(m=>m.date===TODAY&&m.name===s.name);
+      return `<div class="supp-row" onclick="toggleSupp(${i})">
+        <span style="font-size:20px;margin-right:10px;">${s.emoji}</span>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:600;color:var(--text1);">${s.name}</div>
+          <div style="font-size:11px;color:var(--text3);">${s.cover}</div>
+        </div>
+        <div class="supp-toggle${taken?' taken':''}">
+          ${taken?'✓ 服用済':'未服用'}
+        </div>
+      </div>`;
+    }).join('');
+}
 function renderSupplements(){
   const el = document.getElementById('supp-coverage');
   if(!el) return;
@@ -1278,6 +1343,7 @@ function delMeal(i){
   save(); renderNutrition(); renderToday();
 }
 renderNutrition();
+renderSuppChecklist();
 
 // ── SLEEP ─────────────────────────────────────────────
 const slColor = h => h>=7?'#34c759':h>=6?'#ff9500':'#ff3b30';
