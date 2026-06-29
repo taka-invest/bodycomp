@@ -419,7 +419,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
       <div style="display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--text3);">
         <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(0,122,255,.25);vertical-align:middle;margin-right:4px;"></span>自主トレ</span>
         <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(52,199,89,.25);vertical-align:middle;margin-right:4px;"></span>パーソナル</span>
-        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(255,149,0,.3);vertical-align:middle;margin-right:4px;"></span>HIIT</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(255,149,0,.3);vertical-align:middle;margin-right:4px;"></span>4×4（Zone5）</span>
         <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:rgba(90,200,250,.3);vertical-align:middle;margin-right:4px;"></span>Zone 2</span>
       </div>
     </div>
@@ -833,11 +833,11 @@ function renderWeek() {
   const PLAN = [
     null,
     {icon:'🏋️',label:'自主トレ',cls:'self'},
-    {icon:'⚡',label:'HIIT',cls:'hiit'},
+    {icon:'🚴',label:'4×4',cls:'hiit'},
     null,
     {icon:'👨‍🏫',label:'P',cls:'personal'},
-    {icon:'🚶',label:'Z2',cls:'cardio'},
-    null,
+    {icon:'🏊',label:'Z2',cls:'cardio'},
+    {icon:'🚴',label:'Z2',cls:'cardio'},
   ];
   const d = new Date(TODAY+'T00:00:00');
   const dow = d.getDay()===0?6:d.getDay()-1;
@@ -871,7 +871,7 @@ renderWeek();
 function showDayPlan(gridIdx) {
   document.querySelectorAll('#wgrid .day').forEach((el,j)=>el.classList.toggle('viewing',j===gridIdx));
   const jsDow = [1,2,3,4,5,6,0][gridIdx];
-  const PROGS = {2:PROGRAM_TUE, 3:PROGRAM_WED, 5:PROGRAM_FRI, 6:PROGRAM_SAT};
+  const PROGS = {2:PROGRAM_TUE, 3:PROGRAM_WED, 5:PROGRAM_FRI, 6:PROGRAM_SAT, 0:PROGRAM_SUN};
   const prog = PROGS[jsDow];
   const el = document.getElementById('prog-card-inner');
   // 今日のセルをタップ → インタラクティブ版に戻す
@@ -1127,9 +1127,17 @@ function renderNutrition() {
 
   const badge = document.getElementById('train-day-badge');
   if(badge){
-    badge.textContent = IS_TRAIN ? '🏋️ トレーニング日' : '💤 休養日';
-    badge.style.background = IS_TRAIN ? 'rgba(52,199,89,.1)' : 'rgba(0,122,255,.1)';
-    badge.style.color = IS_TRAIN ? 'var(--green)' : 'var(--blue)';
+    const IS_CARDIO = [3,6,0].includes(todayDow); // 水=4×4, 土=Z2, 日=Z2
+    if(IS_TRAIN){
+      badge.textContent = '🏋️ 筋トレ日';
+      badge.style.background = 'rgba(52,199,89,.1)'; badge.style.color = 'var(--green)';
+    } else if(IS_CARDIO){
+      badge.textContent = todayDow===3 ? '🚴 4×4（Zone5）日' : '🚴 Zone2 日';
+      badge.style.background = 'rgba(255,149,0,.1)'; badge.style.color = 'var(--orange)';
+    } else {
+      badge.textContent = '💤 休養日';
+      badge.style.background = 'rgba(0,122,255,.1)'; badge.style.color = 'var(--blue)';
+    }
   }
   function barHtml(rows){
     const GOAL_PCT='66.67';
@@ -2019,49 +2027,41 @@ const PROGRAM_FRI = {
 };
 
 const PROGRAM_WED = {
-  label:'⚡ 水曜｜HIIT 8ラウンド',
-  duration:'22分',
+  label:'🚴 水曜｜エアロバイク Norwegian 4×4',
+  duration:'約38分',
   type:'hiit',
-  note:'器具不要・下半身主体｜4種目ローテーション × 2周｜RPE 8〜9（全8ラウンド同じ強度を維持できるペース）',
+  note:'Zone5でVO2maxを直接刺激する高強度の日（ポラライズドの「高強度2割」）｜4分全力→3分リカバリー×4本｜各インターバルの後半2分で必ず Zone5（169 bpm以上）に到達すること｜Apple WatchでHR管理｜低衝撃なので金曜パーソナルに干渉しない',
   blocks:[
-    { name:'ウォームアップ（4分）',
+    { name:'ウォームアップ（10分）',
       exercises:[
-        {id:'wu',name:'足踏み・足首回し・股関節ほぐし',sets:'',reps:'4分',weight:'徐々に動きを大きくする',muscle:'心拍を 120 bpm 台へ'},
+        {id:'wu',name:'徐々にペースアップ',sets:'',reps:'10分',weight:'軽い負荷からゆっくり上げる｜最後はZone2上限あたりへ',muscle:'心拍 113〜132 bpm（Zone1〜2）'},
       ]},
-    { name:'1周目（R1〜R4）',
-      note:'R3 ハイニーは意図的に強度を落とす設計。脚を回復させながら心拍を維持する。',
+    { name:'メインセット — 4×4インターバル',
+      note:'リカバリーは止まらず軽く漕ぎ続ける。心拍が完全に下がりきる前に次へ。後半2本がきついが、ここがVO2maxの肝。',
       exercises:[
-        {id:'h1',rnum:'R1',name:'ジャンプスクワット',        reps:'60秒',recovery:'60秒',hrRange:'160〜173 bpm',weight:'膝をつま先より前に出さない｜着地は静かに',         muscle:'大腿四頭筋・臀部'},
-        {id:'h2',rnum:'R2',name:'ジャンピングランジ（左右交互）',reps:'60秒',recovery:'60秒',hrRange:'160〜173 bpm',weight:'前膝 90度｜体幹まっすぐ｜左右交互に跳ぶ',       muscle:'ハムストリング・臀部'},
-        {id:'h3',rnum:'R3',name:'ハイニー',                  reps:'60秒',recovery:'60秒',hrRange:'150〜163 bpm',weight:'膝を腰の高さまで上げる｜腕を大きく振る',          muscle:'腸腰筋・心肺（意図的に脚を休ませる）'},
-        {id:'h4',rnum:'R4',name:'スケータージャンプ',         reps:'60秒',recovery:'60秒',hrRange:'158〜170 bpm',weight:'横に大きく跳ぶ｜着地は片足1本｜3歩幅を意識',     muscle:'外転筋・内転筋'},
+        {id:'i1',rnum:'1本目',name:'全力ペダリング',reps:'4分',recovery:'リカバリー3分',hrRange:'169〜179 bpm',weight:'負荷を上げ脚で踏む｜後半2分でZone5到達',muscle:'🔑 Zone5・VO2max'},
+        {id:'i2',rnum:'2本目',name:'全力ペダリング',reps:'4分',recovery:'リカバリー3分',hrRange:'169〜179 bpm',weight:'1本目と同じ強度を維持｜呼吸は深く',muscle:'🔑 Zone5・VO2max'},
+        {id:'i3',rnum:'3本目',name:'全力ペダリング',reps:'4分',recovery:'リカバリー3分',hrRange:'169〜179 bpm',weight:'きつくなる帯｜フォームを崩さず一定ペース',muscle:'🔑 Zone5・VO2max'},
+        {id:'i4',rnum:'4本目',name:'全力ペダリング',reps:'4分',recovery:'→ クールダウンへ',hrRange:'169〜179 bpm',weight:'ラスト｜出し切る（ただし全力100%スプリントではなく90〜95%の維持）',muscle:'🔑 Zone5・VO2max'},
       ]},
-    { name:'2周目（R5〜R8）— 1周目と同じ構成',
-      note:'「また同じだ」でメンタルが楽になる設計。ペースを落とさず最後まで。',
+    { name:'クールダウン（5分）',
       exercises:[
-        {id:'h5',rnum:'R5',name:'ジャンプスクワット',        reps:'60秒',recovery:'60秒',hrRange:'160〜173 bpm',weight:'膝をつま先より前に出さない｜着地は静かに',         muscle:'大腿四頭筋・臀部'},
-        {id:'h6',rnum:'R6',name:'ジャンピングランジ（左右交互）',reps:'60秒',recovery:'60秒',hrRange:'160〜173 bpm',weight:'前膝 90度｜体幹まっすぐ｜左右交互に跳ぶ',       muscle:'ハムストリング・臀部'},
-        {id:'h7',rnum:'R7',name:'ハイニー',                  reps:'60秒',recovery:'60秒',hrRange:'150〜163 bpm',weight:'膝を腰の高さまで上げる｜腕を大きく振る',          muscle:'腸腰筋・心肺（意図的に脚を休ませる）'},
-        {id:'h8',rnum:'R8',name:'スケータージャンプ',         reps:'60秒',recovery:'60秒',hrRange:'158〜170 bpm',weight:'横に大きく跳ぶ｜着地は片足1本｜全力フィニッシュ', muscle:'外転筋・内転筋'},
-      ]},
-    { name:'クールダウン（2〜3分）',
-      exercises:[
-        {id:'cd',name:'ゆっくり歩き・太腿ストレッチ',sets:'',reps:'2〜3分',weight:'大腿四頭筋・ハムストリングを伸ばす',muscle:'心拍を 100 bpm 以下に'},
+        {id:'cd',name:'ゆっくり漕ぐ',sets:'',reps:'5分',weight:'負荷を最小に｜呼吸を整える',muscle:'心拍を 110 bpm 以下へ'},
       ]},
   ]
 };
 
 const PROGRAM_SAT = {
-  label:'🚶 土曜｜Zone 2 有酸素',
+  label:'🏊 土曜｜Zone 2（プール / バイク）',
   duration:'40分',
   type:'cardio',
-  note:'目標心拍：188×60〜70%＝113〜132 bpm｜速歩き / エアロバイク弱め / 水泳。会話できるギリギリの強度を40分維持',
+  note:'ポラライズドの「低強度8割」の1回目｜茅ヶ崎温水プール（退勤後）or エアロバイク｜目標心拍 113〜132 bpm（水泳はHRが10〜15 bpm低く出るため100〜115 bpmが目安・体感優先）｜能動的回復として週の筋トレ疲労も流す',
   blocks:[
     { name:'ウォームアップ（5分）',
       exercises:[
         {id:'z0',name:'ゆっくりスタート',sets:'',reps:'5分',weight:'徐々に上げる',muscle:'心拍 90〜110 bpm'},
       ]},
-    { name:'Zone 2 メイン（30分） — HR 113〜132 bpm を維持', note:'ハミングできるレベル。それ以上なら少し落とす',
+    { name:'Zone 2 メイン（30分） — HR 113〜132 bpm を維持', note:'プールは平泳ぎ主体・飽きたらクロール。ハミングできるレベル、それ以上なら少し落とす',
       exercises:[
         {id:'z1',name:'Zone 2 ブロック 1',sets:'',reps:'10分',weight:'会話できる強度',muscle:'心拍 113〜132 bpm'},
         {id:'z2',name:'Zone 2 ブロック 2',sets:'',reps:'10分',weight:'会話できる強度',muscle:'心拍 113〜132 bpm'},
@@ -2070,6 +2070,29 @@ const PROGRAM_SAT = {
     { name:'クールダウン（5分）',
       exercises:[
         {id:'z4',name:'ゆっくり歩き・ストレッチ',sets:'',reps:'5分',weight:'心拍を安静時へ',muscle:'全身'},
+      ]},
+  ]
+};
+
+const PROGRAM_SUN = {
+  label:'🚴 日曜｜Zone 2（早朝バイク＋映画）',
+  duration:'40分',
+  type:'cardio',
+  note:'ポラライズドの「低強度8割」の2回目｜早朝・空腹時が脂肪燃焼に最適（インスリン低でBDNF↑・午前の認知も上がる）｜映画/ドラマを見ながら｜HR 113〜132 bpm維持｜運動前にプロテイン10〜20gで筋分解を抑制',
+  blocks:[
+    { name:'ウォームアップ（5分）',
+      exercises:[
+        {id:'s0',name:'ゆっくりスタート',sets:'',reps:'5分',weight:'軽い負荷から',muscle:'心拍 90〜110 bpm'},
+      ]},
+    { name:'Zone 2 メイン（30分） — HR 113〜132 bpm を維持', note:'タブレットで映画を観ながら。会話できる強度を淡々と。',
+      exercises:[
+        {id:'s1',name:'Zone 2 ブロック 1',sets:'',reps:'10分',weight:'会話できる強度',muscle:'心拍 113〜132 bpm'},
+        {id:'s2',name:'Zone 2 ブロック 2',sets:'',reps:'10分',weight:'会話できる強度',muscle:'心拍 113〜132 bpm'},
+        {id:'s3',name:'Zone 2 ブロック 3',sets:'',reps:'10分',weight:'会話できる強度',muscle:'心拍 113〜132 bpm'},
+      ]},
+    { name:'クールダウン（5分）',
+      exercises:[
+        {id:'s4',name:'ゆっくり漕ぐ・ストレッチ',sets:'',reps:'5分',weight:'心拍を安静時へ',muscle:'全身'},
       ]},
   ]
 };
@@ -2192,6 +2215,7 @@ function getTodayProg() {
   if(todayDow===5) return PROGRAM_FRI;
   if(todayDow===3) return PROGRAM_WED;
   if(todayDow===6) return PROGRAM_SAT;
+  if(todayDow===0) return PROGRAM_SUN;
   return null;
 }
 
