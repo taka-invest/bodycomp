@@ -167,6 +167,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
 .libt{font-size:15px;font-weight:600;margin-bottom:4px;}
 .libb{font-size:13px;color:var(--text2);line-height:1.6;}
 .libs{font-size:11px;color:var(--text3);margin-top:6px;}
+.lib-tabbar{display:flex;gap:6px;overflow-x:auto;padding:4px 0 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.lib-tabbar::-webkit-scrollbar{display:none;}
+.lib-tab{white-space:nowrap;padding:7px 14px;border-radius:20px;border:none;background:var(--surface2);color:var(--text3);font-size:13px;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
+.lib-tab.active{background:var(--blue);color:#fff;}
 
 /* ── Sheet ── */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;animation:fadein .2s;}
@@ -508,20 +512,23 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
 
   <!-- ⑤ライブラリ -->
   <div id="sc-lib" class="screen">
-    <div class="card">
-      <div class="card-title">✅ 検証済みの知見</div>
-      <div id="lib-ok"></div>
+    <div class="lib-tabbar">
+      <button class="lib-tab active" data-tab="all"   onclick="switchLibTab('all')">📚 全て</button>
+      <button class="lib-tab" data-tab="睡眠"          onclick="switchLibTab('睡眠')">😴 睡眠</button>
+      <button class="lib-tab" data-tab="血糖値"        onclick="switchLibTab('血糖値')">🩸 血糖値</button>
+      <button class="lib-tab" data-tab="抗酸化"        onclick="switchLibTab('抗酸化')">🛡 抗酸化</button>
+      <button class="lib-tab" data-tab="視力"          onclick="switchLibTab('視力')">👁 視力</button>
+      <button class="lib-tab" data-tab="栄養"          onclick="switchLibTab('栄養')">🥦 栄養</button>
+      <button class="lib-tab" data-tab="筋肥大"        onclick="switchLibTab('筋肥大')">💪 筋肥大</button>
+      <button class="lib-tab" data-tab="有酸素"        onclick="switchLibTab('有酸素')">🏃 有酸素</button>
+      <button class="lib-tab" data-tab="サプリ"        onclick="switchLibTab('サプリ')">💊 サプリ</button>
+      <button class="lib-tab" data-tab="ホルモン"      onclick="switchLibTab('ホルモン')">⚡ ホルモン</button>
     </div>
-    <div class="card">
-      <div class="card-title">❌ 棄却された俗説</div>
-      <div id="lib-no"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">❓ 未確定（追加研究が必要）</div>
-      <div id="lib-q"></div>
+    <div class="card" style="margin-top:0;">
+      <div id="lib-content"></div>
     </div>
     <div style="text-align:center;font-size:12px;color:var(--text3);padding:8px 0 4px;">
-      調査実施: 2026-06-26 / 107エージェント・725ツール呼び出し
+      調査実施: 2026-06-26〜06-29
     </div>
   </div>
 
@@ -1501,6 +1508,32 @@ const LIB = {
     {t:'オメガ3は脂質豊富な夕食と同時摂取で吸収300%増',b:'EPA/DHAは脂質と一緒に摂取すると胆汁・膵酵素が活性化され吸収率が最大3倍になる。空腹時は吸収率が著しく低下。プロテイン鍋（オリーブオイル+鮭）は最高の服用環境。夕食マルチのビタミンEがオメガ3の酸化（劣化）を防ぐ追加の相乗効果もある。',s:'OmegaQuant / MedicalNewsToday Omega-3 Timing Research',tag:'サプリ'},
     {t:'マグネシウムは就寝30〜60分前で睡眠効果が最大化',b:'MgはGABAを活性化し副交感神経を優位にする。睡眠30〜60分前摂取でWHOOPデータによると睡眠時間+15分・REM睡眠+2%・回復スコア+8%の改善。MgはマルチのビタミンDを活性型に変換する酵素の補因子でもあるため、不足するとVitDが機能しない。就寝前服用でZn・鉄との競合も完全回避（夕食から6h以上）。',s:'WHOOP Sleep Study / Mayo Clinic Press / Sleep Foundation',tag:'サプリ'},
     {t:'32歳男性の最適体脂肪率ゾーン：12〜17%',b:'4観点（アンチエイジング・認知機能・運動パフォーマンス・肉体美）の重複域として12〜17%が推奨。日本人男性は同一体脂肪率でも欧米人より内臓脂肪が多い傾向があるため、上限17%以内が特に重要。腹筋可視化は〜14%、シックスパックは〜12%が目安。',s:'NHANES 2024 / ACSM Guidelines 2022 / Nature Comm 2026 / ACE体組成分類 / 統合推定',tag:'体脂肪率'},
+    // ── 血糖値・GIコントロール ──
+    {t:'食後15〜20分の歩行で血糖スパイクが最大20%低下',b:'食後にGLUT4が筋肉に移行し、インスリンを介さずに血中グルコースを直接取り込む。食後すぐの歩行（10〜15分）が最も効果的。スクワット10回でも代替可能。同カロリーの食事でも運動の有無で血糖ピーク値が大きく変わる。',s:'Diabetes Care 2016 / Journal of Applied Physiology 2021',tag:'血糖値'},
+    {t:'酢酸（もずく酢・黒酢）は食後血糖を20〜35%低下させる',b:'酢酸がα-アミラーゼ・α-グルコシダーゼを阻害し糖質分解速度を低下させるとともに、骨格筋のGLUT4を刺激する。食前15〜30分に大さじ1〜2の酢を摂取することで効果が最大化。もずく酢はフコイダンの粘性が糖吸収をさらに遅延させる追加効果あり。',s:'Johnston et al. 2004 (Diabetes Care) / Fushimi et al. 2006',tag:'血糖値'},
+    {t:'カーボラスト（野菜→タンパク質・脂質→炭水化物順）で食後血糖ピークが最大40%低下',b:'同じ食事内容でも食べる順番を変えるだけで食後血糖ピーク値が最大40%低下するRCTが複数ある。タンパク質・脂質が先行することでGLP-1が分泌され胃排出速度が低下し、炭水化物の吸収が緩やかになる。',s:'Imai et al. 2013 (Diabetes Care) / Clinical Nutrition 2015 RCT',tag:'血糖値'},
+    {t:'大麦β-グルカン混合でGIが白米比約30%低下',b:'β-グルカンは腸内で高粘性ゲルを形成し、糖質の消化・吸収速度を物理的に低下させる。白米に大麦を3割混ぜるだけでGIが約70→50に低下。食物繊維の目標達成にも同時に貢献。',s:'European Journal of Clinical Nutrition 2008 / British Journal of Nutrition 2016',tag:'血糖値'},
+    {t:'緑茶EGCG（エピガロカテキンガレート）がα-グルコシダーゼを阻害しGIを低下',b:'食事中・食後の緑茶摂取でEGCGが小腸の糖質分解酵素を阻害し、糖の吸収を遅らせる。1日3〜4杯の習慣で食後血糖の安定化と抗酸化効果を同時に得られる。',s:'Journal of Agricultural and Food Chemistry 2007 / Asia Pacific Journal of Clinical Nutrition 2013',tag:'血糖値'},
+    // ── 抗酸化・活性酸素対策 ──
+    {t:'スルフォラファン（ブロッコリースプラウト）はNRF2経路を活性化し体内抗酸化酵素を大量産生',b:'食品の抗酸化物質が直接活性酸素を打ち消す「直接経路」に対し、スルフォラファンはNRF2転写因子を活性化してSOD・グルタチオン等の抗酸化酵素産生を誘導する「間接経路」。この根本的な差が他の食品より別格とされる理由。スプラウトは通常のブロッコリーの数十倍のスルフォラファン含有量を持ち、生で食べるか、よく噛むことで活性化（ミロシナーゼ）。',s:'Fahey & Talalay 1999 (PNAS) / Zhang et al. 1992 / Cancer Prev Res 2011',tag:'抗酸化'},
+    {t:'アスタキサンチン（鮭）の抗酸化力はβ-カロテンの約550倍',b:'カロテノイドの中で最強クラスの抗酸化力を持つ。眼の毛様体筋調節力改善・網膜保護・皮膚老化抑制・運動後の筋炎症軽減と多面的な効果が確認されている。鮭・エビ・カニ・イクラが主要供給源。週2〜3回の鮭で有効量を継続的に摂取できる。',s:'Nir et al. 2016 (Nutrients) / BMC Complementary Medicine 2014 / J Nutr Sci Vitaminol 2009',tag:'抗酸化'},
+    {t:'クルクミン＋ブラックペッパー（ピペリン）で吸収率が2000%向上',b:'クルクミン単体の吸収率は極めて低い（〜1%）。ブラックペッパーのピペリンがCYP酵素の代謝を阻害することで吸収率が約2000%向上する。カレー料理や味噌汁への少量添加が継続しやすい。抗炎症・NRF2活性化の両面で作用する。',s:'Shoba et al. 1998 (Planta Medica) — RCT n=20',tag:'抗酸化'},
+    {t:'ブルーベリー等ベリー類のアントシアニンはORAC値最上位クラス',b:'ブルーベリー・アサイー・ラズベリーはORAC値（酸化耐性指標）が全食品の中でも最上位クラス。冷凍ブルーベリーは生とほぼ同等の抗酸化物質を含む。ヨーグルトと組み合わせることで腸内環境改善との相乗効果も期待できる。',s:'USDA ORAC Database 2010 / Journal of Agricultural and Food Chemistry',tag:'抗酸化'},
+    // ── 視力・目の健康 ──
+    {t:'ルテイン＋ゼアキサンチンが加齢黄斑変性（AMD）を予防・進行抑制',b:'AMD（日本の中途失明原因1位）の予防・進行抑制に最も強いエビデンスを持つ栄養素。黄斑に集積する色素として青色光フィルターとなる。目標：ルテイン10mg/日＋ゼアキサンチン2mg/日（AREDS2試験基準）。体内では合成できないため食事での補充が必須。',s:'AREDS2 Study Group 2013 (JAMA Ophthalmology) / Cochrane Review 2017',tag:'視力'},
+    {t:'ほうれん草100gで約12mgのルテイン — 1品で1日分達成可能',b:'ほうれん草はケール（約40mg）に次ぐルテイン含有量を誇り、入手・調理しやすさで実用性が最も高い。冷凍ほうれん草でも含有量はほぼ同等。オリーブオイル炒め＋卵の組み合わせで吸収率が最大化される。鶏もも肉のプロテイン鍋のほうれん草も、鶏の脂肪が溶け出すことで吸収が助けられる。',s:'USDA FoodData Central / Journal of Food Composition and Analysis',tag:'視力'},
+    {t:'ルテインは脂質と同時摂取で吸収率4〜5倍に向上',b:'ルテインは脂溶性カロテノイドのため、脂質が存在しない状態での吸収率は極めて低い。オリーブオイルでの炒め調理・卵黄との同時摂取・アボカドとの組み合わせが最も効果的。卵黄のルテインはもともと脂質と結合しているため植物性より吸収率が約3倍高い。',s:'Brown et al. 2004 (Journal of Nutrition) / American Journal of Clinical Nutrition 2005',tag:'視力'},
+    {t:'アスタキサンチン6mg/日で毛様体筋の調節力が有意改善（眼精疲労）',b:'眼のピント調節を担う毛様体筋に直接作用し、4週間の摂取で調節力の有意な改善と眼精疲労スコアの低下が確認されている（複数の日本RCT）。抗酸化最強クラスでもあり、眼の抗酸化保護と疲労軽減を同時に担う。鮭の定期摂取がもっとも実用的な補充手段。',s:'Nagaki et al. 2002 (Japanese Journal of Clinical Ophthalmology) / J Clin Biochem Nutr 2009 RCT',tag:'視力'},
+    {t:'20-20-20ルールでデジタル眼精疲労を有意軽減',b:'20分ごとに20フィート（約6m）先を20秒見ることで毛様体筋の緊張を解放する。スマホ・PC作業中は通常の瞬き回数（約17回/分）が1/3以下に減少し、乾燥→疲労のサイクルを引き起こす。意識的な瞬きの回数維持と組み合わせることで効果倍増。',s:'American Optometric Association / Journal of Ophthalmology 2016 (digital eye strain review)',tag:'視力'},
+    {t:'屋外活動（バイオレット光曝露・1日1〜2時間）が近視の進行を抑制',b:'バイオレット光（360〜400nm）が眼軸の伸長を抑制する遺伝子（EGR1）を活性化する。窓ガラスはバイオレット光を遮断するため屋外での曝露が必須。近視進行抑制の中で最も強いエビデンスを持つ非薬物介入。1日2時間が推奨量。',s:'Torii et al. 2017 (EBioMedicine) / Smith et al. 2009 (Invest Ophthalmol Vis Sci)',tag:'視力'},
+    // ── 睡眠の質・寝起きコンディション ──
+    {t:'就寝90分前の38〜40℃入浴（15〜20分）が深部体温を最適化',b:'入浴で一時的に体温を上げることで、その後90分で体温が急降下し自然な眠気のピークと一致する。シャワーよりも有意に入眠潜時を短縮し深睡眠を増加させる。体温低下のシグナルが松果体のメラトニン分泌とも同期する。',s:'Haghayegh et al. 2019 (Sleep Medicine Reviews) — 17研究のシステマティックレビュー',tag:'睡眠'},
+    {t:'起床後30分以内の太陽光曝露がコルチゾール覚醒反応（CAR）を最大化',b:'起床後20〜30分以内に太陽光が網膜に届くと視交叉上核（SCN）がリセットされ、コルチゾールの覚醒ピーク（CAR）が最大化される。これにより午前中のエネルギー・集中力のピークが設定される。窓越しでは光量が不足するため屋外が必要。曇りでも屋外光は室内の数十倍。',s:'Leproult & Van Cauter 2010 (SLEEP) / Scheer & Buijs 1999 (J Neuroscience)',tag:'睡眠'},
+    {t:'起床後90〜120分後のコーヒーでカフェイン効果が最大化',b:'起床後60〜90分はコルチゾールが自然に最高値に達しており、この時間帯のカフェインはコルチゾールの効果と相殺される。90〜120分後に飲むと、コルチゾールが下がり始めたタイミングでカフェインが独立して覚醒を延長する。コーヒーを遅らせることで昼過ぎの眠気クラッシュも軽減される。',s:'Lovallo et al. 2005 (Psychosomatic Medicine) / Sprecher et al. 2021',tag:'睡眠'},
+    {t:'週末も同じ起床時間の維持が体内時計安定の最重要因子',b:'週末に2時間以上遅く起きることで体内時計がずれ、月曜に時差ぼけと同等の状態（Social Jet Lag）が発生する。これが週前半のパフォーマンス低下・睡眠質悪化の主因。起床時刻の固定が睡眠改善の単一介入として最も効果が高い。',s:'Wittmann et al. 2006 (Chronobiology International) / Roenneberg et al. 2012 (Current Biology)',tag:'睡眠'},
+    {t:'カフェイン半減期5〜7時間 — 午後14時以降の摂取は深睡眠を確実に減少',b:'カフェインは摂取後5〜7時間で半分しか代謝されない。20時就寝の場合、14時のコーヒー1杯でも就寝時にカフェインの50%が残存する。睡眠の「量」は確保できても「深睡眠（SWS）の時間」が有意に減少することが複数の研究で確認されている。',s:'Drake et al. 2013 (Journal of Clinical Sleep Medicine) — 停止時刻別RCT',tag:'睡眠'},
+    {t:'グリシン3gの就寝前摂取で深部体温が低下し深睡眠・翌朝のコンディションが改善',b:'グリシンが末梢血管を拡張し放熱を促進することで深部体温が低下、深睡眠（SWS）への移行が速まる。就寝前3gで主観的睡眠質・翌朝の疲労感・日中の集中力が有意改善するRCTが複数ある。食品ではコラーゲン豊富な鶏皮・骨ブロスに多く含まれる。',s:'Yamadera et al. 2007 / Bannai et al. 2012 (Sleep and Biological Rhythms) RCT',tag:'睡眠'},
+    {t:'マグネシウム（就寝30〜60分前）でGABAが活性化し睡眠の深さが改善',b:'MgはGABA受容体を活性化し副交感神経を優位にする。就寝前摂取でREM睡眠・深睡眠ともに改善が報告されている。また、VitDを活性型に変換する酵素の補因子でもあるため、不足するとVitDが機能しない。グリシン酸マグネシウム形態が吸収率最良。',s:'WHOOP Sleep Study / Abbasi et al. 2012 (Journal of Research in Medical Sciences) RCT',tag:'睡眠'},
   ],
   no:[
     // ── サプリメント競合 ──
@@ -1514,6 +1547,10 @@ const LIB = {
     // ── 理想体脂肪率 ──
     {t:'「体脂肪率25%付近がJ字型で最も長寿」は確認されていない',b:'体脂肪率と全死亡リスクのJ字型関係（約25%が最適）という主張は0票で棄却。現状のエビデンスでは体脂肪率の「死亡リスク最小値」を定量的に特定できていない。',s:'検証プロセスで0票棄却 (PubMed 35717418)',tag:'体脂肪率'},
     {t:'「体脂肪が高いとテロメア短縮・エピジェネティック老化が数値的に加速する」は棄却',b:'若年肥満者のテロメア長差（8.01 vs 7.42 kb）・エピジェネティック老化加速（+15〜16%）という具体的な数値は0票で棄却。方向性は示唆されるが特定の数値として過信しないこと。',s:'検証プロセスで0票棄却 (PMC12254895)',tag:'アンチエイジング'},
+    // ── 視力 ──
+    {t:'視力回復トレーニングで近視の度数（眼軸）は戻らない',b:'近視の本質は眼軸（眼球の奥行き）の物理的な伸長であり、一度伸びた眼軸は縮まない（骨格と同様）。眼球運動・ガボール視力等のトレーニングは毛様体筋の疲労軽減には貢献するが、屈折度数（近視度数）の改善は科学的に確認されていない。治療は手術（LASIK/ICL）のみ。',s:'Cochrane Review 2011 (vision therapy for myopia) / Clinical and Experimental Optometry 2021',tag:'視力'},
+    // ── 睡眠 ──
+    {t:'「週末の寝溜め」で睡眠不足は解消されない',b:'週末に長時間眠ることで主観的な眠気は回復するが、代謝機能・認知機能・炎症マーカーへの影響は完全には回復しないことが研究で示されている。加えて体内時計がずれるSocial Jet Lagが生じ、週明けの睡眠の質がさらに低下する悪循環が生まれる。',s:'Depner et al. 2019 (Current Biology) n=36 RCT / Roenneberg et al. 2012',tag:'睡眠'},
   ],
   q:[
     // ── 筋肥大・リコンポジション ──
@@ -1531,29 +1568,53 @@ const LIB = {
   ]
 };
 const TAG_COLOR = {
-  '筋肥大':'rgba(0,122,255,.12);color:var(--blue)',
-  '栄養':'rgba(255,149,0,.12);color:var(--orange)',
-  '睡眠':'rgba(142,142,147,.12);color:var(--text3)',
-  'ホルモン':'rgba(175,82,222,.12);color:var(--purple)',
-  '認知機能':'rgba(52,199,89,.12);color:var(--green)',
-  '体脂肪率':'rgba(255,59,48,.12);color:var(--red)',
+  '筋肥大':    'rgba(0,122,255,.12);color:var(--blue)',
+  '栄養':      'rgba(255,149,0,.12);color:var(--orange)',
+  '睡眠':      'rgba(90,200,250,.12);color:#32ade6',
+  'ホルモン':  'rgba(175,82,222,.12);color:var(--purple)',
+  '認知機能':  'rgba(52,199,89,.12);color:var(--green)',
+  '体脂肪率':  'rgba(255,59,48,.12);color:var(--red)',
   'アンチエイジング':'rgba(255,149,0,.12);color:var(--orange)',
-  '計測':'rgba(142,142,147,.12);color:var(--text3)',
-  'サプリ':'rgba(88,86,214,.12);color:#5856d6',
+  '計測':      'rgba(142,142,147,.12);color:var(--text3)',
+  'サプリ':    'rgba(88,86,214,.12);color:#5856d6',
+  '有酸素':    'rgba(255,59,48,.12);color:var(--red)',
+  '血糖値':    'rgba(50,173,230,.12);color:#0a84ff',
+  '抗酸化':    'rgba(191,90,242,.12);color:#bf5af2',
+  '視力':      'rgba(52,199,89,.12);color:var(--green)',
 };
+let _libTab = 'all';
+function switchLibTab(tab){
+  _libTab = tab;
+  document.querySelectorAll('.lib-tab').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
+  renderLib();
+}
 function renderLib(){
-  ['ok','no','q'].forEach(k=>{
-    document.getElementById('lib-'+k).innerHTML = LIB[k].map(x=>{
-      const tc = TAG_COLOR[x.tag]||'rgba(142,142,147,.12);color:var(--text3)';
-      const tagHtml = x.tag ? `<span style="display:inline-block;font-size:10px;padding:2px 7px;border-radius:99px;margin-bottom:6px;background:${tc.split(';')[0]};${tc.split(';')[1]?tc.split(';')[1]+';':''}">${x.tag}</span>` : '';
-      return `<div class="libi">
-        ${tagHtml}
-        <div class="libt" style="${k==='no'?'color:var(--red);':k==='q'?'color:var(--orange);':''}">${x.t}</div>
-        <div class="libb">${x.b}</div>
-        <div class="libs">出典: ${x.s}</div>
-      </div>`;
-    }).join('');
-  });
+  const STATUS = {
+    ok:{lbl:'✅ 検証済み', col:'var(--green)',  bg:'rgba(52,199,89,.12)'},
+    no:{lbl:'❌ 棄却',    col:'var(--red)',    bg:'rgba(255,59,48,.12)'},
+    q: {lbl:'❓ 未確定',  col:'var(--orange)', bg:'rgba(255,149,0,.12)'},
+  };
+  const ALL = [
+    ...LIB.ok.map(x=>({...x,status:'ok'})),
+    ...LIB.no.map(x=>({...x,status:'no'})),
+    ...LIB.q.map(x=>({...x,status:'q'})),
+  ];
+  const items = _libTab==='all' ? ALL : ALL.filter(x=>x.tag===_libTab);
+  const el = document.getElementById('lib-content');
+  if(!el) return;
+  el.innerHTML = items.length ? items.map(x=>{
+    const st  = STATUS[x.status];
+    const tc  = TAG_COLOR[x.tag]||'rgba(142,142,147,.12);color:var(--text3)';
+    const [tagBg, tagFg] = tc.split(';');
+    const stBadge  = `<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:${st.bg};color:${st.col};">${st.lbl}</span>`;
+    const tagBadge = x.tag ? `<span style="font-size:10px;padding:2px 8px;border-radius:99px;background:${tagBg};${tagFg};">${x.tag}</span>` : '';
+    return `<div class="libi">
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;">${stBadge}${tagBadge}</div>
+      <div class="libt">${x.t}</div>
+      <div class="libb">${x.b}</div>
+      <div class="libs">出典: ${x.s}</div>
+    </div>`;
+  }).join('') : '<div style="text-align:center;padding:32px 0;color:var(--text3);font-size:14px;">この分野のデータはまだありません</div>';
 }
 renderLib();
 
