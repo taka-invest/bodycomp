@@ -401,6 +401,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
       <div class="card-title">今日</div>
       <div id="today-sum"></div>
     </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div class="card-title" style="margin-bottom:0;">🏃 有酸素ゾーン</div>
+        <button id="aero-edit-btn" onclick="openAeroEdit()" style="font-size:12px;color:var(--blue);background:none;border:none;cursor:pointer;padding:4px 0;">編集</button>
+      </div>
+      <div id="aero-zone-content"></div>
+    </div>
   </div>
 
   <!-- ②トレーニング -->
@@ -589,7 +597,8 @@ const SEED = {
     {date:'2026-06-17',weight:79.15,fat:19.0,muscle:36.5},
     {date:'2026-06-24',weight:79.5,fat:19.3,muscle:36.6},
   ],
-  workouts:[],meals:[],sleep:[],shopping:[],todayProgress:{date:'',checked:{}}
+  workouts:[],meals:[],sleep:[],shopping:[],todayProgress:{date:'',checked:{}},
+  profile:{}
 };
 let DB = JSON.parse(localStorage.getItem('bc_db')||'null') || JSON.parse(JSON.stringify(SEED));
 const save = () => { DB._ts=Date.now(); localStorage.setItem('bc_db',JSON.stringify(DB)); syncSchedule(); };
@@ -1682,6 +1691,104 @@ function switchLibTab(tab){
   document.querySelectorAll('.lib-tab').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
   renderLib();
 }
+// ── 有酸素ゾーン（Karvonen）──────────────────────────────
+const HR_MAX = 188;
+const AERO_ZONES = [
+  {lbl:'Zone 1', name:'ウォームアップ',    lo:.50, hi:.60, col:'#34c759', bg:'rgba(52,199,89,.13)',   note:'準備・回復'},
+  {lbl:'Zone 2', name:'脂肪酸化・ベース', lo:.60, hi:.70, col:'#32ade6', bg:'rgba(50,173,230,.15)',  note:'★ 脂肪燃焼・ミトコンドリア', star:true},
+  {lbl:'Zone 3', name:'No Man\'s Land',   lo:.70, hi:.80, col:'#8e8e93', bg:'rgba(142,142,147,.10)', note:'⚠ 効果薄 — 避ける'},
+  {lbl:'Zone 4', name:'乳酸閾値',         lo:.80, hi:.85, col:'#ff9f0a', bg:'rgba(255,159,10,.12)',  note:'月1〜2回'},
+  {lbl:'Zone 5', name:'VO₂max（HIIT）',   lo:.90, hi:.95, col:'#ff453a', bg:'rgba(255,69,58,.15)',   note:'★ 4×4プロトコル', star:true},
+];
+
+function kv(lo, rhr){ return Math.round(rhr + (HR_MAX - rhr) * lo); }
+
+function saveRestingHR(){
+  const v = parseInt(document.getElementById('rhr-input')?.value);
+  if(v >= 30 && v <= 100){
+    if(!DB.profile) DB.profile = {};
+    DB.profile.restingHR = v;
+    save();
+    renderAeroZones();
+  }
+}
+
+function openAeroEdit(){
+  const el = document.getElementById('aero-zone-content');
+  if(!el) return;
+  const cur = DB.profile?.restingHR || '';
+  el.innerHTML =
+    `<div style="font-size:12px;color:var(--text3);margin-bottom:10px;">Apple Watch：起床直後・ベッドで安静1分後に計測</div>
+     <div style="display:flex;gap:8px;align-items:center;">
+       <span style="font-size:13px;color:var(--text2);">安静時心拍数</span>
+       <input id="rhr-input" type="number" min="30" max="100" value="${cur}" placeholder="例: 55"
+         style="width:72px;padding:7px 10px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:16px;text-align:center;">
+       <span style="font-size:13px;color:var(--text3);">bpm</span>
+       <button onclick="saveRestingHR()"
+         style="background:var(--blue);color:#fff;border:none;border-radius:10px;padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer;">保存</button>
+     </div>`;
+  document.getElementById('aero-edit-btn').textContent = '';
+}
+
+function renderAeroZones(){
+  const el = document.getElementById('aero-zone-content');
+  if(!el) return;
+  const rhr = DB.profile?.restingHR;
+  const btn = document.getElementById('aero-edit-btn');
+
+  if(!rhr){
+    if(btn) btn.textContent = '';
+    el.innerHTML =
+      `<div style="font-size:12px;color:var(--text3);margin-bottom:10px;">
+         安静時心拍数を入力するとKarvonenゾーンが精密計算されます
+       </div>
+       <div style="display:flex;gap:8px;align-items:center;">
+         <input id="rhr-input" type="number" min="30" max="100" placeholder="例: 55"
+           style="width:72px;padding:7px 10px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:16px;text-align:center;">
+         <span style="font-size:13px;color:var(--text3);">bpm</span>
+         <button onclick="saveRestingHR()"
+           style="background:var(--blue);color:#fff;border:none;border-radius:10px;padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer;">保存</button>
+       </div>
+       <div style="font-size:11px;color:var(--text3);margin-top:8px;">Apple Watch：起床直後・安静1分後に計測</div>`;
+    return;
+  }
+
+  if(btn) btn.textContent = '編集';
+  const hrr = HR_MAX - rhr;
+
+  const rows = AERO_ZONES.map(z=>{
+    const lo = kv(z.lo, rhr), hi = kv(z.hi, rhr);
+    return `<div style="display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;background:${z.bg};margin-bottom:5px;">
+      <div style="flex-shrink:0;width:56px;font-size:11px;font-weight:700;color:${z.col};">${z.lbl}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:12px;font-weight:${z.star?'600':'400'};color:${z.star?'var(--text)':'var(--text2)'};">${z.name}</div>
+        <div style="font-size:11px;color:var(--text3);">${z.note}</div>
+      </div>
+      <div style="flex-shrink:0;text-align:right;font-size:14px;font-weight:700;color:${z.col};">${lo}<span style="font-size:10px;font-weight:400;color:var(--text3);">〜</span>${hi}</div>
+    </div>`;
+  }).join('');
+
+  const z2lo = kv(.60,rhr), z2hi = kv(.70,rhr);
+  const z5lo = kv(.90,rhr), z5hi = kv(.95,rhr);
+
+  el.innerHTML =
+    `<div style="display:flex;gap:16px;margin-bottom:12px;font-size:12px;color:var(--text3);">
+       <span>最大HR <b style="color:var(--text);font-size:14px;">${HR_MAX}</b> bpm</span>
+       <span>安静時HR <b style="color:var(--text);font-size:14px;">${rhr}</b> bpm</span>
+       <span>HRR <b style="color:var(--text);font-size:14px;">${hrr}</b> bpm</span>
+     </div>
+     ${rows}
+     <div style="margin-top:12px;padding:10px 12px;border-radius:10px;background:rgba(255,69,58,.08);border:1px solid rgba(255,69,58,.2);">
+       <div style="font-size:11px;font-weight:700;color:#ff453a;margin-bottom:6px;">Norwegian 4×4 ターゲット</div>
+       <div style="font-size:12px;color:var(--text2);line-height:1.7;">
+         ウォームアップ：<b>${kv(.50,rhr)}〜${z2hi} bpm</b>（10分）<br>
+         インターバル（4分×4本）：<b style="color:#ff453a;">${z5lo}〜${z5hi} bpm</b><br>
+         インターバル間リカバリー（3分）：<b>${kv(.50,rhr)}〜${kv(.60,rhr)} bpm</b>
+       </div>
+     </div>`;
+}
+// ─────────────────────────────────────────────────────────
+
 function renderLib(){
   const el = document.getElementById('lib-content');
   if(!el) return;
@@ -1734,6 +1841,7 @@ function renderLib(){
   }).join('') : '<div style="text-align:center;padding:32px 0;color:var(--text3);font-size:14px;">この分野のデータはまだありません</div>';
 }
 renderLib();
+renderAeroZones();
 
 // ── SHEET ─────────────────────────────────────────────
 function openSheet() {
