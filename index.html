@@ -513,7 +513,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
   <!-- ⑤ライブラリ -->
   <div id="sc-lib" class="screen">
     <div class="lib-tabbar">
-      <button class="lib-tab active" data-tab="all"   onclick="switchLibTab('all')">📚 全て</button>
+      <button class="lib-tab active" data-tab="score"  onclick="switchLibTab('score')">🎯 スコア</button>
+      <button class="lib-tab" data-tab="all"           onclick="switchLibTab('all')">📚 全て</button>
       <button class="lib-tab" data-tab="睡眠"          onclick="switchLibTab('睡眠')">😴 睡眠</button>
       <button class="lib-tab" data-tab="血糖値"        onclick="switchLibTab('血糖値')">🩸 血糖値</button>
       <button class="lib-tab" data-tab="抗酸化"        onclick="switchLibTab('抗酸化')">🛡 抗酸化</button>
@@ -521,6 +522,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
       <button class="lib-tab" data-tab="栄養"          onclick="switchLibTab('栄養')">🥦 栄養</button>
       <button class="lib-tab" data-tab="筋肥大"        onclick="switchLibTab('筋肥大')">💪 筋肥大</button>
       <button class="lib-tab" data-tab="有酸素"        onclick="switchLibTab('有酸素')">🏃 有酸素</button>
+      <button class="lib-tab" data-tab="ストレス"      onclick="switchLibTab('ストレス')">💆 ストレス</button>
       <button class="lib-tab" data-tab="サプリ"        onclick="switchLibTab('サプリ')">💊 サプリ</button>
       <button class="lib-tab" data-tab="ホルモン"      onclick="switchLibTab('ホルモン')">⚡ ホルモン</button>
     </div>
@@ -1547,6 +1549,10 @@ const LIB = {
     // ── 理想体脂肪率 ──
     {t:'「体脂肪率25%付近がJ字型で最も長寿」は確認されていない',b:'体脂肪率と全死亡リスクのJ字型関係（約25%が最適）という主張は0票で棄却。現状のエビデンスでは体脂肪率の「死亡リスク最小値」を定量的に特定できていない。',s:'検証プロセスで0票棄却 (PubMed 35717418)',tag:'体脂肪率'},
     {t:'「体脂肪が高いとテロメア短縮・エピジェネティック老化が数値的に加速する」は棄却',b:'若年肥満者のテロメア長差（8.01 vs 7.42 kb）・エピジェネティック老化加速（+15〜16%）という具体的な数値は0票で棄却。方向性は示唆されるが特定の数値として過信しないこと。',s:'検証プロセスで0票棄却 (PMC12254895)',tag:'アンチエイジング'},
+    // ── ストレス ──
+    {t:'HRV（心拍変動）が慢性ストレスの最実用的客観指標',b:'自律神経の副交感/交感神経バランスを反映する。高HRV=副交感優位=良好な回復状態、低HRV=交感神経活性=ストレス・回復不足。Apple Watch・WHOOP・Garminで毎朝の安静時HRVを継続計測することで、主観では気づけない慢性ストレスを早期発見できる。他人との比較ではなく自分のベースラインからの逸脱トレンドで判断する。',s:'Thayer et al. 2012 (Neuroscience & Biobehavioral Reviews) / Shaffer & Ginsberg 2017 (Frontiers in Public Health)',tag:'ストレス'},
+    {t:'PSS-10（知覚ストレス尺度）が主観的ストレスの世界標準評価ツール',b:'10項目の質問票でストレスの主観的評価を数値化。スコア0〜40：0〜13（低）・14〜26（中程度）・27以上（高）。「自分はストレスを感じていない」と思っていても中程度以上が出るケースが多く、主観的認識と実際のストレス負荷のズレを可視化できる。世界100カ国以上で使用される信頼性の高いツール。',s:'Cohen et al. 1983 (Journal of Health and Social Behavior) — 被引用数6万件超',tag:'ストレス'},
+    {t:'慢性ストレスでテロメアが10年分短縮（Epel et al. 2004）',b:'介護者（慢性ストレス群）は低ストレス群と比較してテロメアが10年分短い。ストレス期間が長いほど短縮量が増大。慢性コルチゾール高値→免疫抑制→テロメア修復酵素（テロメラーゼ）の活性低下という連鎖。心理的ストレスが生物学的老化を加速させることを初めて定量的に示した画期的研究。',s:'Epel et al. 2004 (PNAS) n=58 / Blackburn & Epel "The Telomere Effect" 2017',tag:'ストレス'},
     // ── 視力 ──
     {t:'視力回復トレーニングで近視の度数（眼軸）は戻らない',b:'近視の本質は眼軸（眼球の奥行き）の物理的な伸長であり、一度伸びた眼軸は縮まない（骨格と同様）。眼球運動・ガボール視力等のトレーニングは毛様体筋の疲労軽減には貢献するが、屈折度数（近視度数）の改善は科学的に確認されていない。治療は手術（LASIK/ICL）のみ。',s:'Cochrane Review 2011 (vision therapy for myopia) / Clinical and Experimental Optometry 2021',tag:'視力'},
     // ── 睡眠 ──
@@ -1581,14 +1587,94 @@ const TAG_COLOR = {
   '血糖値':    'rgba(50,173,230,.12);color:#0a84ff',
   '抗酸化':    'rgba(191,90,242,.12);color:#bf5af2',
   '視力':      'rgba(52,199,89,.12);color:var(--green)',
+  'ストレス':  'rgba(255,69,58,.12);color:#ff6b6b',
+  '社会':      'rgba(175,82,222,.12);color:var(--purple)',
 };
-let _libTab = 'all';
+const SCORECARD = [
+  // ── S Tier ──
+  {tier:'S', item:'有酸素能力（VO2max）',    status:'progress',
+   note:'Zone2・HIIT 追加取り組み中 → ◎を目指す',
+   detail:'全死亡リスクの最強単一予測因子。低→高群で5倍差。1 MET向上=死亡リスク-13%'},
+  {tier:'S', item:'筋力・筋量の維持',         status:'good',
+   note:'週2回パーソナル + 自主トレ（火・金）',
+   detail:'筋肉はミオカイン産生の内分泌臓器。握力は血圧より正確な死亡率予測因子（Lancet n=139,691）'},
+  {tier:'S', item:'睡眠（7〜9時間・質）',     status:'ok',
+   note:'就寝前入浴・朝の光曝露など改善取り組み中',
+   detail:'グリンパティック系でアミロイドβ排出。慢性6h以下で生物学的年齢+3〜5歳（エピジェネティック時計）'},
+  {tier:'S', item:'禁煙・受動喫煙回避',       status:'good',
+   note:'喫煙なし・受動喫煙も積極的に回避中',
+   detail:'喫煙はエピジェネティック時計で生物学的年齢+7〜10歳。禁煙後5年で部分回復'},
+  {tier:'S', item:'体脂肪率・内臓脂肪管理',   status:'progress',
+   note:'リコンプで12〜17%ゾーンに向けて調整中（現在最優先課題）',
+   detail:'内臓脂肪がインフラメイジングの震源地。1%上昇でT -12ng/dL。12の特徴のほぼ全てに波及'},
+  // ── A Tier ──
+  {tier:'A', item:'社会的つながり・目的意識',  status:'watch',
+   note:'仕事中心・プライベート交友が少ない → 科学的改善法を後日調査予定',
+   detail:'孤独=1日15本タバコ同等リスク（Holt-Lunstad）。ハーバード80年追跡: 関係の質が最強の長寿予測因子'},
+  {tier:'A', item:'ストレス管理',              status:'ok',
+   note:'主観的に問題なし。HRV客観計測が次のステップ',
+   detail:'慢性コルチゾール高値でテロメア10年分短縮（Epel 2004）。「主観的問題なし×HRV低値」=隠れた慢性ストレス'},
+  {tier:'A', item:'食事パターン',              status:'good',
+   note:'血糖管理・抗酸化食品・プロテイン鍋を実践中',
+   detail:'地中海食パターンでCVDリスク-30%（PREDIMED RCT）。AGEs・超加工食品を排除している'},
+  {tier:'A', item:'アルコール最小化',          status:'good',
+   note:'ほぼ飲まない（年数回の付き合いのみ）',
+   detail:'飲酒量と脳萎縮は線形比例（2023年Lancet）。少量でも保護効果なし。エピジェネティック時計を加速'},
+  {tier:'A', item:'サウナ（週4回以上）',       status:'none',
+   note:'未実施 ← 最も即効性の高い未着手介入',
+   detail:'Laukkanen et al.: 週4回以上で全死亡-40%・心血管死-50%。HSP産生・有酸素運動を模倣する効果'},
+  // ── B Tier ──
+  {tier:'B', item:'腸内マイクロバイオーム',    status:'ok',
+   note:'もずく・発酵食品・食物繊維を継続中',
+   detail:'腸内細菌叢の多様性が長寿と相関。Blue Zone共通の発酵食品・食物繊維習慣'},
+  {tier:'B', item:'認知活動・生涯学習',        status:'good',
+   note:'エビデンスベースの継続的学習・調査習慣',
+   detail:'認知予備能の構築。神経可塑性「Use it or lose it」。認知症発症を7〜10年遅らせる可能性'},
+];
+const SC_STATUS = {
+  good:    {lbl:'◎', col:'#34c759', bg:'rgba(52,199,89,.15)'},
+  ok:      {lbl:'○', col:'#32ade6', bg:'rgba(50,173,230,.15)'},
+  progress:{lbl:'△', col:'#ff9f0a', bg:'rgba(255,159,10,.15)'},
+  watch:   {lbl:'⚠', col:'#ff9f0a', bg:'rgba(255,159,10,.15)'},
+  none:    {lbl:'✗', col:'var(--text3)', bg:'var(--surface2)'},
+};
+const SC_TIER_STYLE = {
+  S:{label:'S TIER — 最優先・最大インパクト', col:'#ff453a', bg:'rgba(255,69,58,.1)'},
+  A:{label:'A TIER — 強いエビデンス',         col:'#ff9f0a', bg:'rgba(255,159,10,.1)'},
+  B:{label:'B TIER — 実践価値が高い',         col:'#34c759', bg:'rgba(52,199,89,.1)'},
+};
+let _libTab = 'score';
 function switchLibTab(tab){
   _libTab = tab;
   document.querySelectorAll('.lib-tab').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
   renderLib();
 }
 function renderLib(){
+  const el = document.getElementById('lib-content');
+  if(!el) return;
+  if(_libTab === 'score'){
+    const tiers = ['S','A','B'];
+    el.innerHTML =
+      `<div style="font-size:11px;color:var(--text3);margin-bottom:14px;">最終更新: 2026-06-29 / ロペス・オティン「老化の12の特徴」準拠</div>` +
+      tiers.map(t=>{
+        const ts = SC_TIER_STYLE[t];
+        return `<div style="margin-bottom:4px;">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.05em;padding:3px 10px;border-radius:6px;display:inline-block;background:${ts.bg};color:${ts.col};margin-bottom:10px;">${ts.label}</div>
+          ${SCORECARD.filter(x=>x.tier===t).map(x=>{
+            const st = SC_STATUS[x.status];
+            return `<div style="display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:0.5px solid var(--border);">
+              <div style="flex-shrink:0;width:30px;height:30px;border-radius:50%;background:${st.bg};display:flex;align-items:center;justify-content:center;font-size:15px;color:${st.col};font-weight:700;">${st.lbl}</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:600;margin-bottom:3px;">${x.item}</div>
+                <div style="font-size:12px;color:var(--text2);margin-bottom:3px;">${x.note}</div>
+                <div style="font-size:11px;color:var(--text3);line-height:1.45;">${x.detail}</div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>`;
+      }).join('');
+    return;
+  }
   const STATUS = {
     ok:{lbl:'✅ 検証済み', col:'var(--green)',  bg:'rgba(52,199,89,.12)'},
     no:{lbl:'❌ 棄却',    col:'var(--red)',    bg:'rgba(255,59,48,.12)'},
