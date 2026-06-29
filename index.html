@@ -836,8 +836,8 @@ function renderWeek() {
     {icon:'🚴',label:'4×4',cls:'hiit'},
     null,
     {icon:'👨‍🏫',label:'P',cls:'personal'},
-    {icon:'🏊',label:'Z2',cls:'cardio'},
-    {icon:'🚴',label:'Z2',cls:'cardio'},
+    {icon:'🏊',label:'Z2夕前',cls:'cardio'},
+    {icon:'🚴',label:'Z2朝',cls:'cardio'},
   ];
   const d = new Date(TODAY+'T00:00:00');
   const dow = d.getDay()===0?6:d.getDay()-1;
@@ -2052,16 +2052,16 @@ const PROGRAM_WED = {
 };
 
 const PROGRAM_SAT = {
-  label:'🏊 土曜｜Zone 2（プール / バイク）',
+  label:'🏊 土曜｜Zone 2（夕食前・プール / バイク）',
   duration:'40分',
   type:'cardio',
-  note:'ポラライズドの「低強度8割」の1回目｜茅ヶ崎温水プール（退勤後）or エアロバイク｜目標心拍 113〜132 bpm（水泳はHRが10〜15 bpm低く出るため100〜115 bpmが目安・体感優先）｜能動的回復として週の筋トレ疲労も流す',
+  note:'⏰ 退勤後そのまま夕食前に（仕事→プール→帰宅→夕食）。一度帰宅すると再出発の摩擦が出るため直行が鉄則｜第1選択：茅ヶ崎温水プール／気が乗らない日：エアロバイクZone2に切替｜目標心拍 113〜132 bpm（水泳はHRが10〜15 bpm低く出るため100〜115 bpmが目安・体感優先）｜空腹寄り＝脂肪燃焼に有利、運動後の夕食がそのまま補給になる｜能動的回復として週の筋トレ疲労も流す',
   blocks:[
     { name:'ウォームアップ（5分）',
       exercises:[
         {id:'z0',name:'ゆっくりスタート',sets:'',reps:'5分',weight:'徐々に上げる',muscle:'心拍 90〜110 bpm'},
       ]},
-    { name:'Zone 2 メイン（30分） — HR 113〜132 bpm を維持', note:'プールは平泳ぎ主体・飽きたらクロール。ハミングできるレベル、それ以上なら少し落とす',
+    { name:'Zone 2 メイン（30分） — HR 113〜132 bpm を維持', note:'プールは平泳ぎ主体・飽きたらクロール／バイクなら映画を見ながら。ハミングできるレベル、それ以上なら少し落とす',
       exercises:[
         {id:'z1',name:'Zone 2 ブロック 1',sets:'',reps:'10分',weight:'会話できる強度',muscle:'心拍 113〜132 bpm'},
         {id:'z2',name:'Zone 2 ブロック 2',sets:'',reps:'10分',weight:'会話できる強度',muscle:'心拍 113〜132 bpm'},
@@ -2070,6 +2070,10 @@ const PROGRAM_SAT = {
     { name:'クールダウン（5分）',
       exercises:[
         {id:'z4',name:'ゆっくり歩き・ストレッチ',sets:'',reps:'5分',weight:'心拍を安静時へ',muscle:'全身'},
+      ]},
+    { name:'💡 夕食が遅くなりそうな日の調整',
+      exercises:[
+        {id:'z5',name:'プール前に軽くタンパク質',sets:'',reps:'運動前',weight:'プロテイン10〜20g or ゆで卵｜空腹ピークを抑え帰宅後の夕食を軽く・早く',muscle:'筋分解の予防＋就寝3h前までに食べ終える'},
       ]},
   ]
 };
