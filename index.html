@@ -429,12 +429,13 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
   <!-- ③栄養 -->
   <div id="sc-food" class="screen">
     <div class="seg-ctrl">
-      <button id="tab-meals" class="seg-btn active" onclick="switchFoodTab('meals')">食事</button>
-      <button id="tab-shop" class="seg-btn" onclick="switchFoodTab('shop')">🛒 買い物リスト</button>
+      <button id="tab-today" class="seg-btn active" onclick="switchFoodTab('today')">📊 今日</button>
+      <button id="tab-menu"  class="seg-btn" onclick="switchFoodTab('menu')">🍽 メニュー</button>
+      <button id="tab-shop"  class="seg-btn" onclick="switchFoodTab('shop')">🛒 買い物</button>
     </div>
 
-    <!-- 食事ビュー -->
-    <div id="view-meals">
+    <!-- 今日ビュー -->
+    <div id="view-today">
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
           <div class="card-title" style="margin-bottom:0;">今日の栄養</div>
@@ -450,6 +451,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
         <div class="card-title">💊 本日のサプリ</div>
         <div id="supp-checklist"></div>
       </div>
+    </div>
+
+    <!-- メニュービュー -->
+    <div id="view-menu" style="display:none;">
       <div class="card">
         <div id="rot-banner-wrap"></div>
         <div class="card-title">メニュー</div>
@@ -1319,13 +1324,25 @@ renderSupplements();
 
 // ── SHOPPING LIST ──────────────────────────────────────
 function switchFoodTab(tab){
-  document.getElementById('view-meals').style.display = tab==='meals'?'':'none';
-  document.getElementById('view-shop').style.display  = tab==='shop' ?'':'none';
-  document.getElementById('tab-meals').classList.toggle('active', tab==='meals');
-  document.getElementById('tab-shop').classList.toggle('active',  tab==='shop');
+  ['today','menu','shop'].forEach(t=>{
+    document.getElementById('view-'+t).style.display = t===tab?'':'none';
+    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+  });
   if(tab==='shop') renderShopping();
 }
 
+function renderWeekMenu(){
+  document.getElementById('week-menu').innerHTML = ROTATION.map(r=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border);">
+      <div style="width:22px;font-size:12px;font-weight:700;color:var(--blue);text-align:center;">${r.day}</div>
+      <span style="font-size:18px;">${r.emoji}</span>
+      <div style="flex:1;">
+        <div style="font-size:14px;font-weight:500;">${r.name}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px;">${r.recipe}</div>
+      </div>
+      <div style="text-align:right;font-size:11px;color:var(--text3);">P${r.prot}g<br>${r.cal}kcal</div>
+    </div>`).join('');
+}
 function renderShopping(){
   const checked = new Set(DB.shopping||[]);
   document.getElementById('shop-list').innerHTML = SHOPPING.map(sec=>
@@ -1342,18 +1359,6 @@ function renderShopping(){
       </div>`;
     }).join('')
   ).join('');
-
-  // 今週の献立
-  document.getElementById('week-menu').innerHTML = ROTATION.map(r=>`
-    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border);">
-      <div style="width:22px;font-size:12px;font-weight:700;color:var(--blue);text-align:center;">${r.day}</div>
-      <span style="font-size:18px;">${r.emoji}</span>
-      <div style="flex:1;">
-        <div style="font-size:14px;font-weight:500;">${r.name}</div>
-        <div style="font-size:10px;color:var(--text3);margin-top:2px;">${r.recipe}</div>
-      </div>
-      <div style="text-align:right;font-size:11px;color:var(--text3);">P${r.prot}g<br>${r.cal}kcal</div>
-    </div>`).join('');
 }
 
 function toggleShopItem(key){
@@ -1376,6 +1381,7 @@ function delMeal(i){
 }
 renderNutrition();
 renderSuppChecklist();
+renderWeekMenu();
 
 // ── SLEEP ─────────────────────────────────────────────
 const slColor = h => h>=7?'#34c759':h>=6?'#ff9500':'#ff3b30';
