@@ -441,7 +441,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
           <div class="card-title" style="margin-bottom:0;">今日の栄養</div>
           <div id="train-day-badge" style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:99px;"></div>
         </div>
-        <div id="macro-bars"></div>
+        <div id="nutr-summary"></div>
+        <div id="macro-bars" style="display:none;border-top:0.5px solid var(--surface2);padding-top:14px;margin-top:8px;"></div>
       </div>
       <div class="card">
         <div class="card-title">今日の食事</div>
@@ -1046,6 +1047,14 @@ function ring(pct,color,r){
       transform="rotate(-90 ${c} ${c})"/>
   </svg>`;
 }
+let _nutrExpanded = false;
+function toggleNutrDetail(){
+  _nutrExpanded = !_nutrExpanded;
+  const bEl  = document.getElementById('macro-bars');
+  const tBtn = document.getElementById('nutr-toggle-btn');
+  if(bEl)  bEl.style.display  = _nutrExpanded ? '' : 'none';
+  if(tBtn) tBtn.textContent   = _nutrExpanded ? '▲ 閉じる' : '▼ 全20項目を表示';
+}
 function renderNutrition() {
   const today = DB.meals.filter(m=>m.date===TODAY);
   const r = f => today.reduce((a,m)=>a+(m[f]||0),0);
@@ -1054,6 +1063,47 @@ function renderNutrition() {
   const fsatFat=r('satFat'),fvitA=r('vitA'),fvitB1=r('vitB1'),fvitB2=r('vitB2');
   const fvitC=r('vitC'),fzn=r('zn'),fvitD=r('vitD'),fvitB6=r('vitB6');
   const salt = parseFloat((na*2.54/1000).toFixed(1));
+
+  // ── compact summary ──────────────────────────────────
+  const calRatio  = CAL_TGT>0 ? cal/CAL_TGT : 0;
+  const calPct    = Math.round(calRatio*100);
+  const calColor  = calRatio>=0.9?'#34c759':calRatio>=0.6?'#ff9f0a':'#ff453a';
+  const calRem    = CAL_TGT - Math.round(cal);
+  const calRemStr = calRem>0 ? `あと ${calRem} kcal` : `超過 +${Math.abs(calRem)} kcal`;
+  const _ch = [];
+  if(salt>7.5)          _ch.push({lbl:`塩分 +${(salt-7.5).toFixed(1)}g 超過`,col:'#ff453a',bg:'rgba(255,69,58,.12)', pri:1});
+  if(fsatFat>20)        _ch.push({lbl:'飽和脂肪 超過',                        col:'#ff453a',bg:'rgba(255,69,58,.12)', pri:1});
+  if(fvitD/8.5<0.5)     _ch.push({lbl:'VitD 不足',                            col:'#ff453a',bg:'rgba(255,69,58,.12)', pri:2});
+  if(fca/750<0.5)       _ch.push({lbl:'Ca 不足',                              col:'#ff9f0a',bg:'rgba(255,159,10,.12)',pri:3});
+  if(fk/3000<0.5)       _ch.push({lbl:'K 不足',                               col:'#ff9f0a',bg:'rgba(255,159,10,.12)',pri:3});
+  if(ffe/7.5<0.5)       _ch.push({lbl:'鉄 不足',                              col:'#ff9f0a',bg:'rgba(255,159,10,.12)',pri:3});
+  if(prot/PROT_TGT>=1)  _ch.push({lbl:'タンパク質 ✓',                         col:'#34c759',bg:'rgba(52,199,89,.12)', pri:4});
+  if(fiber>=25)         _ch.push({lbl:'食物繊維 ✓',                           col:'#34c759',bg:'rgba(52,199,89,.12)', pri:4});
+  if(fvitC>=100)        _ch.push({lbl:'VitC ✓',                              col:'#34c759',bg:'rgba(52,199,89,.12)', pri:5});
+  _ch.sort((a,b)=>a.pri-b.pri);
+  const chipsHtml = _ch.slice(0,5).map(c=>`<span style="font-size:11px;font-weight:500;padding:3px 9px;border-radius:99px;background:${c.bg};color:${c.col};">${c.lbl}</span>`).join('');
+  const sumEl = document.getElementById('nutr-summary');
+  if(sumEl) sumEl.innerHTML = `
+    <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
+      <div style="position:relative;width:66px;height:66px;flex-shrink:0;line-height:0;">
+        ${ring(Math.min(1,calRatio),calColor,26)}
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2;">
+          <div style="font-size:14px;font-weight:700;color:${calColor};">${calPct}%</div>
+          <div style="font-size:9px;color:var(--text3);">cal</div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:17px;font-weight:700;">${Math.round(cal).toLocaleString()}<span style="font-size:11px;font-weight:400;color:var(--text3);margin-left:3px;">kcal</span></div>
+        <div style="font-size:11px;color:${calRem<0?'#ff453a':'var(--text3)'};margin-top:2px;">目標 ${CAL_TGT} · ${calRemStr}</div>
+        <div style="display:flex;gap:12px;margin-top:7px;">
+          <span style="font-size:12px;"><span style="color:var(--text3);">P </span><span style="font-weight:600;">${Math.round(prot)}g</span><span style="font-size:10px;color:var(--text3);"> /${PROT_TGT}</span></span>
+          <span style="font-size:12px;"><span style="color:var(--text3);">F </span><span style="font-weight:600;">${Math.round(fat)}g</span><span style="font-size:10px;color:var(--text3);"> /${FAT_TGT}</span></span>
+          <span style="font-size:12px;"><span style="color:var(--text3);">C </span><span style="font-weight:600;">${Math.round(carbs)}g</span><span style="font-size:10px;color:var(--text3);"> /${CARB_TGT}</span></span>
+        </div>
+      </div>
+    </div>
+    ${chipsHtml?`<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;">${chipsHtml}</div>`:''}
+    <button id="nutr-toggle-btn" onclick="toggleNutrDetail()" style="width:100%;background:var(--surface2);border:none;border-radius:8px;padding:9px;font-size:12px;color:var(--text3);cursor:pointer;-webkit-tap-highlight-color:transparent;">${_nutrExpanded?'▲ 閉じる':'▼ 全20項目を表示'}</button>`;
 
   const badge = document.getElementById('train-day-badge');
   if(badge){
@@ -1145,6 +1195,7 @@ function renderNutrition() {
     '<div class="mbsec-title">マクロ栄養素</div>'  + barHtml(MACROS)   +
     '<div class="mbsec-title">ミネラル</div>'       + barHtml(MINERALS) +
     '<div class="mbsec-title">ビタミン</div>'       + barHtml(VITAMINS);
+  document.getElementById('macro-bars').style.display = _nutrExpanded ? '' : 'none';
 
   const ml = document.getElementById('mlist');
   if(!today.length){ ml.innerHTML='<div style="text-align:center;padding:20px;color:var(--text3);font-size:14px;">食事を追加してください</div>'; }
