@@ -1686,8 +1686,6 @@ function renderLib(){
     ...LIB.q.map(x=>({...x,status:'q'})),
   ];
   const items = _libTab==='all' ? ALL : ALL.filter(x=>x.tag===_libTab);
-  const el = document.getElementById('lib-content');
-  if(!el) return;
   el.innerHTML = items.length ? items.map(x=>{
     const st  = STATUS[x.status];
     const tc  = TAG_COLOR[x.tag]||'rgba(142,142,147,.12);color:var(--text3)';
