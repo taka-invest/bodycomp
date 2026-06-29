@@ -237,15 +237,19 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
 .shop-reset{width:100%;border:1px solid var(--border);background:none;color:var(--text3);border-radius:10px;padding:10px;font-size:14px;margin-top:14px;cursor:pointer;}
 
 /* ── Macro bars ── */
-.mbrow{margin-bottom:12px;}
+.mbrow{margin-bottom:16px;}
 .mbrow:last-child{margin-bottom:0;}
-.mbhdr{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
-.mblbl{font-size:12px;color:var(--text2);font-weight:600;}
-.mbval{font-size:12px;color:var(--text2);font-weight:500;}
-.mbtrack{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;}
-.mbfill{height:100%;border-radius:4px;transition:width .4s ease;}
-.mbrow.done .mblbl,.mbrow.done .mbval{color:var(--green);}
-.mbsec-title{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--surface2);}
+.mbhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.mblbl{font-size:13px;color:var(--text);font-weight:500;display:flex;align-items:center;gap:5px;}
+.mbval{font-size:12px;color:var(--text3);font-weight:500;}
+.mbtrack{height:14px;background:var(--surface2);border-radius:7px;overflow:visible;position:relative;}
+.mbtrack-inner{height:100%;border-radius:7px;overflow:hidden;position:relative;}
+.mbfill{height:100%;border-radius:7px;transition:width .4s ease;}
+.mbgoal{position:absolute;top:-2px;width:2px;height:18px;background:var(--text3);border-radius:1px;transform:translateX(-50%);z-index:2;pointer-events:none;}
+.mbbadge{font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;line-height:1.5;flex-shrink:0;}
+.mbremain{text-align:right;font-size:11px;color:var(--text3);margin-top:4px;}
+.mbrow.done .mblbl{color:var(--green);}
+.mbsec-title{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin:16px 0 10px;padding-top:14px;border-top:1px solid var(--surface2);}
 .mbsec-title:first-child{margin-top:0;padding-top:0;border-top:none;}
 .mbsupp{font-size:10px;color:var(--text3);margin-left:3px;font-weight:400;}
 .supp-row{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--surface2);cursor:pointer;-webkit-tap-highlight-color:transparent;}
@@ -1053,27 +1057,56 @@ function renderNutrition() {
     badge.style.color = IS_TRAIN ? 'var(--green)' : 'var(--blue)';
   }
   function barHtml(rows){
+    const GOAL_PCT='66.67';
     return rows.map(m=>{
       const ratio = m.tgt>0 ? m.val/m.tgt : 0;
-      const pct   = Math.min(1, ratio)*100;
       const over  = m.limit && ratio>1;
       const done  = !m.limit && ratio>=1;
-      const color = m.limit
-        ? (ratio>=1?'#ff453a':ratio>=0.8?'#ff9f0a':'#34c759')
+      const pctInt = Math.round(ratio*100);
+      // badge
+      const bdBg = m.limit
+        ? (over?'rgba(255,69,58,.15)':ratio>=0.8?'rgba(255,159,10,.15)':'rgba(52,199,89,.15)')
+        : (ratio>=0.7?'rgba(52,199,89,.15)':ratio>=0.5?'rgba(255,159,10,.15)':'rgba(255,69,58,.15)');
+      const bdFg = m.limit
+        ? (over?'#ff453a':ratio>=0.8?'#ff9f0a':'#34c759')
         : (ratio>=0.7?'#34c759':ratio>=0.5?'#ff9f0a':'#ff453a');
+      const bdLbl = over?'超過 ⚠️':done?'✓ 達成':`${pctInt}%`;
+      // bar geometry (track = 0〜150% of target)
+      const fillPct = (Math.min(ratio,1.5)/1.5*100).toFixed(2);
+      const fillColor = m.limit
+        ? (over?'rgba(52,199,89,.4)':'#34c759')
+        : (ratio>=0.7?'#34c759':ratio>=0.5?'#ff9f0a':'#ff453a');
+      const overW = over ? (parseFloat(fillPct)-66.67).toFixed(2) : 0;
+      const overHtml = over
+        ? `<div style="position:absolute;top:0;left:${GOAL_PCT}%;width:${overW}%;height:100%;background:#ff453a;border-radius:0 7px 7px 0;"></div>`
+        : '';
+      const trackBorder = over ? 'box-shadow:0 0 0 1.5px rgba(255,69,58,.6);' : '';
+      // value
       const valStr = m.dec
         ? `${m.val.toFixed(1)} / ${m.tgt} ${m.unit}`
         : `${Math.round(m.val)} / ${m.tgt} ${m.unit}`;
-      const overStyle = over ? 'color:#ff453a;' : '';
-      const trackStyle = over
-        ? 'box-shadow:0 0 0 1.5px #ff453a,0 0 6px #ff453a44;'
-        : '';
+      // remain / excess text
+      let remHtml='';
+      if(over){
+        const exc=m.dec?(m.val-m.tgt).toFixed(1):Math.round(m.val-m.tgt);
+        remHtml=`<div class="mbremain" style="color:#ff453a;font-weight:500;">+${exc} ${m.unit} 超過</div>`;
+      }else if(!m.limit && !done){
+        const rem=m.dec?(m.tgt-m.val).toFixed(1):Math.round(m.tgt-m.val);
+        remHtml=`<div class="mbremain">あと ${rem} ${m.unit}</div>`;
+      }
       return `<div class="mbrow${done?' done':''}">
         <div class="mbhdr">
-          <span class="mblbl">${m.lbl}</span>
-          <span class="mbval" style="${overStyle}">${valStr}${m.note?'<span class="mbsupp">'+m.note+'</span>':''}${over?' ⚠️':''}</span>
+          <span class="mblbl">${m.lbl}<span class="mbbadge" style="background:${bdBg};color:${bdFg};">${bdLbl}</span></span>
+          <span class="mbval" style="${over?'color:#ff453a;':''}">${valStr}${m.note?'<span class="mbsupp">'+m.note+'</span>':''}</span>
         </div>
-        <div class="mbtrack" style="${trackStyle}"><div class="mbfill" style="width:${pct.toFixed(1)}%;background:${color};"></div></div>
+        <div class="mbtrack" style="${trackBorder}">
+          <div class="mbtrack-inner">
+            <div class="mbfill" style="width:${fillPct}%;background:${fillColor};"></div>
+            ${overHtml}
+          </div>
+          <div class="mbgoal" style="left:${GOAL_PCT}%;"></div>
+        </div>
+        ${remHtml}
       </div>`;
     }).join('');
   }
