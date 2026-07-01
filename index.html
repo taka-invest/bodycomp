@@ -476,7 +476,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
           <div class="card-title" style="margin-bottom:0;">🍲 平日ホットクック献立</div>
           <div id="hc-week-badge" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;"></div>
         </div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">夜にまとめて調理 → 翌日の昼・夕の2食に。A週・B週が隔週で切り替わります（飽き対策）｜上のA週/B週ボタンでどちらも確認できます｜タップで材料・操作手順を展開</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">夜にまとめて調理 → その日の夕食＋翌日の昼食に（1日ズレます）。A週・B週が隔週で切り替わります（飽き対策）｜上のA週/B週ボタンでどちらも確認できます｜タップで材料・操作手順を展開</div>
         <div id="hc-list"></div>
       </div>
       <div class="card">
@@ -1079,7 +1079,7 @@ const SHOPPING = [
 ];
 
 // ── ホットクック 平日献立（A週・B週 隔週ローテーション）────
-// 夜にまとめて調理 → 翌日の昼・夕の2食（同じ料理）。15:00プロテイン込みでタンパク質160g/日を想定。
+// 夜にまとめて調理 → その日の夕食＋翌日の昼食（1日ズレる・同じ料理）。15:00プロテイン込みでタンパク質160g/日を想定。
 // 主食（大麦ご飯・もち麦）は別添え — 下の「もち麦」プリセットを追加で使用。
 const HOTCOOK_A = [
   {day:'月',name:'鶏むね 無水トマトカレー煮',emoji:'🍛',meat:'鶏むね肉（皮なし）',meatWt:'450g',
@@ -1404,71 +1404,74 @@ function renderNutrition() {
       </div>
       <div class="lright" onclick="delMeal(${i})" style="color:var(--red);font-size:22px;padding:4px 0 4px 12px;">×</div>
     </div>`).join(''); }
-  // 今日のローテーションバナー（平日=ホットクック／土日=プロテイン鍋）
-  const hc = getHotcookDish(todayDow);
+  // 今日のクイック追加バナー：昼食＝前日仕込み／夕食＝今日仕込み（1日ズレるモデル）
+  const hcDinner = getTodayDinner(todayDow);
+  const hcLunch  = getTodayLunch(todayDow);
   const trainBg = IS_TRAIN ? 'rgba(52,199,89,.08)' : 'rgba(0,122,255,.08)';
-  const trainLabel = IS_TRAIN ? '🏋️ トレーニング日' : '💤 休養日';
   const trainColor = IS_TRAIN ? 'var(--green)' : 'var(--blue)';
-  let bannerHtml;
-  if(hc){
-    const d = hc.dish;
-    const wkColor = hc.week==='A' ? 'var(--blue)' : 'var(--purple)';
-    const todayMeals = DB.meals.filter(m=>m.date===TODAY);
-    const riceLabel = IS_TRAIN ? 'トレ日' : '休養日';
-    const riceAmt = IS_TRAIN ? '200g' : '150g';
-    const breakfastDone  = todayMeals.some(m=>m.name==='ナイトオーツ（朝食）');
-    const lunchDishDone  = todayMeals.some(m=>m.name===`${d.name}（昼）`);
-    const dinnerDishDone = todayMeals.some(m=>m.name===`${d.name}（夕）`);
-    const lunchRiceDone  = todayMeals.some(m=>m.name.includes('もち麦') && m.name.includes(`（${riceLabel}・昼）`));
-    const dinnerRiceDone = todayMeals.some(m=>m.name.includes('もち麦') && m.name.includes(`（${riceLabel}・夕）`));
-    const qaRow = (label, done, fn) => `
-      <div style="display:flex;align-items:center;gap:8px;padding:5px 0;">
-        <span style="font-size:12px;color:var(--text2);flex:1;">${label}</span>
-        ${done
-          ? `<span style="font-size:11px;color:var(--green);font-weight:600;">✅ 記録済み</span>`
-          : `<button onclick="${fn}" style="background:var(--blue);color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;">+ 追加</button>`}
-      </div>`;
-    bannerHtml = `
-    <div class="rot-banner" style="background:${trainBg};flex-direction:column;align-items:stretch;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span style="font-size:24px;">${d.emoji}</span>
-        <div style="flex:1;min-width:0;">
-          <div class="rot-day" style="color:${wkColor};">🍲 ホットクック（${hc.week}週・${d.day}）</div>
-          <div class="rot-name">${d.name}</div>
-          <div class="rot-mac">${d.meat} ${d.meatWt}</div>
-        </div>
-        <div style="text-align:right;flex-shrink:0;">
-          <div style="font-size:10px;color:var(--text3);">目標</div>
-          <div style="font-size:17px;font-weight:700;color:${trainColor};">${CAL_TGT}<span style="font-size:10px;font-weight:400;">kcal</span></div>
-        </div>
-      </div>
-      <div style="border-top:0.5px solid var(--border);margin-top:8px;padding-top:6px;">
-        <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:2px;">🌅 朝食</div>
-        ${qaRow('ナイトオーツ（プロテイン＋バナナ＋チアシード）', breakfastDone, `quickAddPresetByName('ナイトオーツ（朝食）')`)}
-        <div style="font-size:11px;font-weight:600;color:var(--text3);margin:6px 0 2px;">🍱 昼食</div>
-        ${qaRow('主菜（'+d.name+'）', lunchDishDone, `quickAddTodayMeal('昼')`)}
-        ${qaRow('もち麦 '+riceAmt, lunchRiceDone, `quickAddTodayRice('昼')`)}
-        <div style="font-size:11px;font-weight:600;color:var(--text3);margin:6px 0 2px;">🌙 夕食</div>
-        ${qaRow('主菜（'+d.name+'）', dinnerDishDone, `quickAddTodayMeal('夕')`)}
-        ${qaRow('もち麦 '+riceAmt, dinnerRiceDone, `quickAddTodayRice('夕')`)}
-      </div>
+  const todayMeals = DB.meals.filter(m=>m.date===TODAY);
+  const riceLabel = IS_TRAIN ? 'トレ日' : '休養日';
+  const riceAmt = IS_TRAIN ? '200g' : '150g';
+  const breakfastDone = todayMeals.some(m=>m.name==='ナイトオーツ（朝食）');
+  const qaRow = (label, done, fn) => `
+    <div style="display:flex;align-items:center;gap:8px;padding:5px 0;">
+      <span style="font-size:12px;color:var(--text2);flex:1;">${label}</span>
+      ${done
+        ? `<span style="font-size:11px;color:var(--green);font-weight:600;">✅ 記録済み</span>`
+        : `<button onclick="${fn}" style="background:var(--blue);color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;">+ 追加</button>`}
     </div>`;
-  } else {
-    const rot = ROTATION[todayDow];
-    bannerHtml = `
-    <div class="rot-banner" style="background:${trainBg};">
-      <span style="font-size:24px;">${rot.emoji}</span>
-      <div style="flex:1;">
-        <div class="rot-day" style="color:${trainColor};">${trainLabel}（${rot.day}）</div>
-        <div class="rot-name">${rot.name}</div>
-        <div class="rot-mac">${rot.season} · P${rot.prot}g · ${rot.cal}kcal</div>
+
+  const lunchD = hcLunch ? hcLunch.dish : null;
+  const dinnerD = hcDinner ? hcDinner.dish : null;
+  const lunchDishDone  = lunchD  ? todayMeals.some(m=>m.name===`${lunchD.name}（昼）`) : false;
+  const dinnerDishDone = dinnerD ? todayMeals.some(m=>m.name===`${dinnerD.name}（夕）`) : false;
+  const lunchRiceDone  = todayMeals.some(m=>m.name.includes('もち麦') && m.name.includes(`（${riceLabel}・昼）`));
+  const dinnerRiceDone = todayMeals.some(m=>m.name.includes('もち麦') && m.name.includes(`（${riceLabel}・夕）`));
+
+  const lunchSection = lunchD ? `
+    <div style="font-size:11px;font-weight:600;color:var(--text3);margin:6px 0 2px;">🍱 昼食（前日仕込み${hcLunch.legacy?'・旧ローテ':''}）：${lunchD.name}</div>
+    ${qaRow('主菜（'+lunchD.name+'）', lunchDishDone, `quickAddTodayMeal('昼')`)}
+    ${hcLunch.legacy ? '' : qaRow('もち麦 '+riceAmt, lunchRiceDone, `quickAddTodayRice('昼')`)}
+  ` : `
+    <div style="font-size:11px;font-weight:600;color:var(--text3);margin:6px 0 2px;">🍱 昼食</div>
+    <div style="font-size:12px;color:var(--text3);padding:4px 0;">前日の仕込みなし（自由枠・外食OK）</div>
+  `;
+  const dinnerSection = dinnerD ? `
+    <div style="font-size:11px;font-weight:600;color:var(--text3);margin:6px 0 2px;">🌙 夕食（今夜仕込み${hcDinner.legacy?'・旧ローテ':''}）：${dinnerD.name}</div>
+    ${qaRow('主菜（'+dinnerD.name+'）', dinnerDishDone, `quickAddTodayMeal('夕')`)}
+    ${hcDinner.legacy ? '' : qaRow('もち麦 '+riceAmt, dinnerRiceDone, `quickAddTodayRice('夕')`)}
+  ` : `
+    <div style="font-size:11px;font-weight:600;color:var(--text3);margin:6px 0 2px;">🌙 夕食</div>
+    <div style="font-size:12px;color:var(--text3);padding:4px 0;">仕込みなし（自由枠・外食OK）</div>
+  `;
+
+  const headD = dinnerD || lunchD;
+  const headEmoji = headD ? headD.emoji : '🍽';
+  const headName  = headD ? headD.name  : 'フリー枠の日';
+  const headWeek  = (hcDinner && !hcDinner.legacy) ? hcDinner.week : ((hcLunch && !hcLunch.legacy) ? hcLunch.week : null);
+  const wkColor = headWeek==='A' ? 'var(--blue)' : (headWeek==='B' ? 'var(--purple)' : 'var(--text3)');
+  const headLabel = headWeek ? `🍲 ホットクック（${headWeek}週）` : (headD ? '🍗 週末ローテーション' : '🍽 今日は仕込みなし');
+
+  const bannerHtml = `
+  <div class="rot-banner" style="background:${trainBg};flex-direction:column;align-items:stretch;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:24px;">${headEmoji}</span>
+      <div style="flex:1;min-width:0;">
+        <div class="rot-day" style="color:${wkColor};">${headLabel}</div>
+        <div class="rot-name">${headName}</div>
       </div>
       <div style="text-align:right;flex-shrink:0;">
         <div style="font-size:10px;color:var(--text3);">目標</div>
         <div style="font-size:17px;font-weight:700;color:${trainColor};">${CAL_TGT}<span style="font-size:10px;font-weight:400;">kcal</span></div>
       </div>
-    </div>`;
-  }
+    </div>
+    <div style="border-top:0.5px solid var(--border);margin-top:8px;padding-top:6px;">
+      <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:2px;">🌅 朝食</div>
+      ${qaRow('ナイトオーツ（プロテイン＋バナナ＋チアシード）', breakfastDone, `quickAddPresetByName('ナイトオーツ（朝食）')`)}
+      ${lunchSection}
+      ${dinnerSection}
+    </div>
+  </div>`;
   document.getElementById('rot-banner-wrap').innerHTML = bannerHtml;
   // ラベル更新
   const cLbl = document.getElementById('cal-tgt-lbl');
@@ -1614,6 +1617,15 @@ function getHotcookDish(dow){ // dow: 1=月 … 5=金
   const week = hotcookWeekLetter();
   return { week, dish: (week==='A'?HOTCOOK_A:HOTCOOK_B)[dow-1] };
 }
+// 仕込みモデル：その日の夜に仕込んだ分＝その日の夕食＋翌日の昼食（1日ズレる）
+function getTodayDinner(dow){ // dow: 0=日…6=土。その晩に仕込んで食べる夕食
+  if(dow>=1 && dow<=5) return getHotcookDish(dow); // 月〜金＝ホットクック
+  if(dow===0) return { dish: ROTATION[0], legacy:true }; // 日＝旧ローテーション（タイ風チキン）
+  return null; // 土＝仕込みなし（フリー枠）
+}
+function getTodayLunch(dow){ // 昼食＝前日夜に仕込んだものの残り
+  return getTodayDinner((dow+6)%7);
+}
 function hcSteps(category, menuName, manualCat){
   return [
     'まぜ技ユニットを使うメニューの場合は、ウィングを閉じた状態で先に取り付ける',
@@ -1670,9 +1682,10 @@ function addHotcookMeal(idx, when){
   save(); renderNutrition(); renderToday();
 }
 function quickAddTodayMeal(when){
-  const hc = getHotcookDish(todayDow); // 常に実際の今日の献立（_hcViewWeekの閲覧トグルは無視）
-  if(!hc) return;
-  const d = hc.dish;
+  // 昼食＝前日仕込み／夕食＝今日仕込み（_hcViewWeekの閲覧トグルとは独立、常に実際の今日基準）
+  const src = when==='昼' ? getTodayLunch(todayDow) : getTodayDinner(todayDow);
+  if(!src) return;
+  const d = src.dish;
   DB.meals.push({date:TODAY, name:`${d.name}（${when}）`,
     cal:d.cal, prot:d.prot||0, fat:d.fat||0, carbs:d.carbs||0, fiber:d.fiber||0, na:d.na||0,
     ca:d.ca||0, vitD:d.vitD||0});
