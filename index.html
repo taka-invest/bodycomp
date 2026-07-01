@@ -1433,12 +1433,12 @@ function renderNutrition() {
   if(cLbl) cLbl.textContent = CAL_TGT;
   if(pLbl) pLbl.textContent = PROT_TGT;
 
-  // プリセット（カテゴリ別）
+  // プリセット（カテゴリ別・普段は閉じていてタップで展開）
   const cats = [...new Set(PRESETS.map(p=>p.cat))];
   document.getElementById('mpresets').innerHTML = cats.map(cat=>{
     const items = PRESETS.map((p,i)=>({...p,i})).filter(p=>p.cat===cat);
-    return `<div class="preset-cat">${cat}</div>` +
-      items.map(p=>{
+    const open = !!_mpresetOpen[cat];
+    const itemsHtml = items.map(p=>{
         const rot = cat==='夕食' ? ROTATION.find(r=>p.name.includes('（'+r.day)) : null;
         const rawRecipe = rot ? rot.recipe : (p.recipe||'');
         const hasDetail = !!rawRecipe;
@@ -1466,7 +1466,21 @@ function renderNutrition() {
           </div>
           ${detailHtml}`;
       }).join('');
+    return `<div class="preset-cat" onclick="toggleMpresetCat('${cat}')" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+        <span>${cat}（${items.length}）</span>
+        <span id="mp-arr-${cat}" style="display:inline-block;transition:transform .2s;transform:${open?'rotate(180deg)':'none'};">▼</span>
+      </div>
+      <div id="mp-body-${cat}" style="display:${open?'':'none'};">${itemsHtml}</div>`;
   }).join('');
+}
+let _mpresetOpen = {}; // カテゴリ名 → 開閉状態（未設定＝閉じる）
+function toggleMpresetCat(cat){
+  _mpresetOpen[cat] = !_mpresetOpen[cat];
+  const body = document.getElementById('mp-body-'+cat);
+  const arr = document.getElementById('mp-arr-'+cat);
+  if(!body) return;
+  body.style.display = _mpresetOpen[cat] ? '' : 'none';
+  if(arr) arr.style.transform = _mpresetOpen[cat] ? 'rotate(180deg)' : 'none';
 }
 function togglePresetDetail(i){
   const panel=document.getElementById('pd-'+i);
