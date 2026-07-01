@@ -457,6 +457,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
         <div id="macro-bars" style="display:none;border-top:0.5px solid var(--surface2);padding-top:14px;margin-top:8px;"></div>
       </div>
       <div class="card">
+        <div class="card-title" style="margin-bottom:8px;">🍽 食事ごとの内訳</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;">どの食事がどの栄養素をどれだけ補っているか</div>
+        <div id="meal-breakdown"></div>
+      </div>
+      <div class="card">
         <div class="card-title">今日の食事</div>
         <div id="mlist"></div>
       </div>
@@ -1241,6 +1246,78 @@ function toggleNutrDetail(){
   if(bEl)  bEl.style.display  = _nutrExpanded ? '' : 'none';
   if(tBtn) tBtn.textContent   = _nutrExpanded ? '▲ 閉じる' : '▼ 全21項目を表示';
 }
+// ── 食事ごとの栄養内訳（どのメニューが何を補っているか） ──────
+const MEAL_GROUPS = [
+  {key:'朝食',   label:'朝食',   emoji:'🌅', color:'#5ac8fa'},
+  {key:'昼食',   label:'昼食',   emoji:'🍱', color:'#ff9f0a'},
+  {key:'夕食',   label:'夕食',   emoji:'🌙', color:'#af52de'},
+  {key:'15:00',  label:'15:00',  emoji:'💪', color:'#34c759'},
+  {key:'サプリ', label:'サプリ', emoji:'💊', color:'#ff453a'},
+  {key:'追加',   label:'追加',   emoji:'➕', color:'#8e8e93'},
+];
+function categorizeMeal(m){
+  if(m.name.endsWith('昼）')) return '昼食';
+  if(m.name.endsWith('夕）')) return '夕食';
+  if(SUPP_ITEMS.some(s=>s.name===m.name)) return 'サプリ';
+  const preset = PRESETS.find(p=>p.name===m.name);
+  if(preset) return preset.cat==='15:00補完' ? '15:00' : preset.cat;
+  return '追加';
+}
+function renderMealBreakdown(){
+  const el = document.getElementById('meal-breakdown');
+  if(!el) return;
+  const today = DB.meals.filter(m=>m.date===TODAY);
+  if(!today.length){ el.innerHTML = '<div style="text-align:center;padding:20px 0;color:var(--text3);font-size:13px;">まだ食事が記録されていません</div>'; return; }
+
+  const grouped = MEAL_GROUPS.map(g=>({...g, items: today.filter(m=>categorizeMeal(m)===g.key)})).filter(g=>g.items.length);
+  const legendHtml = grouped.map(g=>`
+    <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text2);margin-right:12px;">
+      <span style="width:8px;height:8px;border-radius:2px;background:${g.color};display:inline-block;"></span>${g.emoji} ${g.label}
+    </span>`).join('');
+
+  const NUTRIENTS = [
+    {field:'cal',  lbl:'カロリー',   tgt:CAL_TGT,  unit:'kcal'},
+    {field:'prot', lbl:'タンパク質', tgt:PROT_TGT, unit:'g'},
+    {field:'fiber',lbl:'食物繊維',   tgt:25,       unit:'g'},
+    {field:'na',   lbl:'塩分',       tgt:7.5,      unit:'g', salt:true},
+    {field:'epaDha',lbl:'EPA+DHA',  tgt:2000,     unit:'mg'},
+  ];
+  const barsHtml = NUTRIENTS.map(n=>{
+    const gv = grouped.map(g=>{
+      const raw = g.items.reduce((a,m)=>a+(m[n.field]||0),0);
+      const val = n.salt ? raw*2.54/1000 : raw;
+      return {...g, val};
+    });
+    const total = gv.reduce((a,g)=>a+g.val,0);
+    const scaleMax = n.tgt*1.5;
+    let cursor = 0;
+    const segs = gv.filter(g=>g.val>0).map(g=>{
+      const w = Math.max(0, Math.min(g.val/scaleMax*100, 100-cursor));
+      const html = `<div style="position:absolute;left:${cursor}%;width:${w}%;height:100%;background:${g.color};"></div>`;
+      cursor += w;
+      return html;
+    }).join('');
+    const goalPct = Math.min(100/1.5, 100);
+    const totalStr = (n.field==='cal'||n.field==='epaDha') ? Math.round(total).toLocaleString() : (n.salt||n.field==='fiber' ? total.toFixed(1) : Math.round(total));
+    const breakdown = gv.filter(g=>g.val>0).map(g=>{
+      const vStr = (n.field==='cal'||n.field==='epaDha') ? Math.round(g.val) : (n.salt||n.field==='fiber' ? g.val.toFixed(1) : Math.round(g.val));
+      return `${g.emoji}${vStr}${n.unit}`;
+    }).join('　');
+    return `<div style="margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+        <span style="font-size:12px;font-weight:600;color:var(--text2);">${n.lbl}</span>
+        <span style="font-size:12px;color:var(--text3);">${totalStr} / ${n.tgt}${n.unit}</span>
+      </div>
+      <div style="position:relative;height:14px;background:var(--surface2);border-radius:7px;overflow:hidden;">
+        ${segs}
+        <div style="position:absolute;top:0;left:${goalPct}%;width:1px;height:100%;background:var(--text3);opacity:.5;"></div>
+      </div>
+      <div style="font-size:10px;color:var(--text3);margin-top:3px;">${breakdown}</div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `<div style="margin-bottom:12px;">${legendHtml}</div>${barsHtml}`;
+}
 function renderNutrition() {
   const today = DB.meals.filter(m=>m.date===TODAY);
   const r = f => today.reduce((a,m)=>a+(m[f]||0),0);
@@ -1482,6 +1559,7 @@ function renderNutrition() {
   if(cLbl) cLbl.textContent = CAL_TGT;
   if(pLbl) pLbl.textContent = PROT_TGT;
 
+  renderMealBreakdown();
 }
 let _mpresetOpen = {}; // カテゴリ名 → 開閉状態（未設定＝閉じる）
 function toggleMpresetCat(cat){
