@@ -482,6 +482,23 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
         <div id="hc-list"></div>
       </div>
       <div class="card">
+        <div class="card-title" style="margin-bottom:8px;">🍚 ご飯の作り置き（マーナ冷凍ごはん容器）</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">日曜に5日分×昼夕2食＝10個をまとめて炊いて容器へ。曜日はA週・B週共通（トレ日＝火・金は変わらないため）</div>
+        <div style="display:flex;gap:10px;">
+          <div style="flex:1;padding:12px;border-radius:12px;background:rgba(0,122,255,.08);">
+            <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px;">小容器（280ml）× 6個</div>
+            <div style="font-size:12px;color:var(--text2);margin-bottom:2px;">オフ日：月・水・木</div>
+            <div style="font-size:18px;font-weight:700;">150g<span style="font-size:11px;font-weight:400;color:var(--text3);"> ／食</span></div>
+          </div>
+          <div style="flex:1;padding:12px;border-radius:12px;background:rgba(255,149,0,.08);">
+            <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:4px;">大容器（390ml）× 4個</div>
+            <div style="font-size:12px;color:var(--text2);margin-bottom:2px;">トレ日：火・金</div>
+            <div style="font-size:18px;font-weight:700;">200g<span style="font-size:11px;font-weight:400;color:var(--text3);"> ／食</span></div>
+          </div>
+        </div>
+        <div style="font-size:10px;color:var(--text3);margin-top:8px;">標準収容量に対して小=約83%・大=約80%でほぼ同じ余裕度｜詰めすぎ防止で蒸気の抜けが均一になる</div>
+      </div>
+      <div class="card">
         <div class="card-title" style="margin-bottom:8px;">今週の献立（土・日）</div>
         <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">平日は上のホットクック献立をご覧ください</div>
         <div id="week-menu"></div>
@@ -1023,9 +1040,9 @@ const PRESETS = [
   {name:'納豆 1パック（昼食セット）',     cal:95, prot:8, fat:5, carbs:6, fiber:3, na:300, ca:45, mg2:45, k:330, fe:1.7,cu:0.18,vitE:0.5, satFat:0.4,vitA:0,  vitB1:0,  vitB2:0.3,vitC:0, zn:0.9,vitD:0,  vitB6:0.1, emoji:'🫘',cat:'昼食',
    recipe:'納豆 1パック（45g）・付属タレ・からし｜よく混ぜて昼食に追加。K2・葉酸・マンガンを補完'},
   {name:'もち麦 150g（休養日・昼）',      cal:233,prot:4, fat:1, carbs:48,fiber:5, na:0,   ca:5,  mg2:20, k:70,  fe:0.5,cu:0.10,vitE:0,   satFat:0.1,vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0.4,vitD:0,  vitB6:0,   emoji:'🌾',cat:'昼食',
-   recipe:'もち麦 150g（炊き）・前日夜に炊いてタッパーへ｜β-グルカン約4.8g。血糖値スパイク抑制・低GI。プロテイン鍋残り＋納豆とセット'},
+   recipe:'もち麦 150g（炊き）・マーナ冷凍ごはん容器「小（280ml）」で作り置き｜β-グルカン約4.8g。血糖値スパイク抑制・低GI。ホットクックの主菜とセット'},
   {name:'もち麦 200g（トレ日・昼）',      cal:311,prot:6, fat:1, carbs:64,fiber:7, na:0,   ca:6,  mg2:25, k:93,  fe:0.65,cu:0.10,vitE:0,   satFat:0.1,vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0.55,vitD:0,  vitB6:0.05, emoji:'🌾',cat:'昼食',
-   recipe:'もち麦 200g（炊き）・前日夜に炊いてタッパーへ｜β-グルカン約6.4g。トレ日は昼夕とも200gで統一、食物繊維を安定確保。ホットクックの主菜とセット'},
+   recipe:'もち麦 200g（炊き）・マーナ冷凍ごはん容器「大（390ml）」で作り置き｜β-グルカン約6.4g。トレ日は昼夕とも200gで統一、食物繊維を安定確保。ホットクックの主菜とセット'},
   {name:'プロテイン 2スクープ（15:00）',  cal:240,prot:43,fat:4, carbs:8, fiber:0, na:250, ca:150,mg2:30, k:150, fe:0.5,cu:0.00,vitE:0,   satFat:0.5,vitA:0,  vitB1:0.1,vitB2:0.3,vitC:0, zn:2.0,vitD:0,  vitB6:0.1, emoji:'💪',cat:'15:00補完'},
   {name:'タイ風チキン（日）',             cal:570,prot:57,fat:33,carbs:14,fiber:5, na:550, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, satFat:4.3,vitA:640,vitB1:0.5,vitB2:1.2,vitC:28,zn:8.0,vitD:3.1,vitB6:1.2, emoji:'🍗',cat:'夕食'},
   {name:'和風生姜チキン（月）',           cal:585,prot:57,fat:33,carbs:18,fiber:5, na:950, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, satFat:4.3,vitA:640,vitB1:0.5,vitB2:1.2,vitC:28,zn:8.0,vitD:3.1,vitB6:1.2, emoji:'🍗',cat:'夕食'},
@@ -1037,9 +1054,9 @@ const PRESETS = [
   {name:'かぼちゃ 80g（休養日・鍋追加）', cal:73, prot:2, fat:0, carbs:17,fiber:3, na:1,   ca:12, mg2:20, k:344, fe:0.4,cu:0.06,vitE:3.9, satFat:0,  vitA:270,vitB1:0.1,vitB2:0.1,vitC:34,zn:0.2,vitD:0,  vitB6:0.2, emoji:'🎃',cat:'追加',
    recipe:'かぼちゃ 80g（蒸し or 電子レンジ3分）｜プロテイン鍋に投入。ビタミンE約2mg・β-カロテン・カリウム340mgを補完。アーモンドの休養日代替'},
   {name:'もち麦 150g（休養日・夕）',      cal:233,prot:4, fat:1, carbs:48,fiber:5, na:0,   ca:5,  mg2:20, k:70,  fe:0.5,cu:0.10,vitE:0,   satFat:0.1,vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0.4,vitD:0,  vitB6:0,   emoji:'🌾',cat:'追加',
-   recipe:'もち麦 150g（炊き）｜プロテイン鍋と一緒に。β-グルカン約4.8g'},
+   recipe:'もち麦 150g（炊き）・マーナ冷凍ごはん容器「小（280ml）」で作り置き｜ホットクックの主菜と一緒に。β-グルカン約4.8g'},
   {name:'もち麦 200g（トレ日・夕）',      cal:311,prot:6, fat:1, carbs:64,fiber:7, na:0,   ca:6,  mg2:25, k:93,  fe:0.65,cu:0.10,vitE:0,   satFat:0.1,vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0.55,vitD:0,  vitB6:0.05, emoji:'🌾',cat:'追加',
-   recipe:'もち麦 200g（炊き）｜ホットクックの主菜と一緒に。β-グルカン約6.4g。トレ日は昼夕とも200gで統一'},
+   recipe:'もち麦 200g（炊き）・マーナ冷凍ごはん容器「大（390ml）」で作り置き｜ホットクックの主菜と一緒に。β-グルカン約6.4g。トレ日は昼夕とも200gで統一'},
   {name:'乾燥わかめ 5g',                  cal:8,  prot:1, fat:0, carbs:1, fiber:1, na:370, ca:41, mg2:55, k:245, fe:0.2,cu:0.02,vitE:0.4, satFat:0,  vitA:5,  vitB1:0,  vitB2:0,  vitC:1, zn:0,  vitD:0,  vitB6:0,   emoji:'🌊',cat:'追加',
    recipe:'乾燥わかめ 5g｜水で戻してプロテイン鍋に投入。ヨウ素約200mcg（1日RDA 130mcg超）を補完'},
   {name:'こんにゃく 100g（食物繊維）',    cal:5,  prot:0, fat:0, carbs:3, fiber:2, na:10,  ca:43, mg2:2,  k:33,  fe:0.4,cu:0.02,vitE:0,   satFat:0,  vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0,  vitD:0,  vitB6:0,   emoji:'🌿',cat:'追加'},
