@@ -1122,11 +1122,11 @@ const HOTCOOK_B = [
    category:'魚料理',menuName:'鮭のちゃんちゃん焼き',manualCat:'煮物を作る［まぜない］（魚は必ずまぜない）',
    prot:48,cal:530,fat:32,carbs:12,fiber:6,na:470},
   {day:'水',name:'鶏もも 参鶏湯（サムゲタン）風スープ',emoji:'🍜',meat:'鶏もも肉（皮なし）',meatWt:'500g',
-   veg:'長ねぎ1本・にんにく5片・しめじ100g・冷凍にんじん100g',
-   season:'生姜1片・塩少々・黒胡椒',
-   prep:'鶏ももと丸ごとにんにく・生姜・長ねぎを内鍋へ。だしで煮るだけ（米は別添え大麦ご飯で代用）',
+   veg:'長ねぎ1本・にんにく5片・しめじ100g・冷凍にんじん100g・乾燥きくらげ5g（天日干し推奨・戻さずそのまま投入可）',
+   season:'干しエビ（アミエビ）10g・生姜1片・塩少々・黒胡椒',
+   prep:'鶏ももと丸ごとにんにく・生姜・長ねぎ・きくらげ・干しエビを内鍋へ。だしで煮るだけ（米は別添え大麦ご飯で代用）｜干しエビのうま味で塩を増やさず満足感アップ',
    category:'スープ・鍋',menuName:'鶏スープ',manualCat:'スープを作る［まぜない］（丸ごとにんにく・ねぎの大きめ食材のため）',
-   prot:45,cal:350,fat:15,carbs:8,fiber:4,na:400},
+   prot:48,cal:370,fat:15,carbs:8,fiber:5,na:430,ca:355,vitD:1},
   {day:'木',name:'サバの無水カレー煮（ターメリック）',emoji:'🍛',meat:'サバ切り身',meatWt:'480g',
    veg:'冷凍たまねぎ150g・冷凍パプリカ150g・しめじ100g',
    season:'カレー粉大1・ターメリック小1/2・黒胡椒少々・トマト缶100g',
@@ -1185,6 +1185,8 @@ const SHOPPING_HC_B = [
     {name:'玉ねぎ',            qty:'100g',note:'火分'},
     {name:'長ねぎ',            qty:'1本',note:'水分'},
     {name:'にんにく',          qty:'6片',note:'水分5片＋各日少々'},
+    {name:'乾燥きくらげ',      qty:'5g',note:'水分・天日干し推奨（ビタミンD）'},
+    {name:'干しエビ（アミエビ）',qty:'10g',note:'水分・無塩タイプ推奨'},
     {name:'冷凍たまねぎ',      qty:'150g',note:'木分'},
     {name:'冷凍パプリカ',      qty:'250g',note:'木・金分'},
     {name:'冷凍なす',          qty:'150g',note:'金分'},
@@ -1628,7 +1630,8 @@ function addHotcookMeal(idx, when){
   const week = hotcookWeekLetter();
   const d = (week==='A'?HOTCOOK_A:HOTCOOK_B)[idx];
   DB.meals.push({date:TODAY, name:`${d.name}（${when}）`,
-    cal:d.cal, prot:d.prot||0, fat:d.fat||0, carbs:d.carbs||0, fiber:d.fiber||0, na:d.na||0});
+    cal:d.cal, prot:d.prot||0, fat:d.fat||0, carbs:d.carbs||0, fiber:d.fiber||0, na:d.na||0,
+    ca:d.ca||0, vitD:d.vitD||0});
   save(); renderNutrition(); renderToday();
 }
 function renderHotcookMenu(){
