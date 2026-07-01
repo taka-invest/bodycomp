@@ -483,20 +483,20 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
       </div>
       <div class="card">
         <div class="card-title" style="margin-bottom:8px;">🍚 ご飯の作り置き（マーナ冷凍ごはん容器）</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">日曜に5日分×昼夕2食＝10個をまとめて炊いて容器へ。曜日はA週・B週共通（トレ日＝火・金は変わらないため）</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">日曜に5日分×昼夕2食＝10個をまとめて炊いて容器へ。曜日はA週・B週共通（高需要日＝火・水・金は変わらないため）</div>
         <div style="display:flex;gap:10px;">
           <div style="flex:1;padding:12px;border-radius:12px;background:rgba(0,122,255,.08);">
-            <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px;">小容器（280ml）× 6個</div>
-            <div style="font-size:12px;color:var(--text2);margin-bottom:2px;">オフ日：月・水・木</div>
+            <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px;">小容器（280ml）× 4個</div>
+            <div style="font-size:12px;color:var(--text2);margin-bottom:2px;">真のオフ日：月・木</div>
             <div style="font-size:18px;font-weight:700;">150g<span style="font-size:11px;font-weight:400;color:var(--text3);"> ／食</span></div>
           </div>
           <div style="flex:1;padding:12px;border-radius:12px;background:rgba(255,149,0,.08);">
-            <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:4px;">大容器（390ml）× 4個</div>
-            <div style="font-size:12px;color:var(--text2);margin-bottom:2px;">トレ日：火・金</div>
+            <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:4px;">大容器（390ml）× 6個</div>
+            <div style="font-size:12px;color:var(--text2);margin-bottom:2px;">高需要日：火（筋トレ）・水（4×4 Zone5）・金（筋トレ）</div>
             <div style="font-size:18px;font-weight:700;">200g<span style="font-size:11px;font-weight:400;color:var(--text3);"> ／食</span></div>
           </div>
         </div>
-        <div style="font-size:10px;color:var(--text3);margin-top:8px;">標準収容量に対して小=約83%・大=約80%でほぼ同じ余裕度｜詰めすぎ防止で蒸気の抜けが均一になる</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:8px;">水曜はNorwegian 4×4（Zone5高強度）でグリコーゲン消費が大きく、翌々日の金曜パーソナルへの回復需要もあるため、筋トレ日と同じ高炭水化物枠に統一。カロリー目標(2200kcal)も火・水・金で統一</div>
       </div>
       <div class="card">
         <div class="card-title" style="margin-bottom:8px;">今週の献立（土・日）</div>
@@ -999,7 +999,7 @@ renderWklist();
 
 // ── NUTRITION ─────────────────────────────────────────
 const DAY_NAMES = ['日','月','火','水','木','金','土'];
-const TRAIN_DAYS = [2, 5]; // 火=2, 金=5
+const TRAIN_DAYS = [2, 3, 5]; // 火=2(筋トレ), 水=3(4×4 Zone5・高強度), 金=5(筋トレ)
 const todayDow = new Date(TODAY+'T00:00:00').getDay();
 const IS_TRAIN = TRAIN_DAYS.includes(todayDow);
 const CAL_TGT  = IS_TRAIN ? 2200 : 1850;
@@ -1305,12 +1305,14 @@ function renderNutrition() {
 
   const badge = document.getElementById('train-day-badge');
   if(badge){
-    const IS_CARDIO = [3,6,0].includes(todayDow); // 水=4×4, 土=Z2, 日=Z2
-    if(IS_TRAIN){
+    if(todayDow===3){
+      badge.textContent = '🚴 4×4（Zone5）日';
+      badge.style.background = 'rgba(255,149,0,.1)'; badge.style.color = 'var(--orange)';
+    } else if(IS_TRAIN){
       badge.textContent = '🏋️ 筋トレ日';
       badge.style.background = 'rgba(52,199,89,.1)'; badge.style.color = 'var(--green)';
-    } else if(IS_CARDIO){
-      badge.textContent = todayDow===3 ? '🚴 4×4（Zone5）日' : '🚴 Zone2 日';
+    } else if([6,0].includes(todayDow)){
+      badge.textContent = '🚴 Zone2 日';
       badge.style.background = 'rgba(255,149,0,.1)'; badge.style.color = 'var(--orange)';
     } else {
       badge.textContent = '💤 休養日';
