@@ -498,16 +498,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
         </div>
         <div style="font-size:10px;color:var(--text3);margin-top:8px;">水曜はNorwegian 4×4（Zone5高強度）でグリコーゲン消費が大きく、翌々日の金曜パーソナルへの回復需要もあるため、筋トレ日と同じ高炭水化物枠に統一。カロリー目標(2200kcal)も火・水・金で統一</div>
       </div>
-      <div class="card">
-        <div class="card-title" style="margin-bottom:8px;">今週の献立（土・日）</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">平日は上のホットクック献立をご覧ください</div>
-        <div id="week-menu"></div>
-      </div>
-      <div class="card">
-        <div class="card-title">サプリカバレッジ</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">現在の4製品で充足する栄養素</div>
-        <div id="supp-coverage"></div>
-      </div>
     </div>
 
     <!-- 買い物リストビュー -->
@@ -1781,18 +1771,6 @@ function renderHotcookShopping(){
 }
 // ─────────────────────────────────────────────────────────
 
-function renderWeekMenu(){
-  document.getElementById('week-menu').innerHTML = ROTATION.filter(r=>r.day==='土'||r.day==='日').map(r=>`
-    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border);">
-      <div style="width:22px;font-size:12px;font-weight:700;color:var(--blue);text-align:center;">${r.day}</div>
-      <span style="font-size:18px;">${r.emoji}</span>
-      <div style="flex:1;">
-        <div style="font-size:14px;font-weight:500;">${r.name}</div>
-        <div style="font-size:10px;color:var(--text3);margin-top:2px;">${r.recipe}</div>
-      </div>
-      <div style="text-align:right;font-size:11px;color:var(--text3);">P${r.prot}g<br>${r.cal}kcal</div>
-    </div>`).join('');
-}
 function renderShopping(){
   const checked = new Set(DB.shopping||[]);
   document.getElementById('shop-list').innerHTML = SHOPPING.map(sec=>
@@ -1831,7 +1809,6 @@ function delMeal(i){
 }
 renderNutrition();
 renderSuppChecklist();
-renderWeekMenu();
 renderHotcookMenu();
 
 // ── SLEEP ─────────────────────────────────────────────
@@ -2212,7 +2189,14 @@ function renderLib(){
     ...LIB.q.map(x=>({...x,status:'q'})),
   ];
   const items = _libTab==='all' ? ALL : ALL.filter(x=>x.tag===_libTab);
-  el.innerHTML = items.length ? items.map(x=>{
+  const suppHtml = _libTab==='サプリ' ? `
+    <div style="margin-bottom:18px;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:2px;">💊 サプリカバレッジ</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:10px;">現在の4製品で充足する栄養素</div>
+      <div id="supp-coverage"></div>
+    </div>
+    <div style="border-top:0.5px solid var(--border);margin-bottom:14px;"></div>` : '';
+  el.innerHTML = suppHtml + (items.length ? items.map(x=>{
     const st  = STATUS[x.status];
     const tc  = TAG_COLOR[x.tag]||'rgba(142,142,147,.12);color:var(--text3)';
     const [tagBg, tagFg] = tc.split(';');
@@ -2224,7 +2208,8 @@ function renderLib(){
       <div class="libb">${x.b}</div>
       <div class="libs">出典: ${x.s}</div>
     </div>`;
-  }).join('') : '<div style="text-align:center;padding:32px 0;color:var(--text3);font-size:14px;">この分野のデータはまだありません</div>';
+  }).join('') : '<div style="text-align:center;padding:32px 0;color:var(--text3);font-size:14px;">この分野のデータはまだありません</div>');
+  if(_libTab==='サプリ') renderSupplements();
 }
 renderLib();
 renderAeroZones();
