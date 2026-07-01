@@ -474,7 +474,16 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
         <div id="mpresets"></div>
       </div>
       <div class="card">
-        <div class="card-title" style="margin-bottom:8px;">今週の献立</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div class="card-title" style="margin-bottom:0;">🍲 平日ホットクック献立</div>
+          <div id="hc-week-badge" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;"></div>
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">夜にまとめて調理 → 翌日の昼・夕の2食に。A週・B週が隔週で切り替わります（飽き対策）｜タップで材料・操作手順を展開</div>
+        <div id="hc-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:8px;">今週の献立（土・日）</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">平日は上のホットクック献立をご覧ください</div>
         <div id="week-menu"></div>
       </div>
       <div class="card">
@@ -487,8 +496,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
     <!-- 買い物リストビュー -->
     <div id="view-shop" style="display:none;">
       <div class="card">
-        <div class="card-title">買い物リスト</div>
-        <div style="font-size:12px;color:var(--text3);margin-bottom:8px;">日曜日に一括購入 — 14食分（昼・夜 × 7日）</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <div class="card-title" style="margin-bottom:0;">🍲 ホットクック買い出し</div>
+          <div id="hc-shop-week-badge" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;"></div>
+        </div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:8px;">平日5日分（昼・夜×5日＝10食）｜隔週でA週・B週の材料に切り替わります</div>
+        <div id="hc-shop-list"></div>
+        <button class="shop-reset" onclick="resetHotcookShopping()">✗ チェックをすべてリセット</button>
+      </div>
+      <div class="card">
+        <div class="card-title">買い物リスト（週末・朝食など）</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:8px;">土・日のプロテイン鍋＋朝食分</div>
         <div id="shop-list"></div>
         <button class="shop-reset" onclick="resetShopping()">✗ チェックをすべてリセット</button>
       </div>
@@ -1054,6 +1072,137 @@ const SHOPPING = [
     {name:'トマト缶',          qty:'2缶',note:'金曜分'},
   ]},
 ];
+
+// ── ホットクック 平日献立（A週・B週 隔週ローテーション）────
+// 夜にまとめて調理 → 翌日の昼・夕の2食（同じ料理）。15:00プロテイン込みでタンパク質160g/日を想定。
+// 主食（大麦ご飯・もち麦）は別添え — 下の「もち麦」プリセットを追加で使用。
+const HOTCOOK_A = [
+  {day:'月',name:'鶏むね 無水トマトカレー煮',emoji:'🍛',meat:'鶏むね肉（皮なし）',meatWt:'450g',
+   veg:'冷凍ブロッコリー150g・冷凍パプリカ150g・しめじ100g',
+   season:'カットトマト缶200g・カレー粉大1・塩小1/3・おろしにんにく少々',
+   prep:'鶏むねをざく切りにして内鍋へ（唯一の包丁仕事）。野菜・きのこ・トマト缶・調味料を上から加えるだけ',
+   category:'カレー・シチュー',menuName:'無水カレー',
+   prot:52,cal:400,fat:9,carbs:18,fiber:8,na:400},
+  {day:'火',name:'鮭の豆乳味噌煮（石狩風）',emoji:'🐟',meat:'鮭切り身',meatWt:'480g',
+   veg:'冷凍キャベツ150g・冷凍にんじん100g・しめじ100g',
+   season:'無調整豆乳200ml・味噌大2・バター少々',
+   prep:'鮭は骨取り済みのものが楽。野菜・きのこを敷き鮭をのせ、豆乳と味噌を溶いて加える',
+   category:'魚料理',menuName:'鮭の味噌煮',
+   prot:48,cal:520,fat:30,carbs:14,fiber:5,na:480},
+  {day:'水',name:'鶏もも 筑前煮風',emoji:'🍢',meat:'鶏もも肉（皮なし）',meatWt:'500g',
+   veg:'冷凍ごぼう100g・冷凍れんこん100g・冷凍里芋 or にんじん100g・しいたけ100g',
+   season:'だし200ml・醤油大1・みりん少々',
+   prep:'鶏ももを一口大に（唯一の包丁仕事）。冷凍根菜は凍ったまま投入でOK',
+   category:'煮物',menuName:'筑前煮',
+   prot:45,cal:410,fat:16,carbs:20,fiber:9,na:430},
+  {day:'木',name:'サバの無水トマト味噌煮',emoji:'🐟',meat:'サバ切り身',meatWt:'480g',
+   veg:'冷凍たまねぎ150g・冷凍ズッキーニ or なす150g・しめじ100g',
+   season:'カットトマト缶200g・味噌大1.5',
+   prep:'サバをのせ、野菜・トマト缶・味噌を加えるだけ。骨取り済み切り身が時短の鍵',
+   category:'魚料理',menuName:'さばの味噌煮',
+   prot:46,cal:550,fat:34,carbs:14,fiber:6,na:460},
+  {day:'金',name:'鶏むね 無水ポトフ',emoji:'🍲',meat:'鶏むね肉（皮なし）',meatWt:'450g',
+   veg:'冷凍キャベツ150g・にんじん100g・玉ねぎ100g',
+   season:'コンソメ1個・塩少々',
+   prep:'鶏むねをぶつ切りにして内鍋へ。野菜を加えコンソメを溶かすだけ',
+   category:'スープ・鍋',menuName:'ポトフ',
+   prot:51,cal:360,fat:9,carbs:16,fiber:7,na:420},
+];
+const HOTCOOK_B = [
+  {day:'月',name:'鶏むね バンバンジー風蒸し鶏スープ',emoji:'🥢',meat:'鶏むね肉（皮なし）',meatWt:'450g',
+   veg:'冷凍もやし150g・にんじん100g・しめじ100g',
+   season:'生姜1片・にんにく1片・すりごま大2・醤油/酢/砂糖 各少々（食べる直前にごまだれをかける）',
+   prep:'鶏むねと生姜にんにくを内鍋へ。取り出したら手で割いてごまだれをかける',
+   category:'蒸し料理',menuName:'蒸し鶏',
+   prot:51,cal:380,fat:14,carbs:10,fiber:6,na:410},
+  {day:'火',name:'鮭のちゃんちゃん焼き風（味噌バター）',emoji:'🐟',meat:'鮭切り身',meatWt:'480g',
+   veg:'冷凍キャベツ200g・玉ねぎ100g・しめじ100g',
+   season:'味噌大2・バター10g・みりん大1',
+   prep:'キャベツを敷き鮭をのせ、味噌バターだれをかけて内鍋へ',
+   category:'魚料理',menuName:'鮭のちゃんちゃん焼き',
+   prot:48,cal:530,fat:32,carbs:12,fiber:6,na:470},
+  {day:'水',name:'鶏もも 参鶏湯（サムゲタン）風スープ',emoji:'🍜',meat:'鶏もも肉（皮なし）',meatWt:'500g',
+   veg:'長ねぎ1本・にんにく5片・しめじ100g・冷凍にんじん100g',
+   season:'生姜1片・塩少々・黒胡椒',
+   prep:'鶏ももと丸ごとにんにく・生姜・長ねぎを内鍋へ。だしで煮るだけ（米は別添え大麦ご飯で代用）',
+   category:'スープ・鍋',menuName:'鶏スープ',
+   prot:45,cal:350,fat:15,carbs:8,fiber:4,na:400},
+  {day:'木',name:'サバの無水カレー煮（ターメリック）',emoji:'🍛',meat:'サバ切り身',meatWt:'480g',
+   veg:'冷凍たまねぎ150g・冷凍パプリカ150g・しめじ100g',
+   season:'カレー粉大1・ターメリック小1/2・黒胡椒少々・トマト缶100g',
+   prep:'サバと野菜・スパイス・トマト缶を内鍋へ。黒胡椒でクルクミン吸収を最大化',
+   category:'カレー・シチュー',menuName:'無水カレー',
+   prot:46,cal:560,fat:34,carbs:16,fiber:7,na:440},
+  {day:'金',name:'鶏むね 無水ラタトゥイユ',emoji:'🍅',meat:'鶏むね肉（皮なし）',meatWt:'450g',
+   veg:'冷凍なす150g・冷凍ズッキーニ150g・冷凍パプリカ100g',
+   season:'カットトマト缶200g・オリーブオイル大1・にんにく1片・バジル/オレガノ少々・塩少々',
+   prep:'鶏むねと野菜・トマト缶・ハーブを内鍋へ。仕上げにオリーブオイルを回しかけ',
+   category:'煮物',menuName:'ラタトゥイユ',
+   prot:51,cal:380,fat:12,carbs:16,fiber:8,na:400},
+];
+
+const SHOPPING_HC_A = [
+  {cat:'🥩 タンパク質', items:[
+    {name:'鶏むね肉（皮なし）',qty:'900g',note:'月・金分'},
+    {name:'鶏もも肉（皮なし）',qty:'500g',note:'水分'},
+    {name:'鮭切り身',          qty:'480g',note:'火分'},
+    {name:'サバ切り身',        qty:'480g',note:'木分（骨取り済みが時短）'},
+  ]},
+  {cat:'🥬 冷凍野菜', items:[
+    {name:'冷凍ブロッコリー',  qty:'150g',note:'月分'},
+    {name:'冷凍パプリカ',      qty:'150g',note:'月分'},
+    {name:'冷凍キャベツ',      qty:'300g',note:'火・金分'},
+    {name:'冷凍にんじん',      qty:'200g',note:'火・金分（生でも可）'},
+    {name:'冷凍ごぼう',        qty:'100g',note:'水分'},
+    {name:'冷凍れんこん',      qty:'100g',note:'水分'},
+    {name:'冷凍里芋 or にんじん',qty:'100g',note:'水分'},
+    {name:'冷凍たまねぎ',      qty:'150g',note:'木分'},
+    {name:'冷凍ズッキーニ or なす',qty:'150g',note:'木分'},
+  ]},
+  {cat:'🍄 きのこ', items:[
+    {name:'しめじ or えのき',  qty:'500g（5袋）',note:'各日100g'},
+    {name:'しいたけ',          qty:'100g',note:'水分'},
+  ]},
+  {cat:'🧂 調味料・その他', items:[
+    {name:'カットトマト缶',    qty:'2缶',note:'月・木分'},
+    {name:'無調整豆乳',        qty:'200ml',note:'火分'},
+    {name:'味噌',              qty:'—',note:'常備・火/木分'},
+    {name:'カレー粉',          qty:'—',note:'常備・月分'},
+    {name:'コンソメ',          qty:'1個',note:'金分'},
+  ]},
+];
+const SHOPPING_HC_B = [
+  {cat:'🥩 タンパク質', items:[
+    {name:'鶏むね肉（皮なし）',qty:'900g',note:'月・金分'},
+    {name:'鶏もも肉（皮なし）',qty:'500g',note:'水分'},
+    {name:'鮭切り身',          qty:'480g',note:'火分'},
+    {name:'サバ切り身',        qty:'480g',note:'木分（骨取り済みが時短）'},
+  ]},
+  {cat:'🥬 冷凍野菜・生鮮', items:[
+    {name:'冷凍もやし',        qty:'150g',note:'月分'},
+    {name:'にんじん',          qty:'200g',note:'月・水分'},
+    {name:'冷凍キャベツ',      qty:'200g',note:'火分'},
+    {name:'玉ねぎ',            qty:'100g',note:'火分'},
+    {name:'長ねぎ',            qty:'1本',note:'水分'},
+    {name:'にんにく',          qty:'6片',note:'水分5片＋各日少々'},
+    {name:'冷凍たまねぎ',      qty:'150g',note:'木分'},
+    {name:'冷凍パプリカ',      qty:'250g',note:'木・金分'},
+    {name:'冷凍なす',          qty:'150g',note:'金分'},
+    {name:'冷凍ズッキーニ',    qty:'150g',note:'金分'},
+  ]},
+  {cat:'🍄 きのこ', items:[
+    {name:'しめじ or えのき',  qty:'400g（4袋）',note:'月・火・水・木分'},
+  ]},
+  {cat:'🧂 調味料・その他', items:[
+    {name:'すりごま',          qty:'—',note:'常備・月分'},
+    {name:'味噌',              qty:'—',note:'常備・火分'},
+    {name:'バター',            qty:'—',note:'常備・火分'},
+    {name:'カレー粉・ターメリック',qty:'—',note:'常備・木分'},
+    {name:'カットトマト缶',    qty:'2缶',note:'木・金分'},
+    {name:'オリーブオイル・バジル/オレガノ',qty:'—',note:'常備・金分'},
+  ]},
+];
+
 // CAL_TGT / PROT_TGT は ROTATION ブロック内の IS_TRAIN で動的設定済み
 const FAT_TGT   = IS_TRAIN ? 65  : 55;
 const CARB_TGT  = IS_TRAIN ? 244 : 179;
@@ -1236,12 +1385,31 @@ function renderNutrition() {
       </div>
       <div class="lright" onclick="delMeal(${i})" style="color:var(--red);font-size:22px;padding:4px 0 4px 12px;">×</div>
     </div>`).join(''); }
-  // 今日のローテーションバナー
-  const rot = ROTATION[todayDow];
+  // 今日のローテーションバナー（平日=ホットクック／土日=プロテイン鍋）
+  const hc = getHotcookDish(todayDow);
   const trainBg = IS_TRAIN ? 'rgba(52,199,89,.08)' : 'rgba(0,122,255,.08)';
   const trainLabel = IS_TRAIN ? '🏋️ トレーニング日' : '💤 休養日';
   const trainColor = IS_TRAIN ? 'var(--green)' : 'var(--blue)';
-  document.getElementById('rot-banner-wrap').innerHTML = `
+  let bannerHtml;
+  if(hc){
+    const d = hc.dish;
+    const wkColor = hc.week==='A' ? 'var(--blue)' : 'var(--purple)';
+    bannerHtml = `
+    <div class="rot-banner" style="background:${trainBg};">
+      <span style="font-size:24px;">${d.emoji}</span>
+      <div style="flex:1;">
+        <div class="rot-day" style="color:${wkColor};">🍲 ホットクック（${hc.week}週・${d.day}）</div>
+        <div class="rot-name">${d.name}</div>
+        <div class="rot-mac">${d.meat} ${d.meatWt} · P${d.prot}g · ${d.cal}kcal</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        <div style="font-size:10px;color:var(--text3);">目標</div>
+        <div style="font-size:17px;font-weight:700;color:${trainColor};">${CAL_TGT}<span style="font-size:10px;font-weight:400;">kcal</span></div>
+      </div>
+    </div>`;
+  } else {
+    const rot = ROTATION[todayDow];
+    bannerHtml = `
     <div class="rot-banner" style="background:${trainBg};">
       <span style="font-size:24px;">${rot.emoji}</span>
       <div style="flex:1;">
@@ -1254,6 +1422,8 @@ function renderNutrition() {
         <div style="font-size:17px;font-weight:700;color:${trainColor};">${CAL_TGT}<span style="font-size:10px;font-weight:400;">kcal</span></div>
       </div>
     </div>`;
+  }
+  document.getElementById('rot-banner-wrap').innerHTML = bannerHtml;
   // ラベル更新
   const cLbl = document.getElementById('cal-tgt-lbl');
   const pLbl = document.getElementById('prot-tgt-lbl');
@@ -1407,11 +1577,153 @@ function switchFoodTab(tab){
     document.getElementById('view-'+t).style.display = t===tab?'':'none';
     document.getElementById('tab-'+t).classList.toggle('active', t===tab);
   });
-  if(tab==='shop') renderShopping();
+  if(tab==='shop'){ renderShopping(); renderHotcookShopping(); }
 }
 
+// ── ホットクック A/B週判定・レンダー ─────────────────────
+function hotcookWeekLetter(){
+  const ref = new Date('2026-01-05T00:00:00'); // 基準月曜＝A週
+  const d = new Date(TODAY+'T00:00:00');
+  const diffDays = Math.round((d - ref) / 86400000);
+  const weekIndex = Math.floor(diffDays / 7);
+  return (((weekIndex % 2) + 2) % 2 === 0) ? 'A' : 'B';
+}
+function getHotcookDish(dow){ // dow: 1=月 … 5=金
+  if(dow < 1 || dow > 5) return null;
+  const week = hotcookWeekLetter();
+  return { week, dish: (week==='A'?HOTCOOK_A:HOTCOOK_B)[dow-1] };
+}
+function hcSteps(category, menuName){
+  return [
+    '内鍋に材料を記載の順に入れる（液体・調味料は最後）',
+    'ふたを閉め、カチッと音がするまでしっかりロックする',
+    '「メニューを選ぶ」ダイヤルを回し「'+category+'」を選択',
+    'サブメニューから「'+menuName+'」に近いメニューを選び「決定」を押す（無ければ「手動」で温度・時間を設定）',
+    '重さ・人数を聞かれたら調整して「決定」',
+    '「スタート」ボタンを押す（ピピッと音で調理開始）',
+    '完成の合図音が鳴ったらふたを開け、全体を軽く混ぜて完成',
+    'スマホ連携時：COCORO KITCHENアプリで外出先から進捗確認・完成通知を受け取れる',
+  ];
+}
+function toggleHotcookDetail(idx){
+  const panel = document.getElementById('hc-detail-'+idx);
+  const arr = document.getElementById('hc-arr-'+idx);
+  if(!panel) return;
+  const open = panel.style.display !== 'none';
+  panel.style.display = open ? 'none' : '';
+  if(arr) arr.style.transform = open ? '' : 'rotate(180deg)';
+}
+function toggleHotcookSteps(idx){
+  const panel = document.getElementById('hc-steps-'+idx);
+  const arr = document.getElementById('hc-steps-arr-'+idx);
+  if(!panel) return;
+  const open = panel.style.display !== 'none';
+  panel.style.display = open ? 'none' : '';
+  if(arr) arr.style.transform = open ? '' : 'rotate(180deg)';
+}
+function addHotcookMeal(idx, when){
+  const week = hotcookWeekLetter();
+  const d = (week==='A'?HOTCOOK_A:HOTCOOK_B)[idx];
+  DB.meals.push({date:TODAY, name:`${d.name}（${when}）`,
+    cal:d.cal, prot:d.prot||0, fat:d.fat||0, carbs:d.carbs||0, fiber:d.fiber||0, na:d.na||0});
+  save(); renderNutrition(); renderToday();
+}
+function renderHotcookMenu(){
+  const list = document.getElementById('hc-list');
+  const badge = document.getElementById('hc-week-badge');
+  if(!list) return;
+  const week = hotcookWeekLetter();
+  const dishes = week==='A' ? HOTCOOK_A : HOTCOOK_B;
+  if(badge){
+    badge.textContent = '今週：' + week + '週';
+    badge.style.background = week==='A' ? 'rgba(0,122,255,.12)' : 'rgba(175,82,222,.12)';
+    badge.style.color = week==='A' ? 'var(--blue)' : 'var(--purple)';
+  }
+  list.innerHTML = dishes.map((d,i)=>`
+    <div style="border-bottom:0.5px solid var(--border);${i===dishes.length-1?'border-bottom:none;':''}">
+      <div onclick="toggleHotcookDetail(${i})" style="display:flex;align-items:center;gap:10px;padding:10px 0;cursor:pointer;">
+        <div style="width:22px;font-size:12px;font-weight:700;color:var(--blue);text-align:center;">${d.day}</div>
+        <span style="font-size:20px;">${d.emoji}</span>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:500;">${d.name}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:1px;">${d.meat} ${d.meatWt}</div>
+        </div>
+        <div style="text-align:right;font-size:11px;color:var(--text3);margin-right:6px;">P${d.prot}g<br>${d.cal}kcal</div>
+        <span id="hc-arr-${i}" style="color:var(--text3);font-size:10px;display:inline-block;transition:transform .2s;">▼</span>
+      </div>
+      <div id="hc-detail-${i}" style="display:none;padding:0 0 12px 32px;font-size:12px;line-height:1.6;">
+        <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">🥬 材料（2食分）</div>
+        <div style="color:var(--text3);margin-bottom:8px;">${d.meat} ${d.meatWt}・${d.veg}</div>
+        <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">🧂 調味料</div>
+        <div style="color:var(--text3);margin-bottom:8px;">${d.season}</div>
+        <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">📝 仕込み（10分以内）</div>
+        <div style="color:var(--text3);margin-bottom:10px;">${d.prep}</div>
+
+        <div onclick="event.stopPropagation();toggleHotcookSteps(${i})" style="display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:10px;background:rgba(0,122,255,.08);cursor:pointer;margin-bottom:2px;">
+          <span style="font-size:14px;">🎛</span>
+          <span style="flex:1;font-size:12px;font-weight:600;color:var(--blue);">ヘルシオ 操作手順（KN-HW16G-B）</span>
+          <span id="hc-steps-arr-${i}" style="color:var(--blue);font-size:10px;display:inline-block;transition:transform .2s;">▼</span>
+        </div>
+        <div id="hc-steps-${i}" style="display:none;padding:10px 4px 4px;">
+          <ol style="padding-left:18px;color:var(--text2);">
+            ${hcSteps(d.category, d.menuName).map(s=>`<li style="margin-bottom:6px;">${s}</li>`).join('')}
+          </ol>
+          <div style="font-size:10px;color:var(--text3);margin-top:4px;">※ボタン名・メニュー名は実機の表示に合わせて読み替えてください（型番・ファームウェアにより多少異なる場合があります）</div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button onclick="event.stopPropagation();addHotcookMeal(${i},'昼')" style="flex:1;background:var(--surface2);border:none;border-radius:10px;padding:8px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;">🍱 昼食に追加</button>
+          <button onclick="event.stopPropagation();addHotcookMeal(${i},'夕')" style="flex:1;background:var(--surface2);border:none;border-radius:10px;padding:8px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;">🌙 夕食に追加</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function toggleHotcookShopItem(key){
+  if(!DB.shopping) DB.shopping=[];
+  const idx = DB.shopping.indexOf(key);
+  if(idx>=0) DB.shopping.splice(idx,1);
+  else DB.shopping.push(key);
+  save(); renderHotcookShopping();
+}
+function resetHotcookShopping(){
+  const week = hotcookWeekLetter();
+  const list = week==='A' ? SHOPPING_HC_A : SHOPPING_HC_B;
+  const prefix = 'HC'+week+':';
+  DB.shopping = (DB.shopping||[]).filter(k=>!k.startsWith(prefix));
+  save(); renderHotcookShopping();
+}
+function renderHotcookShopping(){
+  const el = document.getElementById('hc-shop-list');
+  const badge = document.getElementById('hc-shop-week-badge');
+  if(!el) return;
+  const week = hotcookWeekLetter();
+  const sections = week==='A' ? SHOPPING_HC_A : SHOPPING_HC_B;
+  const prefix = 'HC'+week+':';
+  if(badge){
+    badge.textContent = '今週：' + week + '週';
+    badge.style.background = week==='A' ? 'rgba(0,122,255,.12)' : 'rgba(175,82,222,.12)';
+    badge.style.color = week==='A' ? 'var(--blue)' : 'var(--purple)';
+  }
+  const checked = new Set(DB.shopping||[]);
+  el.innerHTML = sections.map(sec=>
+    `<div class="shop-cat">${sec.cat}</div>` +
+    sec.items.map(item=>{
+      const key = prefix + item.name;
+      const done = checked.has(key);
+      return `<div class="shop-item" onclick="toggleHotcookShopItem('${key.replace(/'/g,"\\'")}')">
+        <div class="shop-check${done?' done':''}"></div>
+        <div class="shop-label">
+          <div class="shop-name${done?' done':''}">${item.name}</div>
+          <div class="shop-qty">${item.qty}${item.note?' · '+item.note:''}</div>
+        </div>
+      </div>`;
+    }).join('')
+  ).join('');
+}
+// ─────────────────────────────────────────────────────────
+
 function renderWeekMenu(){
-  document.getElementById('week-menu').innerHTML = ROTATION.map(r=>`
+  document.getElementById('week-menu').innerHTML = ROTATION.filter(r=>r.day==='土'||r.day==='日').map(r=>`
     <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border);">
       <div style="width:22px;font-size:12px;font-weight:700;color:var(--blue);text-align:center;">${r.day}</div>
       <span style="font-size:18px;">${r.emoji}</span>
@@ -1461,6 +1773,7 @@ function delMeal(i){
 renderNutrition();
 renderSuppChecklist();
 renderWeekMenu();
+renderHotcookMenu();
 
 // ── SLEEP ─────────────────────────────────────────────
 const slColor = h => h>=7?'#34c759':h>=6?'#ff9500':'#ff3b30';
