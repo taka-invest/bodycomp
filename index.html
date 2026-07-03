@@ -375,6 +375,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
     </div>
 
     <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div class="card-title" style="margin-bottom:0;">📍 100日プラン進捗</div>
+        <div id="cp-status-badge" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;"></div>
+      </div>
+      <div id="checkpoint-card"></div>
+    </div>
+
+    <div class="card">
       <div class="card-title">🎯 リコンポジション シミュレーター</div>
       <div class="sout">
         <div class="sstat"><div class="ssv" id="s-fat">—</div><div class="ssl">落とすべき脂肪</div></div>
@@ -750,6 +758,83 @@ function refreshMetrics() {
 }
 refreshMetrics();
 
+// ── 100日プラン チェックポイント ─────────────────────────
+// 起点は固定日（新システム移行日）。TODAYは毎日変わるのでここはハードコードする。
+const PLAN_START_DATE   = '2026-07-01';
+const PLAN_DURATION_DAYS = 100;
+const PLAN_TARGET_FAT    = 14.0; // 魅力度(10-12%)×アンチエイジング(12-17%)の重複ゾーン中心値
+function daysBetween(d1, d2){
+  return Math.round((new Date(d2+'T00:00:00') - new Date(d1+'T00:00:00')) / 86400000);
+}
+function get2WeekAvg(field){
+  const cutoff = new Date(TODAY+'T00:00:00');
+  cutoff.setDate(cutoff.getDate() - 14);
+  const recent = DB.measurements.filter(m => new Date(m.date+'T00:00:00') >= cutoff);
+  if(!recent.length) return null;
+  return recent.reduce((a,m)=>a+m[field], 0) / recent.length;
+}
+function renderCheckpoint(){
+  const el = document.getElementById('checkpoint-card');
+  const badge = document.getElementById('cp-status-badge');
+  if(!el) return;
+
+  // 起点時点の実測値（プラン開始日以前で最も新しい記録。無ければ最古の記録で代用）
+  const startM = [...DB.measurements].reverse().find(m => m.date <= PLAN_START_DATE) || DB.measurements[0] || {weight:79.5, fat:19.3};
+  const startFat = startM.fat, startWeight = startM.weight;
+
+  const elapsed  = Math.max(0, daysBetween(PLAN_START_DATE, TODAY));
+  const progress = Math.min(1, elapsed / PLAN_DURATION_DAYS);
+  const expectedFat = startFat + (PLAN_TARGET_FAT - startFat) * progress; // 線形の目安ライン
+
+  const avgFat    = get2WeekAvg('fat');
+  const avgWeight = get2WeekAvg('weight');
+  const latest    = latestM();
+
+  let statusLabel = 'データ不足', statusColor = 'var(--text3)', statusBg = 'var(--surface2)', diffStr = '—';
+  if(avgFat !== null){
+    const diff = avgFat - expectedFat; // 正＝目安より体脂肪率が高い（遅れ）
+    diffStr = (diff>=0?'+':'') + diff.toFixed(1) + 'pt';
+    if(diff <= 0.3){ statusLabel='順調'; statusColor='var(--green)'; statusBg='rgba(52,199,89,.12)'; }
+    else if(diff <= 1.0){ statusLabel='やや遅れ'; statusColor='var(--orange)'; statusBg='rgba(255,159,10,.12)'; }
+    else { statusLabel='要注意'; statusColor='var(--red)'; statusBg='rgba(255,69,58,.12)'; }
+  }
+  if(badge){ badge.textContent = statusLabel; badge.style.color = statusColor; badge.style.background = statusBg; }
+
+  const nextCpDay = Math.min(PLAN_DURATION_DAYS, (Math.floor(elapsed/30)+1)*30);
+  const nextCpDate = new Date(PLAN_START_DATE+'T00:00:00');
+  nextCpDate.setDate(nextCpDate.getDate() + nextCpDay);
+  const nextCpStr = (nextCpDate.getMonth()+1)+'/'+nextCpDate.getDate();
+
+  el.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+      <span style="font-size:12px;color:var(--text3);">経過 ${elapsed} / ${PLAN_DURATION_DAYS} 日</span>
+      <span style="font-size:12px;color:var(--text3);">次のチェックポイント：${nextCpStr}（day${nextCpDay}）</span>
+    </div>
+    <div style="height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-bottom:14px;">
+      <div style="height:100%;width:${(progress*100).toFixed(1)}%;background:var(--blue);"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:10px;">
+      <div style="flex:1;padding:10px;border-radius:12px;background:var(--surface2);">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:2px;">直近2週間平均・体脂肪率</div>
+        <div style="font-size:20px;font-weight:700;">${avgFat!==null?avgFat.toFixed(1):'—'}<span style="font-size:11px;font-weight:400;color:var(--text3);">%</span></div>
+      </div>
+      <div style="flex:1;padding:10px;border-radius:12px;background:var(--surface2);">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:2px;">目安ライン（day${elapsed}時点）</div>
+        <div style="font-size:20px;font-weight:700;color:var(--text3);">${expectedFat.toFixed(1)}<span style="font-size:11px;font-weight:400;">%</span></div>
+      </div>
+      <div style="flex:1;padding:10px;border-radius:12px;background:${statusBg};">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:2px;">目安との差</div>
+        <div style="font-size:20px;font-weight:700;color:${statusColor};">${diffStr}</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);line-height:1.6;">
+      起点（${PLAN_START_DATE}）：${startWeight}kg / ${startFat}%　→　目標：${PLAN_TARGET_FAT}%（12〜17%ゾーンの中心）<br>
+      直近2週間平均・体重：${avgWeight!==null?avgWeight.toFixed(1)+'kg':'データ不足'}　｜　単発最新値（参考）：${latest.weight}kg / ${latest.fat}%<br>
+      ※単発測定は水分量で±1〜2%ブレるため、判定は2週間移動平均を優先
+    </div>`;
+}
+renderCheckpoint();
+
 // ── TREND CHART ───────────────────────────────────────
 let tChart, tMode='fat';
 const tCfg = {
@@ -1090,31 +1175,31 @@ const SHOPPING = [
 const HOTCOOK_A = [
   {day:'月',name:'鶏むね 無水トマトカレー煮',emoji:'🍛',meat:'鶏むね肉（皮なし）',meatWt:'450g',
    veg:'冷凍ブロッコリー150g・冷凍パプリカ150g・冷凍ほうれん草100g・しめじ100g',
-   season:'カットトマト缶200g・カレー粉大1・塩小さじ1/3・おろしにんにく・おろし生姜（多め）・みりん大1・かつお節1パック（2〜3g）・黒胡椒（仕上げ）・ブロッコリースプラウト少量（生・仕上げ用）',
+   season:'カットトマト缶200g・カレー粉大1・塩 小さじ1/3（2食分）・おろしにんにく・おろし生姜（多め）・みりん大1・かつお節1パック（2〜3g）・黒胡椒（仕上げ）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'鶏むねを一口大に切り片栗粉大さじ1をまぶす（保水＋ソースの絡み向上）｜鍋底にトマト缶・しめじ・冷凍パプリカ・ブロッコリー・ほうれん草を敷き（焦げ付き防止）、その上に鶏むねをのせる｜カレー粉・にんにく・生姜・みりん・かつお節を上から加えてスイッチON（かつお節のイノシン酸×トマトのグルタミン酸で塩分を増やさずうま味を底上げ）｜仕上げに黒胡椒。塩分は小さじ1/3のまま変更なし｜仕上げに生のブロッコリースプラウトをひとつまみ（加熱しないことでスルフォラファンの効果を活かす）',
    category:'カレー・シチュー',menuName:'無水カレー',manualCat:'煮物を作る［まぜない］',
    prot:61,cal:390,fat:6,carbs:28,fiber:10,na:530,k:1780,ca:138,mg2:144,fe:3.8,zn:2.6,cu:0.34,vitA:540,vitB1:0.49,vitB2:0.61,vitB6:2.1,vitC:80,vitD:0.6,vitE:7.8,satFat:1.1},
   {day:'火',name:'鮭の豆乳味噌煮（石狩風）',emoji:'🐟',meat:'鮭切り身',meatWt:'480g',
    veg:'冷凍キャベツ150g・冷凍にんじん100g・しめじ100g・かつお節1パック（2〜3g）',
-   season:'無調整豆乳200ml（仕上げに後入れ）・味噌大2・バター小さじ1（約4g）・おろし生姜小さじ1/2〜1（鮭に塗る）・酒大1（お好みで）・ブロッコリースプラウト少量（生・仕上げ用）',
+   season:'無調整豆乳200ml（仕上げに後入れ）・味噌大2・バター小さじ1（約4g）・おろし生姜小さじ1/2〜1（鮭に塗る）・酒大1（お好みで）・塩：追加なし（味噌大2で調味・2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'鮭は水気を拭き取りおろし生姜を塗っておく（生臭さ対策）｜内鍋に野菜・しめじ・かつお節を敷き鮭をのせ、酒と味噌を豆乳大さじ2で溶いたものを回しかける｜手動「煮物を作る［まぜない］」で10〜15分加熱｜豆乳は長時間加熱で分離（モロモロ）しやすいため、加熱終了後にふたを開け残りの豆乳(150〜180ml)とバターを追加→決定キー→延長時間3〜5分を設定→スタートキーで延長加熱（沸騰させず温める程度に）｜かつお節のイノシン酸×味噌のグルタミン酸で塩分を増やさずうま味を底上げ｜お好みでネギ・黒胡椒を散らす｜仕上げに生のブロッコリースプラウトをひとつまみ',
    category:'魚料理',menuName:'鮭の味噌煮',manualCat:'煮物を作る［まぜない］（魚は必ずまぜない）',
    prot:57,cal:615,fat:36,carbs:19,fiber:5,na:1035,k:1600,ca:112,mg2:122,fe:3.3,zn:2.5,cu:0.38,vitA:470,vitB1:0.53,vitB2:0.51,vitB6:1.0,vitC:20,vitD:36,vitE:4.7,satFat:7.0,epaDha:4100},
   {day:'水',name:'鶏もも 筑前煮風',emoji:'🍢',meat:'鶏もも肉（皮なし）',meatWt:'500g',
    veg:'冷凍ごぼう100g・冷凍れんこん100g・冷凍里芋 or にんじん100g・しいたけ100g',
-   season:'だし100ml・食塩不使用だしの素小さじ1・醤油大1・みりん大1・酒大1・ブロッコリースプラウト少量（生・仕上げ用）',
+   season:'だし100ml・食塩不使用だしの素小さじ1・醤油大1・みりん大1・酒大1・塩：追加なし（醤油大1で調味・2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'根菜・しいたけを内鍋の底に敷く｜だし・だしの素・醤油・みりん・酒を混ぜて回しかける｜鶏ももを一口大に切り、野菜を覆うように一番上にのせてスイッチON（鶏の脂と旨味が根菜に落ち、土臭さを旨味に変える）｜だしは200ml→100mlに削減（説明書に「一般的なレシピより約1/3減らせる」と記載。冷凍根菜が水分を出す前の焦げ付きを避けるため50mlまでは減らさず中間量に）｜完成後に水っぽければ手動「煮詰める」で3〜5分追加加熱すると照りが出る｜仕上げに生のブロッコリースプラウトをひとつまみ',
    category:'煮物',menuName:'筑前煮',manualCat:'煮物を作る［まぜない］',
    prot:52,cal:430,fat:13,carbs:30,fiber:8,na:715,k:1720,ca:57,mg2:120,fe:2.7,zn:5.7,cu:0.38,vitA:48,vitB1:0.43,vitB2:0.51,vitB6:1.1,vitC:20,vitD:0.7,vitE:2.4,satFat:3.6},
   {day:'木',name:'サバの無水トマト味噌煮',emoji:'🐟',meat:'サバ切り身',meatWt:'480g',
    veg:'冷凍たまねぎ150g（一番下に敷く）・冷凍ズッキーニ or なす150g・しめじ100g',
-   season:'カットトマト缶200g・味噌大1.5・おろし生姜小さじ1・酒大1・みりん大1・ブロッコリースプラウト少量（生・仕上げ用）',
-   prep:'内鍋の一番下に冷凍たまねぎを敷き、ズッキーニ・しめじをのせる｜サバは骨取り済みが時短の鍵、皮目を上にして重ならないように並べる｜トマト缶・味噌・おろし生姜・酒・みりんを別容器で滑らかに混ぜてソースを作り、サバの上から回しかける｜生姜と酒のアルコールで青魚特有の臭みをマスキング、みりんでトマトの酸味を緩和｜仕上げに生のブロッコリースプラウトをひとつまみ',
+   season:'カットトマト缶200g・味噌大1.5・おろし生姜小さじ1・酒大1・みりん大1・塩：追加なし（味噌大1.5で調味・2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
+   prep:'【臭み消し・時短版】サバに塩をひとつまみ振り10〜15分置き、出たドリップをペーパーで拭き取る（塩締めで臭み成分を排出）／【フル版・休日】さらに希釈酢水に20分浸けてから塩締めするとより徹底｜内鍋の一番下に水分の多い冷凍たまねぎを敷く（無水調理は水分の多い野菜を下に＝焦げ付き防止・SHARP公式）、ズッキーニ・しめじをのせる｜サバ（骨取り済みが時短）を皮目を上に重ならないよう並べる｜トマト缶・味噌・生姜・酒・みりんを別容器で混ぜてソースを作りサバに回しかける｜生姜と酒で臭みマスキング、みりんで酸味緩和｜仕上げに生ブロッコリースプラウト',
    category:'魚料理',menuName:'さばの味噌煮',manualCat:'煮物を作る［まぜない］（魚は必ずまぜない）',
    prot:55,cal:680,fat:42,carbs:23,fiber:6,na:940,k:1630,ca:71,mg2:128,fe:4.7,zn:3.6,cu:0.55,vitA:160,vitB1:0.67,vitB2:0.87,vitB6:1.8,vitC:26,vitD:12,vitE:4.9,satFat:11,epaDha:4400},
   {day:'金',name:'鶏むね 無水ポトフ',emoji:'🍲',meat:'鶏むね肉（皮なし）',meatWt:'450g',
    veg:'冷凍キャベツ150g・玉ねぎ100g（薄切り）・にんじん100g（乱切り）・冷凍ほうれん草100g',
-   season:'コンソメ1個（砕く）・塩少々・酒大1＋片栗粉小さじ1（肉の下味用）・ローリエ1枚（あれば）・おろしにんにく少々・粗挽き黒胡椒（仕上げ）・ブロッコリースプラウト少量（生・仕上げ用）',
+   season:'コンソメ1個（砕く）・塩 ふたつまみ（約0.6g・2食分／コンソメ1個で主に調味）・酒大1＋片栗粉小さじ1（肉の下味用）・ローリエ1枚（あれば）・おろしにんにく少々・粗挽き黒胡椒（仕上げ）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'内鍋の一番下に玉ねぎ・キャベツ・にんじん・ほうれん草を敷く（野菜の水分が湧き上がり鶏むねを優しく蒸し上げる）｜砕いたコンソメ・塩・おろしにんにくを加え、ローリエを添える｜鶏むねをぶつ切りにし酒・片栗粉を軽く揉み込んでから、野菜の上に重ならないようにのせてスイッチON｜完成後に底から優しく混ぜ、野菜の甘みが溶けたスープを鶏肉に吸わせる｜仕上げに黒胡椒と生のブロッコリースプラウトをひとつまみ',
    category:'スープ・鍋',menuName:'ポトフ',manualCat:'スープを作る［まぜない］',
    prot:56,cal:325,fat:5,carbs:17,fiber:5,na:730,k:1330,ca:132,mg2:111,fe:1.8,zn:2.0,cu:0.18,vitA:740,vitB1:0.30,vitB2:0.35,vitB6:1.7,vitC:30,vitD:0.2,vitE:1.9,satFat:1.1},
@@ -1122,31 +1207,31 @@ const HOTCOOK_A = [
 const HOTCOOK_B = [
   {day:'月',name:'鶏むね バンバンジー風蒸し鶏スープ',emoji:'🥢',meat:'鶏むね肉（皮なし）',meatWt:'450g',
    veg:'冷凍もやし150g・にんじん100g（千切り）・しめじ100g・冷凍ほうれん草100g',
-   season:'酒大1・塩小さじ1/2（下味用）・生姜1片・にんにく1片・すりごま大2・醤油/酢/砂糖 各少々（ごまだれ用・食べる直前にかける）・ブロッコリースプラウト少量（生・仕上げ用）',
+   season:'酒大1・塩 小さじ1/2（下味用・2食分）・生姜1片・にんにく1片・すりごま大2・醤油/酢/砂糖 各少々（ごまだれ用・食べる直前にかける）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'鶏むねに酒大さじ1・塩小さじ1/2を揉み込んでおく｜鍋底に冷凍もやし・にんじん・しめじ・ほうれん草を敷き詰め、蒸しトレイをセット｜トレイの上に鶏むね・生姜・にんにくをのせてスイッチON（鶏の旨味が野菜へ落ちて絶品スープに）｜取り出して手で割き、鍋に残ったスープ大さじ1〜2をごまだれに混ぜてから絡める｜残った野菜スープはそのまま汁物として楽しめる｜仕上げに生のブロッコリースプラウトをひとつまみ',
    category:'蒸し料理',menuName:'蒸し鶏',manualCat:'蒸す（蒸しトレイを使用）',
    prot:58,cal:350,fat:8,carbs:15,fiber:6,na:880,k:1390,ca:171,mg2:130,fe:2.4,zn:2.5,cu:0.33,vitA:740,vitB1:0.40,vitB2:0.42,vitB6:1.7,vitC:22,vitD:0.5,vitE:2.0,satFat:1.5},
   {day:'火',name:'鮭のちゃんちゃん焼き風（味噌バター）',emoji:'🐟',meat:'鮭切り身',meatWt:'480g',
    veg:'冷凍キャベツ200g・玉ねぎ100g（スライス）・しめじ100g',
-   season:'味噌大2・バター10g・みりん大1・酒大1・おろし生姜小1・黒胡椒 or 一味唐辛子少々（仕上げ）・ブロッコリースプラウト少量（生・仕上げ用）',
+   season:'味噌大2・バター10g・みりん大1・酒大1・おろし生姜小1・黒胡椒 or 一味唐辛子少々（仕上げ）・塩：追加なし（味噌大2で調味・2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'鮭は内鍋に入れる前に表面の水気をペーパーで拭き取る（生臭さ対策）｜内鍋の底にキャベツ・玉ねぎ・しめじを敷き詰め、その上に鮭をのせる｜味噌・みりん・酒・おろし生姜を混ぜたタレをかけ、バターをのせてスイッチON（酒のアルコールが魚臭成分を飛ばす）｜仕上げに黒胡椒 or 一味をふる｜仕上げに生のブロッコリースプラウトをひとつまみ',
    category:'魚料理',menuName:'鮭のちゃんちゃん焼き',manualCat:'煮物を作る［まぜない］（魚は必ずまぜない）',
    prot:53,cal:620,fat:36,carbs:21,fiber:5,na:1040,k:1380,ca:102,mg2:99,fe:2.2,zn:2.2,cu:0.27,vitA:124,vitB1:0.48,vitB2:0.47,vitB6:1.0,vitC:27,vitD:36,vitE:4.6,satFat:8.2,epaDha:4100},
   {day:'水',name:'鶏もも 参鶏湯（サムゲタン）風スープ',emoji:'🍜',meat:'鶏もも肉（皮なし）',meatWt:'500g',
    veg:'長ねぎ1本・にんにく5片・しめじ100g・冷凍にんじん100g・乾燥きくらげ5g（天日干し推奨・戻さずそのまま投入可）',
-   season:'干しエビ（アミエビ）10g・生姜1片・塩少々・黒胡椒・ブロッコリースプラウト少量（生・仕上げ用）',
+   season:'干しエビ（アミエビ）10g・生姜1片・塩 ひとつまみ（約0.3g・2食分／干しエビのうま味で最小限に）・黒胡椒・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'鶏ももと丸ごとにんにく・生姜・長ねぎ・きくらげ・干しエビを内鍋へ。だしで煮るだけ（米は別添え大麦ご飯で代用）｜干しエビのうま味で塩を増やさず満足感アップ｜仕上げに生のブロッコリースプラウトをひとつまみ',
    category:'スープ・鍋',menuName:'鶏スープ',manualCat:'スープを作る［まぜない］（丸ごとにんにく・ねぎの大きめ食材のため）',
    prot:54,cal:375,fat:13,carbs:16,fiber:7,na:290,k:1390,ca:350,mg2:104,fe:2.9,zn:5.5,cu:0.33,vitA:410,vitB1:0.38,vitB2:0.51,vitB6:1.1,vitC:15,vitD:4,vitE:1.9,satFat:3.6},
   {day:'木',name:'サバの無水カレー煮（ターメリック）',emoji:'🍛',meat:'サバ切り身',meatWt:'480g',
    veg:'冷凍たまねぎ150g・冷凍パプリカ150g・しめじ100g',
-   season:'カレー粉大1・ターメリック小1/2・黒胡椒少々・トマト缶100g・おろし生姜大1・おろしにんにく1片・塩小さじ1/2弱・ブロッコリースプラウト少量（生・仕上げ用）',
-   prep:'サバは内鍋に入れる前に表面の水気をペーパーで拭き取ると臭みが消える。野菜・スパイス・トマト缶と内鍋へ｜黒胡椒でクルクミン吸収を最大化、生姜のショウガオールが抗炎症で相乗｜塩は控えめ（他料理と同じ塩分1g台を維持するため小さじ1/2弱に調整）｜仕上げに生のブロッコリースプラウトをひとつまみ',
+   season:'カレー粉大1・ターメリック小1/2・黒胡椒少々・トマト缶100g・おろし生姜大1・おろしにんにく1片・塩 小さじ1/2弱（2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
+   prep:'【臭み消し・時短版】サバに塩（小さじ1/2弱の一部）を振り10〜15分置き、出たドリップをペーパーで拭き取る（塩締めで臭み排出）｜【フル版・休日推奨】さらに希釈酢水に20分浸ける→塩締め→水気を拭きカレー粉をまぶして両面を焼く（スパイスのブルーミング＋身が締まる）｜鍋底に水分の多い冷凍たまねぎを敷き（無水調理の鉄則・SHARP公式）、パプリカ・しめじ・スパイス・トマト缶で「カレーの素」を作る｜フル版は焼サバを調理完了5分前に投入（延長キー・煮崩れと臭み移りを防ぐ）／時短版は塩締めサバを最初から野菜の上に｜黒胡椒でクルクミン吸収最大化｜仕上げに生ブロッコリースプラウト',
    category:'カレー・シチュー',menuName:'無水カレー',manualCat:'煮物を作る［まぜない］（魚は必ずまぜない）',
    prot:53,cal:655,fat:41,carbs:20,fiber:6,na:765,k:1470,ca:57,mg2:110,fe:5.1,zn:3.3,cu:0.45,vitA:190,vitB1:0.67,vitB2:0.94,vitB6:2.0,vitC:50,vitD:12,vitE:7.1,satFat:11,epaDha:4400},
   {day:'金',name:'鶏むね 無水ラタトゥイユ',emoji:'🍅',meat:'鶏むね肉（皮なし）',meatWt:'450g',
    veg:'冷凍なす150g・冷凍ズッキーニ150g・冷凍パプリカ100g・しめじ100g・冷凍ほうれん草100g',
-   season:'カットトマト缶200g・オリーブオイル大1・にんにく（みじん切り or すりおろし）1片・バジル/オレガノ少々・塩小さじ1/2・ブロッコリースプラウト少量（生・仕上げ用）',
+   season:'カットトマト缶200g・オリーブオイル大1・にんにく（みじん切り or すりおろし）1片・バジル/オレガノ少々・塩 小さじ1/2（下味・揉み込み・2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'鶏むねを一口大に切り、塩小さじ1/2とにんにくを揉み込んでから内鍋の底へ（保水効果でパサつき防止）｜その上に冷凍野菜・しめじ・ほうれん草を凍ったまま乗せる｜トマト缶・ハーブを上から回しかけてスイッチON｜しめじのうま味でトマトの酸味だけの物足りなさを解消（コンソメより低塩）｜仕上げにオリーブオイル大さじ1を混ぜる（リコピン吸収率UP・オイルの風味も保てる）｜仕上げに生のブロッコリースプラウトをひとつまみ',
    category:'煮物',menuName:'ラタトゥイユ',manualCat:'煮物を作る［まぜない］（なす・ズッキーニ・しめじの煮くずれ防止）',
    prot:58,cal:385,fat:11,carbs:19,fiber:8,na:725,k:1890,ca:122,mg2:146,fe:2.8,zn:2.5,cu:0.35,vitA:495,vitB1:0.43,vitB2:0.48,vitB6:2.0,vitC:50,vitD:0.5,vitE:6.0,satFat:1.9},
@@ -2386,7 +2471,7 @@ function saveMeasure(){
   DB.measurements=DB.measurements.filter(x=>x.date!==date);
   DB.measurements.push({date,weight:w,fat:f,muscle:m});
   DB.measurements.sort((a,b)=>a.date<b.date?-1:1);
-  save(); closeSheet(); refreshMetrics(); buildTrend(tMode); runSim(); renderToday();
+  save(); closeSheet(); refreshMetrics(); buildTrend(tMode); runSim(); renderToday(); renderCheckpoint();
 }
 function saveWorkout(){
   const date=document.getElementById('i-date').value;
