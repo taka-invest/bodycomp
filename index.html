@@ -489,12 +489,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
           <div class="card-title" style="margin-bottom:0;">🍲 平日ホットクック献立</div>
           <div id="hc-week-badge" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;"></div>
         </div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">夜にまとめて調理 → その日の夕食＋翌日の昼食に（1日ズレます）。A週・B週が隔週で切り替わります（飽き対策）｜上のA週/B週ボタンでどちらも確認できます｜タップで材料・操作手順を展開</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">夜にまとめて調理 → その日の夕食＋翌日の昼食に（1日ズレます）。A週・B週・C週が3週サイクルで切り替わります（飽き対策）｜上のA/B/C週ボタンでどれも確認できます｜タップで材料・操作手順を展開</div>
         <div id="hc-list"></div>
       </div>
       <div class="card">
         <div class="card-title" style="margin-bottom:8px;">🍚 ご飯の作り置き（マーナ冷凍ごはん容器）</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">日曜に5日分×昼夕2食＝10個をまとめて炊いて容器へ。曜日はA週・B週共通（高需要日＝火・水・金は変わらないため）</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">日曜に5日分×昼夕2食＝10個をまとめて炊いて容器へ。曜日はA週・B週・C週共通（高需要日＝火・水・金は変わらないため）</div>
         <div style="display:flex;gap:10px;">
           <div style="flex:1;padding:12px;border-radius:12px;background:rgba(0,122,255,.08);">
             <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px;">小容器（280ml）× 4個</div>
@@ -518,7 +518,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
           <div class="card-title" style="margin-bottom:0;">🍲 ホットクック買い出し</div>
           <div id="hc-shop-week-badge" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;"></div>
         </div>
-        <div style="font-size:12px;color:var(--text3);margin-bottom:8px;">平日5日分（昼・夜×5日＝10食）｜隔週でA週・B週の材料に切り替わります｜上のボタンで来週分の下見も可能</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:8px;">平日5日分（昼・夜×5日＝10食）｜3週サイクルでA週・B週・C週の材料に切り替わります｜上のボタンで来週分の下見も可能</div>
         <div id="hc-shop-list"></div>
         <button class="shop-reset" onclick="resetHotcookShopping()">✗ チェックをすべてリセット</button>
       </div>
@@ -1169,7 +1169,7 @@ const SHOPPING = [
   ]},
 ];
 
-// ── ホットクック 平日献立（A週・B週 隔週ローテーション）────
+// ── ホットクック 平日献立（A週・B週・C週 3週ローテーション）────
 // 夜にまとめて調理 → その日の夕食＋翌日の昼食（1日ズレる・同じ料理）。15:00プロテイン込みでタンパク質160g/日を想定。
 // 主食（大麦ご飯・もち麦）は別添え — 下の「もち麦」プリセットを追加で使用。
 const HOTCOOK_A = [
@@ -1235,6 +1235,38 @@ const HOTCOOK_B = [
    prep:'鶏むねを一口大に切って内鍋の底へ｜その上に冷凍野菜（なす・ズッキーニ・パプリカ）・しめじ・ほうれん草を凍ったまま乗せる｜ケチャップ・黒酢・醤油・みりん・砂糖・生姜・にんにく・塩を混ぜたタレを回しかけてスイッチON｜加熱終了後にふたを開け、片栗粉を同量の水で溶いたものを加えて全体を混ぜ、決定キー→延長2〜3分でとろみをつける（甘酢あん仕立て・ご飯にかけても丼として成立）｜仕上げにごま油を数滴、生のブロッコリースプラウトをひとつまみ',
    category:'煮物',menuName:'酢豚',manualCat:'煮物を作る［まぜない］（仕上げのとろみ付けのみ手動で撹拌）',
    prot:58,cal:394,fat:7,carbs:28,fiber:7,na:921,k:1869,ca:120,mg2:144,fe:2.7,zn:2.5,cu:0.35,vitA:472,vitB1:0.43,vitB2:0.48,vitB6:2.0,vitC:49,vitD:0.5,vitE:4.8,satFat:1.1},
+];
+const HOTCOOK_C = [
+  {day:'月',name:'豚ヒレのみぞれ煮（大根おろし・生姜）',emoji:'🐷',meat:'豚ヒレ肉',meatWt:'450g',
+   veg:'大根おろし300g・冷凍にんじん100g・しめじ100g・冷凍ほうれん草100g',
+   season:'醤油大1.5・みりん大2・酒大1・生姜（すりおろし）1片・塩：追加なし（醤油大1.5で調味・2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
+   prep:'内鍋の底に水分の多い大根おろし・冷凍にんじんを敷く（無水調理の鉄則・SHARP公式）｜その上にしめじ・ほうれん草をのせ、一口大に切った豚ヒレを重ならないように並べる｜醤油・みりん・酒・生姜を混ぜて回しかけてスイッチON｜豚ヒレはビタミンB1が鶏むねの約10倍と圧倒的で、疲労回復・糖代謝サポートに最適（既存10品にない栄養強化ポイント）｜大根おろしの消化酵素（アミラーゼ）が脂身の少ない赤身肉の消化を助ける｜仕上げに生のブロッコリースプラウトをひとつまみ',
+   category:'煮物',menuName:'豚肉のみぞれ煮',manualCat:'煮物を作る［まぜない］（大根おろしの食感を保つ）',
+   prot:56,cal:390,fat:5,carbs:23,fiber:6,na:775,k:1850,ca:80,mg2:92,fe:2.8,zn:5.0,cu:0.20,vitA:530,vitB1:3.0,vitB2:0.70,vitB6:1.3,vitC:23,vitD:0.9,vitE:1.4,satFat:1.3},
+  {day:'火',name:'タラのねぎ生姜蒸し',emoji:'🐟',meat:'タラ切り身',meatWt:'560g',
+   veg:'長ねぎ1本（100g）・冷凍キャベツ150g・しめじ100g',
+   season:'醤油大1・ごま油小1・酒大1・生姜（せん切り）1片・塩：追加なし（醤油大1で調味・2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
+   prep:'内鍋の底に水分の多い冷凍キャベツを敷く｜その上にしめじ・長ねぎ・生姜をのせ、タラを重ならないように並べる｜醤油・酒を回しかけてスイッチON｜白身魚は低脂質・高たんぱくで、鮭・サバに続く3種目の魚として脂質を大きく抑えられる｜仕上げにごま油を数滴、生のブロッコリースプラウトをひとつまみ',
+   category:'魚料理',menuName:'白身魚の香味蒸し',manualCat:'蒸す［まぜない］（魚は必ずまぜない）',
+   prot:51,cal:280,fat:3,carbs:10,fiber:4,na:740,k:1440,ca:128,mg2:86,fe:0.7,zn:1.5,cu:0.07,vitA:20,vitB1:0.36,vitB2:0.37,vitB6:0.6,vitC:35,vitD:3.0,vitE:2.3,satFat:0.4},
+  {day:'水',name:'牛赤身の焼肉風炒め煮（すりおろし玉ねぎだれ）',emoji:'🥩',meat:'牛赤身肉（もも or 切り落とし）',meatWt:'450g',
+   veg:'玉ねぎ200g（炒め用150g・すりおろしだれ用50g）・冷凍にんじん100g・冷凍もやし150g・しめじ100g',
+   season:'醤油大1.5・酢大1・みりん大1・にんにく（すりおろし）1片・ごま油小1・塩：追加なし（醤油大1.5で調味・2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
+   prep:'内鍋の底に水分の多い冷凍もやし・玉ねぎを敷く｜その上ににんじん・しめじ・牛赤身をのせる｜すりおろし玉ねぎ・醤油・酢・みりん・にんにくを混ぜたタレを回しかけてスイッチON｜牛赤身は脂の多い部位より鉄・亜鉛が豊富で、鉄2.8mg・亜鉛9.0mgは全10品中トップクラス（既存メニューにない栄養素を補完）｜仕上げにごま油を数滴、生のブロッコリースプラウトをひとつまみ',
+   category:'炒め物',menuName:'肉野菜炒め',manualCat:'炒め物を作る［まぜる］（野菜と一緒に炒め煮）',
+   prot:50,cal:470,fat:12,carbs:23,fiber:6,na:770,k:1280,ca:46,mg2:75,fe:5.9,zn:9.0,cu:0.15,vitA:360,vitB1:0.28,vitB2:0.54,vitB6:0.75,vitC:13,vitD:0.25,vitE:0.9,satFat:4.0},
+  {day:'木',name:'鶏つくねの塩麹しょうが鍋',emoji:'🥟',meat:'鶏むねひき肉',meatWt:'500g',
+   veg:'れんこん150g・大根150g・しめじ100g',
+   season:'塩麹大2（同量の水で薄めて使用）・酒大1・片栗粉大1（つくねのつなぎ）・卵白1個分（つなぎ）・生姜（すりおろし）1片・ブロッコリースプラウト少量（生・仕上げ用）',
+   prep:'鶏むねひき肉・卵白・片栗粉・すりおろし生姜をよく練り、団子状に丸めておく｜内鍋の底に水分の多い大根・れんこんを敷く｜その上にしめじ、つくねを重ならないように並べる｜塩麹を同量の水で薄めたものと酒を回しかけてスイッチON（塩麹の発酵うま味で塩分を抑えつつコクを出す・全10品中最も塩分が低い）｜れんこんのビタミンCと食物繊維、塩麹の麹菌由来の消化酵素をプラス｜仕上げに生のブロッコリースプラウトをひとつまみ',
+   category:'スープ・鍋',menuName:'鶏団子鍋',manualCat:'スープを作る［まぜない］（つくねの形崩れ防止）',
+   prot:52,cal:468,fat:13,carbs:25,fiber:4,na:450,k:1425,ca:52,mg2:69,fe:1.7,zn:2.3,cu:0.15,vitA:20,vitB1:0.30,vitB2:0.51,vitB6:1.3,vitC:47,vitD:0.25,vitE:0.5,satFat:3.8},
+  {day:'金',name:'えびとブロッコリーのガーリック蒸し（レモン風味）',emoji:'🍤',meat:'むきえび',meatWt:'500g',
+   veg:'冷凍ブロッコリー200g・冷凍パプリカ100g・しめじ100g',
+   season:'にんにく（すりおろし）2片・オリーブオイル大1・レモン汁大1・塩 小さじ1/3（2食分）・黒胡椒（仕上げ）・ブロッコリースプラウト少量（生・仕上げ用）',
+   prep:'内鍋の底に水分の多い冷凍ブロッコリー・パプリカを敷く｜その上にしめじ、むきえびをのせる｜にんにく・オリーブオイル・塩を混ぜて回しかけてスイッチON（えびは加熱しすぎると硬くなるため短めの加熱設定を推奨）｜仕上げにレモン汁と黒胡椒、生のブロッコリースプラウトをひとつまみ｜えびは銅1.05mg（全10品中トップ）・ビタミンC123mgと、既存メニューにない栄養プロフィールを補完',
+   category:'魚料理',menuName:'えびの香草蒸し',manualCat:'蒸す［まぜない］（えびの加熱しすぎ注意）',
+   prot:51,cal:310,fat:7,carbs:10,fiber:6,na:485,k:1065,ca:163,mg2:140,fe:1.5,zn:3.7,cu:1.05,vitA:100,vitB1:0.13,vitB2:0.16,vitB6:0.29,vitC:123,vitD:0.25,vitE:6.3,satFat:0.9},
 ];
 
 const SHOPPING_HC_A = [
@@ -1308,6 +1340,41 @@ const SHOPPING_HC_B = [
     {name:'生姜',              qty:'2〜3片',note:'火・水・木分'},
     {name:'カットトマト缶',    qty:'1缶',note:'木分'},
     {name:'ケチャップ・黒酢（or穀物酢）・ごま油',qty:'—',note:'金分'},
+  ]},
+];
+const SHOPPING_HC_C = [
+  {cat:'🥩 タンパク質', items:[
+    {name:'豚ヒレ肉',          qty:'450g',note:'月分'},
+    {name:'タラ切り身',        qty:'560g',note:'火分'},
+    {name:'牛赤身肉（もも or 切り落とし）',qty:'450g',note:'水分'},
+    {name:'鶏むねひき肉',      qty:'500g',note:'木分'},
+    {name:'むきえび',          qty:'500g',note:'金分'},
+    {name:'卵',                qty:'1個',note:'木分（卵白のみ使用）'},
+  ]},
+  {cat:'🥬 冷凍野菜・生鮮', items:[
+    {name:'大根',              qty:'450g',note:'月分（おろし用300g）・木分150g'},
+    {name:'冷凍にんじん',      qty:'200g',note:'月・水分'},
+    {name:'冷凍ほうれん草',    qty:'100g',note:'月分'},
+    {name:'長ねぎ',            qty:'1本',note:'火分'},
+    {name:'冷凍キャベツ',      qty:'150g',note:'火分'},
+    {name:'玉ねぎ',            qty:'200g',note:'水分（炒め用150g・すりおろしだれ用50g）'},
+    {name:'冷凍もやし',        qty:'150g',note:'水分'},
+    {name:'れんこん',          qty:'150g',note:'木分'},
+    {name:'冷凍ブロッコリー',  qty:'200g',note:'金分'},
+    {name:'冷凍パプリカ',      qty:'100g',note:'金分'},
+    {name:'生姜',              qty:'3〜4片',note:'月・火・水・木分'},
+    {name:'にんにく',          qty:'3片',note:'水・金分'},
+  ]},
+  {cat:'🍄 きのこ', items:[
+    {name:'しめじ or えのき',  qty:'500g（5袋）',note:'月・火・水・木・金分'},
+  ]},
+  {cat:'🧂 調味料・その他', items:[
+    {name:'塩麹',              qty:'—',note:'追加購入・木分'},
+    {name:'穀物酢 or りんご酢',qty:'—',note:'常備・水分'},
+    {name:'ごま油',            qty:'—',note:'常備・火・水分'},
+    {name:'オリーブオイル',    qty:'—',note:'常備・金分'},
+    {name:'レモン',            qty:'1個',note:'金分'},
+    {name:'醤油・みりん・酒・片栗粉',qty:'—',note:'常備・週全体'},
   ]},
 ];
 
@@ -1783,12 +1850,19 @@ function hotcookWeekLetter(){
   const d = new Date(TODAY+'T00:00:00');
   const diffDays = Math.round((d - ref) / 86400000);
   const weekIndex = Math.floor(diffDays / 7);
-  return (((weekIndex % 2) + 2) % 2 === 0) ? 'A' : 'B';
+  const mod = ((weekIndex % 3) + 3) % 3;
+  return ['A','B','C'][mod];
+}
+function hotcookDishesForWeek(week){
+  return week==='A' ? HOTCOOK_A : week==='B' ? HOTCOOK_B : HOTCOOK_C;
+}
+function hotcookShoppingForWeek(week){
+  return week==='A' ? SHOPPING_HC_A : week==='B' ? SHOPPING_HC_B : SHOPPING_HC_C;
 }
 function getHotcookDish(dow){ // dow: 1=月 … 5=金
   if(dow < 1 || dow > 5) return null;
   const week = hotcookWeekLetter();
-  return { week, dish: (week==='A'?HOTCOOK_A:HOTCOOK_B)[dow-1] };
+  return { week, dish: hotcookDishesForWeek(week)[dow-1] };
 }
 // 仕込みモデル：その日の夜に仕込んだ分＝その日の夕食＋翌日の昼食（1日ズレる）
 function getTodayDinner(dow){ // dow: 0=日…6=土。その晩に仕込んで食べる夕食
@@ -1837,18 +1911,18 @@ function switchHcViewWeek(w){
   if(document.getElementById('hc-shop-list')) renderHotcookShopping();
 }
 function hcWeekToggleHtml(viewWeek, actualWeek){
+  const colors = {A:['var(--blue)','rgba(0,122,255,.12)'], B:['var(--purple)','rgba(175,82,222,.12)'], C:['var(--green)','rgba(52,199,89,.12)']};
   const chip = (w)=>{
     const active = w===viewWeek;
     const isActual = w===actualWeek;
-    const col = w==='A' ? 'var(--blue)' : 'var(--purple)';
-    const bg  = w==='A' ? 'rgba(0,122,255,.12)' : 'rgba(175,82,222,.12)';
+    const [col,bg] = colors[w];
     return `<button onclick="switchHcViewWeek('${w}')" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;cursor:pointer;border:${active?'1.5px solid '+col:'1px solid var(--border)'};background:${active?bg:'transparent'};color:${active?col:'var(--text3)'};">${w}週${isActual?' ●今週':''}</button>`;
   };
-  return `<div style="display:flex;gap:6px;">${chip('A')}${chip('B')}</div>`;
+  return `<div style="display:flex;gap:6px;">${chip('A')}${chip('B')}${chip('C')}</div>`;
 }
 function addHotcookMeal(idx, when){
   const week = _hcViewWeek || hotcookWeekLetter();
-  const d = (week==='A'?HOTCOOK_A:HOTCOOK_B)[idx];
+  const d = hotcookDishesForWeek(week)[idx];
   DB.meals.push({date:TODAY, name:`${d.name}（${when}）`,
     cal:d.cal, prot:d.prot||0, fat:d.fat||0, carbs:d.carbs||0, fiber:d.fiber||0, na:d.na||0,
     ca:d.ca||0, mg2:d.mg2||0, fe:d.fe||0, zn:d.zn||0, cu:d.cu||0,
@@ -1887,7 +1961,7 @@ function renderHotcookMenu(){
   if(!list) return;
   const actual = hotcookWeekLetter();
   const week = _hcViewWeek || actual;
-  const dishes = week==='A' ? HOTCOOK_A : HOTCOOK_B;
+  const dishes = hotcookDishesForWeek(week);
   if(badge) badge.innerHTML = hcWeekToggleHtml(week, actual);
   list.innerHTML = dishes.map((d,i)=>`
     <div style="border-bottom:0.5px solid var(--border);${i===dishes.length-1?'border-bottom:none;':''}">
@@ -1937,7 +2011,7 @@ function toggleHotcookShopItem(key){
 }
 function resetHotcookShopping(){
   const week = _hcViewWeek || hotcookWeekLetter();
-  const list = week==='A' ? SHOPPING_HC_A : SHOPPING_HC_B;
+  const list = hotcookShoppingForWeek(week);
   const prefix = 'HC'+week+':';
   DB.shopping = (DB.shopping||[]).filter(k=>!k.startsWith(prefix));
   save(); renderHotcookShopping();
@@ -1948,7 +2022,7 @@ function renderHotcookShopping(){
   if(!el) return;
   const actual = hotcookWeekLetter();
   const week = _hcViewWeek || actual;
-  const sections = week==='A' ? SHOPPING_HC_A : SHOPPING_HC_B;
+  const sections = hotcookShoppingForWeek(week);
   const prefix = 'HC'+week+':';
   if(badge) badge.innerHTML = hcWeekToggleHtml(week, actual);
   const checked = new Set(DB.shopping||[]);
