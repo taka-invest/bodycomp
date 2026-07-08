@@ -2583,25 +2583,26 @@ const PROGRAM_FRI = {
 
 const PROGRAM_WED = {
   label:'🚴 水曜｜エアロバイク Norwegian 4×4',
-  duration:'約38分',
+  duration:'約45分',
   type:'hiit',
-  note:'Zone5でVO2maxを直接刺激する高強度の日（ポラライズドの「高強度2割」）｜4分全力→3分リカバリー×4本｜各インターバルの後半2分で必ず Zone5（169 bpm以上）に到達すること｜Apple WatchでHR管理｜低衝撃なので金曜パーソナルに干渉しない',
+  note:'Zone5でVO2maxを直接刺激する高強度の日（ポラライズドの「高強度2割」）｜4分全力→3分リカバリー×4本｜1〜2本目はHR到達が遅れるのが正常（Helgerud 2007原典でも実証済み）｜Apple WatchでHR管理｜低衝撃なので金曜パーソナルに干渉しない',
   blocks:[
     { name:'ウォームアップ（10分）',
       exercises:[
-        {id:'wu',name:'徐々にペースアップ',sets:'',reps:'10分',weight:'軽い負荷からゆっくり上げる｜最後はZone2上限あたりへ',muscle:'心拍 113〜132 bpm（Zone1〜2）'},
+        {id:'wu',name:'徐々にペースアップ',sets:'',reps:'8分',weight:'軽い負荷からゆっくり上げる｜Zone2上限あたりへ',muscle:'心拍 113〜132 bpm（Zone1〜2）'},
+        {id:'wu2',name:'プライミング（呼び水）ダッシュ',sets:'',reps:'30〜45秒',weight:'ウォームアップ終盤に一度だけZone3〜4まで強度を上げる（Zone5までは上げない）→残りの時間でZone1〜2に戻す',muscle:'VO2キネティクスを事前に起動させ1本目の乳酸蓄積を軽減'},
       ]},
     { name:'メインセット — 4×4インターバル',
       note:'リカバリーは止まらず軽く漕ぎ続ける。心拍が完全に下がりきる前に次へ。後半2本がきついが、ここがVO2maxの肝。',
       exercises:[
-        {id:'i1',rnum:'1本目',name:'全力ペダリング',reps:'4分',recovery:'リカバリー3分',hrRange:'169〜179 bpm',weight:'負荷を上げ脚で踏む｜後半2分でZone5到達',muscle:'🔑 Zone5・VO2max'},
+        {id:'i1',rnum:'1本目',name:'全力ペダリング',reps:'4分',recovery:'リカバリー3分',hrRange:'169〜179 bpm',weight:'負荷を上げすぎず、まずケイデンス（回転数）を上げて心拍を追わせる｜脚で踏み込む「重い負荷×低回転」は乳酸が急激に溜まるので避ける｜後半2分でZone5到達すればOK、150台でも正常',muscle:'🔑 Zone5・VO2max'},
         {id:'i2',rnum:'2本目',name:'全力ペダリング',reps:'4分',recovery:'リカバリー3分',hrRange:'169〜179 bpm',weight:'1本目と同じ強度を維持｜呼吸は深く',muscle:'🔑 Zone5・VO2max'},
         {id:'i3',rnum:'3本目',name:'全力ペダリング',reps:'4分',recovery:'リカバリー3分',hrRange:'169〜179 bpm',weight:'きつくなる帯｜フォームを崩さず一定ペース',muscle:'🔑 Zone5・VO2max'},
         {id:'i4',rnum:'4本目',name:'全力ペダリング',reps:'4分',recovery:'→ クールダウンへ',hrRange:'169〜179 bpm',weight:'ラスト｜出し切る（ただし全力100%スプリントではなく90〜95%の維持）',muscle:'🔑 Zone5・VO2max'},
       ]},
-    { name:'クールダウン（5分）',
+    { name:'クールダウン（10分）',
       exercises:[
-        {id:'cd',name:'ゆっくり漕ぐ',sets:'',reps:'5分',weight:'負荷を最小に｜呼吸を整える',muscle:'心拍を 110 bpm 以下へ'},
+        {id:'cd',name:'ゆっくり漕ぐ',sets:'',reps:'10分',weight:'負荷を最小に｜呼吸を整える（原典Helgerud 2007のクールダウン10分に統一）',muscle:'心拍を 110 bpm 以下へ'},
       ]},
   ]
 };
