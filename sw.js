@@ -1,4 +1,4 @@
-const CACHE = 'bodycomp-v56';
+const CACHE = 'bodycomp-v57';
 const OFFLINE_ASSETS = ['/', '/index.html'];
 
 self.addEventListener('install', e => {
