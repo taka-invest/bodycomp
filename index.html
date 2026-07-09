@@ -1109,36 +1109,36 @@ const ROTATION = [
 
 const PRESETS = [
   // macro: cal prot fat carbs fiber na(mg) | micro: ca mg2 k fe cu vitE(mg) | vit: satFat(g) vitA(mcgRAE) vitB1 vitB2 vitC(mg) zn vitD(mcg) vitB6(mg)
-  {name:'ナイトオーツ（朝食）',          cal:470,prot:32,fat:12,carbs:70,fiber:11,na:250, ca:132,mg2:171,k:836, fe:4.9,cu:0.34,vitE:2.1, satFat:1.6,vitA:310,vitB1:0.54,vitB2:0.47,vitC:50,zn:1.7,vitD:2.0,vitB6:0.92, emoji:'🌾',cat:'朝食',
+  {name:'ナイトオーツ（朝食）',          cal:470,prot:32,fat:12,carbs:70,fiber:11,na:250, ca:132,mg2:171,k:836, fe:4.9,cu:0.34,vitE:2.1, satFat:1.6,vitA:310,vitB1:0.54,vitB2:0.47,vitC:50,zn:1.7,vitD:2.0,vitB6:0.92,vitB12:0.3,folate:57, emoji:'🌾',cat:'朝食',
    recipe:'オートミール 50g・ソイプロテイン 1スクープ（20g）・チアシード 15g・バナナ 1本｜豆乳 or 水 150ml を前夜に混ぜ冷蔵、翌朝そのまま（加熱不要）｜ソイは強化ビタミン(VitC/A/D/B群)を含む。1杯なのでダマになりにくい'},
-  {name:'アーモンド 素焼き 20g（トレ日）',cal:116,prot:4, fat:10,carbs:3, fiber:3, na:0,   ca:50, mg2:54, k:130, fe:0.7,cu:0.18,vitE:5.5, satFat:0.2,vitA:0,  vitB1:0,  vitB2:0.1,vitC:0, zn:0.2,vitD:0,  vitB6:0,   emoji:'🥜',cat:'朝食',
+  {name:'アーモンド 素焼き 20g（トレ日）',cal:116,prot:4, fat:10,carbs:3, fiber:3, na:0,   ca:50, mg2:54, k:130, fe:0.7,cu:0.18,vitE:5.5, satFat:0.2,vitA:0,  vitB1:0,  vitB2:0.1,vitC:0, zn:0.2,vitD:0,  vitB6:0,vitB12:0,folate:2,   emoji:'🥜',cat:'朝食',
    recipe:'素焼きアーモンド 20g｜ナイトオーツに前夜混ぜて準備。ビタミンE・銅・マンガン・食物繊維を補完（休養日はかぼちゃで代替）'},
-  {name:'セブン昼食（休養日）',           cal:545,prot:65,fat:14,carbs:40,fiber:1, na:2100,ca:100,mg2:35, k:400, fe:1.5,cu:0.15,vitE:1.0, satFat:3.0,vitA:50, vitB1:0.2,vitB2:0.2,vitC:10,zn:2.0,vitD:0.5,vitB6:0.3, emoji:'🏪',cat:'昼食'},
-  {name:'セブン昼食（トレ日）',           cal:725,prot:69,fat:15,carbs:78,fiber:1, na:2550,ca:120,mg2:40, k:500, fe:2.0,cu:0.20,vitE:1.0, satFat:3.5,vitA:60, vitB1:0.3,vitB2:0.3,vitC:10,zn:2.5,vitD:0.5,vitB6:0.4, emoji:'🏪',cat:'昼食'},
-  {name:'納豆 1パック（昼食セット）',     cal:95, prot:8, fat:5, carbs:6, fiber:3, na:300, ca:45, mg2:45, k:330, fe:1.7,cu:0.18,vitE:0.5, satFat:0.4,vitA:0,  vitB1:0,  vitB2:0.3,vitC:0, zn:0.9,vitD:0,  vitB6:0.1, emoji:'🫘',cat:'昼食',
+  {name:'セブン昼食（休養日）',           cal:545,prot:65,fat:14,carbs:40,fiber:1, na:2100,ca:100,mg2:35, k:400, fe:1.5,cu:0.15,vitE:1.0, satFat:3.0,vitA:50, vitB1:0.2,vitB2:0.2,vitC:10,zn:2.0,vitD:0.5,vitB6:0.3,vitB12:1.0,folate:40, emoji:'🏪',cat:'昼食'},
+  {name:'セブン昼食（トレ日）',           cal:725,prot:69,fat:15,carbs:78,fiber:1, na:2550,ca:120,mg2:40, k:500, fe:2.0,cu:0.20,vitE:1.0, satFat:3.5,vitA:60, vitB1:0.3,vitB2:0.3,vitC:10,zn:2.5,vitD:0.5,vitB6:0.4,vitB12:1.5,folate:50, emoji:'🏪',cat:'昼食'},
+  {name:'納豆 1パック（昼食セット）',     cal:95, prot:8, fat:5, carbs:6, fiber:3, na:300, ca:45, mg2:45, k:330, fe:1.7,cu:0.18,vitE:0.5, satFat:0.4,vitA:0,  vitB1:0,  vitB2:0.3,vitC:0, zn:0.9,vitD:0,  vitB6:0.1,vitB12:0,folate:54, emoji:'🫘',cat:'昼食',
    recipe:'納豆 1パック（45g）・付属タレ・からし｜よく混ぜて昼食に追加。K2・葉酸・マンガンを補完'},
-  {name:'もち麦 150g（休養日・昼）',      cal:233,prot:4, fat:1, carbs:48,fiber:5, na:0,   ca:5,  mg2:20, k:70,  fe:0.5,cu:0.10,vitE:0,   satFat:0.1,vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0.4,vitD:0,  vitB6:0,   emoji:'🌾',cat:'昼食',
+  {name:'もち麦 150g（休養日・昼）',      cal:233,prot:4, fat:1, carbs:48,fiber:5, na:0,   ca:5,  mg2:20, k:70,  fe:0.5,cu:0.10,vitE:0,   satFat:0.1,vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0.4,vitD:0,  vitB6:0,vitB12:0,folate:12,   emoji:'🌾',cat:'昼食',
    recipe:'もち麦 150g（炊き）・マーナ冷凍ごはん容器「小（280ml）」で作り置き｜β-グルカン約4.8g。血糖値スパイク抑制・低GI。ホットクックの主菜とセット'},
-  {name:'もち麦 200g（トレ日・昼）',      cal:311,prot:6, fat:1, carbs:64,fiber:7, na:0,   ca:6,  mg2:25, k:93,  fe:0.65,cu:0.10,vitE:0,   satFat:0.1,vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0.55,vitD:0,  vitB6:0.05, emoji:'🌾',cat:'昼食',
+  {name:'もち麦 200g（トレ日・昼）',      cal:311,prot:6, fat:1, carbs:64,fiber:7, na:0,   ca:6,  mg2:25, k:93,  fe:0.65,cu:0.10,vitE:0,   satFat:0.1,vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0.55,vitD:0,  vitB6:0.05,vitB12:0,folate:16, emoji:'🌾',cat:'昼食',
    recipe:'もち麦 200g（炊き）・マーナ冷凍ごはん容器「大（390ml）」で作り置き｜β-グルカン約6.4g。トレ日は昼夕とも200gで統一、食物繊維を安定確保。ホットクックの主菜とセット'},
-  {name:'ホエイプロテイン 1スクープ（15:00）',cal:115,prot:21.5,fat:1.5,carbs:4,fiber:0,na:79, ca:30,mg2:10,k:50, fe:0.2,cu:0,vitE:0, satFat:0.8,vitA:0, vitB1:0,vitB2:0.1,vitC:0,zn:0.3,vitD:0, vitB6:0, emoji:'💪',cat:'15:00補完',
+  {name:'ホエイプロテイン 1スクープ（15:00）',cal:115,prot:21.5,fat:1.5,carbs:4,fiber:0,na:79, ca:30,mg2:10,k:50, fe:0.2,cu:0,vitE:0, satFat:0.8,vitA:0, vitB1:0,vitB2:0.1,vitC:0,zn:0.3,vitD:0, vitB6:0,vitB12:0.3,folate:0, emoji:'💪',cat:'15:00補完',
    recipe:'エクスプロージョン ホエイプロテイン ブルーベリー 1スクープ（30g）｜水 or 豆乳で溶く。吸収が速く15:00の間食に最適'},
-  {name:'タイ風チキン（日）',             cal:570,prot:57,fat:33,carbs:14,fiber:5, na:550, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, satFat:4.3,vitA:640,vitB1:0.5,vitB2:1.2,vitC:28,zn:8.0,vitD:3.1,vitB6:1.2, emoji:'🍗',cat:'夕食'},
-  {name:'和風生姜チキン（月）',           cal:585,prot:57,fat:33,carbs:18,fiber:5, na:950, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, satFat:4.3,vitA:640,vitB1:0.5,vitB2:1.2,vitC:28,zn:8.0,vitD:3.1,vitB6:1.2, emoji:'🍗',cat:'夕食'},
-  {name:'韓国風サーモン（火🏋️）',        cal:550,prot:51,fat:34,carbs:14,fiber:5, na:500, ca:150,mg2:120,k:1690,fe:4.2,cu:0.32,vitE:10.0,satFat:5.1,vitA:620,vitB1:0.5,vitB2:1.2,vitC:30,zn:3.6,vitD:66, vitB6:1.6, emoji:'🐟',cat:'夕食'},
-  {name:'中華オイスターチキン（水）',      cal:580,prot:57,fat:34,carbs:16,fiber:5, na:530, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, satFat:4.3,vitA:640,vitB1:0.5,vitB2:1.2,vitC:28,zn:8.0,vitD:3.1,vitB6:1.2, emoji:'🍗',cat:'夕食'},
-  {name:'照り焼きチキン（木）',           cal:578,prot:57,fat:33,carbs:18,fiber:5, na:950, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, satFat:4.3,vitA:640,vitB1:0.5,vitB2:1.2,vitC:28,zn:8.0,vitD:3.1,vitB6:1.2, emoji:'🍗',cat:'夕食'},
-  {name:'地中海サーモン（金🏋️）',        cal:555,prot:51,fat:35,carbs:15,fiber:5, na:250, ca:150,mg2:120,k:1690,fe:4.2,cu:0.32,vitE:10.0,satFat:5.1,vitA:620,vitB1:0.5,vitB2:1.2,vitC:30,zn:3.6,vitD:66, vitB6:1.6, emoji:'🐟',cat:'夕食'},
-  {name:'カレーチキン（土）',             cal:592,prot:57,fat:34,carbs:17,fiber:5, na:150, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, satFat:4.3,vitA:640,vitB1:0.5,vitB2:1.2,vitC:28,zn:8.0,vitD:3.1,vitB6:1.2, emoji:'🍗',cat:'夕食'},
-  {name:'かぼちゃ 80g（休養日・鍋追加）', cal:73, prot:2, fat:0, carbs:17,fiber:3, na:1,   ca:12, mg2:20, k:344, fe:0.4,cu:0.06,vitE:3.9, satFat:0,  vitA:270,vitB1:0.1,vitB2:0.1,vitC:34,zn:0.2,vitD:0,  vitB6:0.2, emoji:'🎃',cat:'追加',
+  {name:'タイ風チキン（日）',             cal:570,prot:57,fat:33,carbs:14,fiber:5, na:550, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, satFat:4.3,vitA:640,vitB1:0.5,vitB2:1.2,vitC:28,zn:8.0,vitD:3.1,vitB6:1.2,vitB12:1.9,folate:190, emoji:'🍗',cat:'夕食'},
+  {name:'和風生姜チキン（月）',           cal:585,prot:57,fat:33,carbs:18,fiber:5, na:950, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, satFat:4.3,vitA:640,vitB1:0.5,vitB2:1.2,vitC:28,zn:8.0,vitD:3.1,vitB6:1.2,vitB12:1.9,folate:190, emoji:'🍗',cat:'夕食'},
+  {name:'韓国風サーモン（火🏋️）',        cal:550,prot:51,fat:34,carbs:14,fiber:5, na:500, ca:150,mg2:120,k:1690,fe:4.2,cu:0.32,vitE:10.0,satFat:5.1,vitA:620,vitB1:0.5,vitB2:1.2,vitC:30,zn:3.6,vitD:66, vitB6:1.6,vitB12:13,folate:212, emoji:'🐟',cat:'夕食'},
+  {name:'中華オイスターチキン（水）',      cal:580,prot:57,fat:34,carbs:16,fiber:5, na:530, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, satFat:4.3,vitA:640,vitB1:0.5,vitB2:1.2,vitC:28,zn:8.0,vitD:3.1,vitB6:1.2,vitB12:1.9,folate:190, emoji:'🍗',cat:'夕食'},
+  {name:'照り焼きチキン（木）',           cal:578,prot:57,fat:33,carbs:18,fiber:5, na:950, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, satFat:4.3,vitA:640,vitB1:0.5,vitB2:1.2,vitC:28,zn:8.0,vitD:3.1,vitB6:1.2,vitB12:1.9,folate:190, emoji:'🍗',cat:'夕食'},
+  {name:'地中海サーモン（金🏋️）',        cal:555,prot:51,fat:35,carbs:15,fiber:5, na:250, ca:150,mg2:120,k:1690,fe:4.2,cu:0.32,vitE:10.0,satFat:5.1,vitA:620,vitB1:0.5,vitB2:1.2,vitC:30,zn:3.6,vitD:66, vitB6:1.6,vitB12:13,folate:212, emoji:'🐟',cat:'夕食'},
+  {name:'カレーチキン（土）',             cal:592,prot:57,fat:34,carbs:17,fiber:5, na:150, ca:150,mg2:132,k:1815,fe:5.0,cu:0.37,vitE:4.0, satFat:4.3,vitA:640,vitB1:0.5,vitB2:1.2,vitC:28,zn:8.0,vitD:3.1,vitB6:1.2,vitB12:1.9,folate:190, emoji:'🍗',cat:'夕食'},
+  {name:'かぼちゃ 80g（休養日・鍋追加）', cal:73, prot:2, fat:0, carbs:17,fiber:3, na:1,   ca:12, mg2:20, k:344, fe:0.4,cu:0.06,vitE:3.9, satFat:0,  vitA:270,vitB1:0.1,vitB2:0.1,vitC:34,zn:0.2,vitD:0,  vitB6:0.2,vitB12:0,folate:18, emoji:'🎃',cat:'追加',
    recipe:'かぼちゃ 80g（蒸し or 電子レンジ3分）｜プロテイン鍋に投入。ビタミンE約2mg・β-カロテン・カリウム340mgを補完。アーモンドの休養日代替'},
-  {name:'もち麦 150g（休養日・夕）',      cal:233,prot:4, fat:1, carbs:48,fiber:5, na:0,   ca:5,  mg2:20, k:70,  fe:0.5,cu:0.10,vitE:0,   satFat:0.1,vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0.4,vitD:0,  vitB6:0,   emoji:'🌾',cat:'追加',
+  {name:'もち麦 150g（休養日・夕）',      cal:233,prot:4, fat:1, carbs:48,fiber:5, na:0,   ca:5,  mg2:20, k:70,  fe:0.5,cu:0.10,vitE:0,   satFat:0.1,vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0.4,vitD:0,  vitB6:0,vitB12:0,folate:12,   emoji:'🌾',cat:'追加',
    recipe:'もち麦 150g（炊き）・マーナ冷凍ごはん容器「小（280ml）」で作り置き｜ホットクックの主菜と一緒に。β-グルカン約4.8g'},
-  {name:'もち麦 200g（トレ日・夕）',      cal:311,prot:6, fat:1, carbs:64,fiber:7, na:0,   ca:6,  mg2:25, k:93,  fe:0.65,cu:0.10,vitE:0,   satFat:0.1,vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0.55,vitD:0,  vitB6:0.05, emoji:'🌾',cat:'追加',
+  {name:'もち麦 200g（トレ日・夕）',      cal:311,prot:6, fat:1, carbs:64,fiber:7, na:0,   ca:6,  mg2:25, k:93,  fe:0.65,cu:0.10,vitE:0,   satFat:0.1,vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0.55,vitD:0,  vitB6:0.05,vitB12:0,folate:16, emoji:'🌾',cat:'追加',
    recipe:'もち麦 200g（炊き）・マーナ冷凍ごはん容器「大（390ml）」で作り置き｜ホットクックの主菜と一緒に。β-グルカン約6.4g。トレ日は昼夕とも200gで統一'},
-  {name:'乾燥わかめ 5g',                  cal:8,  prot:1, fat:0, carbs:1, fiber:1, na:370, ca:41, mg2:55, k:245, fe:0.2,cu:0.02,vitE:0.4, satFat:0,  vitA:5,  vitB1:0,  vitB2:0,  vitC:1, zn:0,  vitD:0,  vitB6:0,   emoji:'🌊',cat:'追加',
+  {name:'乾燥わかめ 5g',                  cal:8,  prot:1, fat:0, carbs:1, fiber:1, na:370, ca:41, mg2:55, k:245, fe:0.2,cu:0.02,vitE:0.4, satFat:0,  vitA:5,  vitB1:0,  vitB2:0,  vitC:1, zn:0,  vitD:0,  vitB6:0,vitB12:0,folate:1,   emoji:'🌊',cat:'追加',
    recipe:'乾燥わかめ 5g｜水で戻してプロテイン鍋に投入。ヨウ素約200mcg（1日RDA 130mcg超）を補完'},
-  {name:'こんにゃく 100g（食物繊維）',    cal:5,  prot:0, fat:0, carbs:3, fiber:2, na:10,  ca:43, mg2:2,  k:33,  fe:0.4,cu:0.02,vitE:0,   satFat:0,  vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0,  vitD:0,  vitB6:0,   emoji:'🌿',cat:'追加'},
+  {name:'こんにゃく 100g（食物繊維）',    cal:5,  prot:0, fat:0, carbs:3, fiber:2, na:10,  ca:43, mg2:2,  k:33,  fe:0.4,cu:0.02,vitE:0,   satFat:0,  vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0,  vitD:0,  vitB6:0,vitB12:0,folate:0,   emoji:'🌿',cat:'追加'},
 ];
 
 const SHOPPING = [
@@ -1179,31 +1179,31 @@ const HOTCOOK_A = [
    season:'カットトマト缶200g・カレー粉大1・塩 小さじ1/3（2食分）・おろしにんにく・おろし生姜（多め）・みりん大1・かつお節1パック（2〜3g）・黒胡椒（仕上げ）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'鶏むねを一口大に切り片栗粉大さじ1をまぶす（保水＋ソースの絡み向上）｜鍋底にトマト缶・しめじ・冷凍パプリカ・ブロッコリー・ほうれん草を敷き（焦げ付き防止）、その上に鶏むねをのせる｜カレー粉・にんにく・生姜・みりん・かつお節を上から加えてスイッチON（かつお節のイノシン酸×トマトのグルタミン酸で塩分を増やさずうま味を底上げ）｜仕上げに黒胡椒。塩分は小さじ1/3のまま変更なし｜仕上げに生のブロッコリースプラウトをひとつまみ（加熱しないことでスルフォラファンの効果を活かす）',
    category:'カレー・シチュー',menuName:'無水カレー',manualCat:'煮物を作る［まぜない］',
-   prot:61,cal:390,fat:6,carbs:28,fiber:10,na:530,k:1780,ca:138,mg2:144,fe:3.8,zn:2.6,cu:0.34,vitA:540,vitB1:0.49,vitB2:0.61,vitB6:2.1,vitC:80,vitD:0.6,vitE:7.8,satFat:1.1},
+   prot:61,cal:390,fat:6,carbs:28,fiber:10,na:530,k:1780,ca:138,mg2:144,fe:3.8,zn:2.6,cu:0.34,vitA:540,vitB1:0.49,vitB2:0.61,vitB6:2.1,vitC:80,vitD:0.6,vitE:7.8,satFat:1.1,vitB12:0.5,folate:155},
   {day:'火',name:'鮭の豆乳味噌煮（石狩風・減塩）',emoji:'🐟',meat:'鮭切り身',meatWt:'480g',
    veg:'冷凍キャベツ150g・冷凍にんじん100g・しめじ100g・かつお節1パック（2〜3g）',
    season:'無調整豆乳200ml（仕上げに後入れ）・味噌大1.5（減塩・2食分）・バター小さじ1（約4g）・おろし生姜小さじ1/2〜1（鮭に塗る）・酒大1（お好みで）・柚子皮少々（仕上げ・香りで減塩をカバー）・塩：追加なし・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'鮭は水気を拭き取りおろし生姜を塗っておく（生臭さ対策）｜内鍋に野菜・しめじ・かつお節を敷き鮭をのせ、酒と味噌を豆乳大さじ2で溶いたものを回しかける｜手動「煮物を作る［まぜない］」で10〜15分加熱｜豆乳は長時間加熱で分離（モロモロ）しやすいため、加熱終了後にふたを開け残りの豆乳(150〜180ml)とバターを追加→決定キー→延長時間3〜5分を設定→スタートキーで延長加熱（沸騰させず温める程度に）｜かつお節のイノシン酸×味噌のグルタミン酸で塩分を増やさずうま味を底上げ｜味噌を大2→大1.5に減量し、仕上げに柚子皮少々を添えて香りで物足りなさを補う｜お好みでネギ・黒胡椒を散らす｜仕上げに生のブロッコリースプラウトをひとつまみ',
    category:'魚料理',menuName:'鮭の味噌煮',manualCat:'煮物を作る［まぜない］（魚は必ずまぜない）',
-   prot:57,cal:600,fat:36,carbs:18,fiber:5,na:855,k:1600,ca:112,mg2:122,fe:3.3,zn:2.5,cu:0.38,vitA:470,vitB1:0.53,vitB2:0.51,vitB6:1.0,vitC:20,vitD:36,vitE:4.7,satFat:7.0,epaDha:4100},
+   prot:57,cal:600,fat:36,carbs:18,fiber:5,na:855,k:1600,ca:112,mg2:122,fe:3.3,zn:2.5,cu:0.38,vitA:470,vitB1:0.53,vitB2:0.51,vitB6:1.0,vitC:20,vitD:36,vitE:4.7,satFat:7.0,epaDha:4100,vitB12:14,folate:107},
   {day:'水',name:'たこの洋風ガーリックバター炒め',emoji:'🐙',meat:'ボイルだこ',meatWt:'500g',
    veg:'ズッキーニ150g・冷凍パプリカ100g・しめじ100g',
    season:'にんにく（薄切り）1〜2片・バター15g・醤油小1・黒胡椒（仕上げ）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'内鍋の底に水分の多いズッキーニ・パプリカを敷く｜その上にしめじ、一口大に切ったたこ、にんにくをのせてスイッチON｜たこは加熱しすぎると硬くなるため短めの加熱設定を推奨｜たこ自体に下処理由来の塩分があるため醤油は控えめに｜仕上げにバターと黒胡椒、生のブロッコリースプラウトをひとつまみ｜たこはマグネシウム163mg・銅0.78mg・ビタミンE7.0mgが全20品中トップクラスの栄養価。ホタテ（相場250〜400円/100g）より価格が手頃なのもメリット',
    category:'魚料理',menuName:'たことズッキーニのバター炒め',manualCat:'炒め物を作る［まぜる］（たこの加熱しすぎ注意）',
-   prot:55,cal:324,fat:9,carbs:8,fiber:4,na:670,k:1165,ca:54,mg2:163,fe:1.6,zn:4.1,cu:0.78,vitA:66,vitB1:0.15,vitB2:0.21,vitB6:0.26,vitC:75,vitD:0.25,vitE:7.0,satFat:4.6},
+   prot:55,cal:324,fat:9,carbs:8,fiber:4,na:670,k:1165,ca:54,mg2:163,fe:1.6,zn:4.1,cu:0.78,vitA:66,vitB1:0.15,vitB2:0.21,vitB6:0.26,vitC:75,vitD:0.25,vitE:7.0,satFat:4.6,vitB12:3.3,folate:60},
   {day:'木',name:'トムヤムクン風 豚こま切れ肉ときのこの酸辣煮',emoji:'🌶️',meat:'豚こま切れ肉',meatWt:'400g',
    veg:'しめじ100g・エリンギ100g・ミニトマト100g・玉ねぎ50g',
    season:'ナンプラー大1・レモン汁大2・唐辛子（輪切り）1本・にんにく1片・生姜少々・砂糖小1・パクチー（仕上げ・お好みで）',
    prep:'内鍋の底に水分の多い玉ねぎ・ミニトマトを敷く｜その上にしめじ・エリンギ・豚こま切れ肉・にんにく・生姜をのせる｜ナンプラー・砂糖を混ぜてまわしかけてスイッチON｜加熱後にレモン汁と唐辛子を加えて全体を混ぜる（酸味は加熱前に入れると飛びやすいため仕上げに）｜お好みでパクチーを添える｜公式メニュー集に掲載の「トムヤムクン」に準拠。豚こま切れ肉は脂質・飽和脂肪がやや高めなので、気になる場合は豚もも薄切り肉（赤身）に置き換え可能',
    category:'スープ・鍋',menuName:'トムヤムクン',manualCat:'煮物を作る［まぜる］',
-   prot:39,cal:524,fat:38,carbs:11,fiber:4,na:710,k:1110,ca:10,mg2:54,fe:1.5,zn:4.3,cu:0.15,vitA:28,vitB1:1.5,vitB2:0.46,vitB6:0.65,vitC:28,vitD:0.6,vitE:0.9,satFat:13.1},
+   prot:39,cal:524,fat:38,carbs:11,fiber:4,na:710,k:1110,ca:10,mg2:54,fe:1.5,zn:4.3,cu:0.15,vitA:28,vitB1:1.5,vitB2:0.46,vitB6:0.65,vitC:28,vitD:0.6,vitE:0.9,satFat:13.1,vitB12:1.0,folate:66},
   {day:'金',name:'鶏つくねの塩麹しょうが鍋',emoji:'🥟',meat:'鶏むねひき肉',meatWt:'500g',
    veg:'れんこん150g・大根150g・しめじ100g',
    season:'塩麹大2（同量の水で薄めて使用）・酒大1・片栗粉大1（つくねのつなぎ）・卵白1個分（つなぎ）・生姜（すりおろし）1片・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'鶏むねひき肉・卵白・片栗粉・すりおろし生姜をよく練り、団子状に丸めておく｜内鍋の底に水分の多い大根・れんこんを敷く｜その上にしめじ、つくねを重ならないように並べる｜塩麹を同量の水で薄めたものと酒を回しかけてスイッチON（塩麹の発酵うま味で塩分を抑えつつコクを出す・全20品中最も塩分が低い）｜れんこんのビタミンCと食物繊維、塩麹の麹菌由来の消化酵素をプラス｜仕上げに生のブロッコリースプラウトをひとつまみ',
    category:'スープ・鍋',menuName:'鶏団子鍋',manualCat:'スープを作る［まぜない］（つくねの形崩れ防止）',
-   prot:52,cal:468,fat:13,carbs:25,fiber:4,na:450,k:1425,ca:52,mg2:69,fe:1.7,zn:2.3,cu:0.15,vitA:20,vitB1:0.30,vitB2:0.51,vitB6:1.3,vitC:47,vitD:0.25,vitE:0.5,satFat:3.8},
+   prot:52,cal:468,fat:13,carbs:25,fiber:4,na:450,k:1425,ca:52,mg2:69,fe:1.7,zn:2.3,cu:0.15,vitA:20,vitB1:0.30,vitB2:0.51,vitB6:1.3,vitC:47,vitD:0.25,vitE:0.5,satFat:3.8,vitB12:0.8,folate:54},
 ];
 const HOTCOOK_B = [
   {day:'月',name:'鶏むね 無水ポトフ',emoji:'🍲',meat:'鶏むね肉（皮なし）',meatWt:'450g',
@@ -1211,31 +1211,31 @@ const HOTCOOK_B = [
    season:'コンソメ1個（砕く）・塩 ふたつまみ（約0.6g・2食分／コンソメ1個で主に調味）・酒大1＋片栗粉小さじ1（肉の下味用）・ローリエ1枚（あれば）・おろしにんにく少々・粗挽き黒胡椒（仕上げ）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'内鍋の一番下に玉ねぎ・キャベツ・にんじん・ほうれん草を敷く（野菜の水分が湧き上がり鶏むねを優しく蒸し上げる）｜砕いたコンソメ・塩・おろしにんにくを加え、ローリエを添える｜鶏むねをぶつ切りにし酒・片栗粉を軽く揉み込んでから、野菜の上に重ならないようにのせてスイッチON｜完成後に底から優しく混ぜ、野菜の甘みが溶けたスープを鶏肉に吸わせる｜仕上げに黒胡椒と生のブロッコリースプラウトをひとつまみ',
    category:'スープ・鍋',menuName:'ポトフ',manualCat:'スープを作る［まぜない］',
-   prot:56,cal:325,fat:5,carbs:17,fiber:5,na:730,k:1330,ca:132,mg2:111,fe:1.8,zn:2.0,cu:0.18,vitA:740,vitB1:0.30,vitB2:0.35,vitB6:1.7,vitC:30,vitD:0.2,vitE:1.9,satFat:1.1},
+   prot:56,cal:325,fat:5,carbs:17,fiber:5,na:730,k:1330,ca:132,mg2:111,fe:1.8,zn:2.0,cu:0.18,vitA:740,vitB1:0.30,vitB2:0.35,vitB6:1.7,vitC:30,vitD:0.2,vitE:1.9,satFat:1.1,vitB12:0.5,folate:142},
   {day:'火',name:'鮭のちゃんちゃん焼き風（味噌バター・減塩）',emoji:'🐟',meat:'鮭切り身',meatWt:'480g',
    veg:'冷凍キャベツ200g・玉ねぎ100g（スライス）・しめじ100g',
    season:'味噌大1.5（減塩・2食分）・バター10g・みりん大1・酒大1・おろし生姜小1（増量）・黒胡椒 or 一味唐辛子（仕上げ・増量）・塩：追加なし・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'鮭は内鍋に入れる前に表面の水気をペーパーで拭き取る（生臭さ対策）｜内鍋の底にキャベツ・玉ねぎ・しめじを敷き詰め、その上に鮭をのせる｜味噌・みりん・酒・おろし生姜を混ぜたタレをかけ、バターをのせてスイッチON（酒のアルコールが魚臭成分を飛ばす）｜味噌を大2→大1.5に減量し、生姜と黒胡椒/一味を増量して香り・辛味のアクセントを強化することで塩分低下による物足りなさを補う｜仕上げに黒胡椒 or 一味をふる｜仕上げに生のブロッコリースプラウトをひとつまみ',
    category:'魚料理',menuName:'鮭のちゃんちゃん焼き',manualCat:'煮物を作る［まぜない］（魚は必ずまぜない）',
-   prot:53,cal:605,fat:36,carbs:20,fiber:5,na:860,k:1380,ca:102,mg2:99,fe:2.2,zn:2.2,cu:0.27,vitA:124,vitB1:0.48,vitB2:0.47,vitB6:1.0,vitC:27,vitD:36,vitE:4.6,satFat:8.2,epaDha:4100},
+   prot:53,cal:605,fat:36,carbs:20,fiber:5,na:860,k:1380,ca:102,mg2:99,fe:2.2,zn:2.2,cu:0.27,vitA:124,vitB1:0.48,vitB2:0.47,vitB6:1.0,vitC:27,vitD:36,vitE:4.6,satFat:8.2,epaDha:4100,vitB12:14,folate:134},
   {day:'水',name:'えびとブロッコリーのガーリック蒸し（レモン風味）',emoji:'🍤',meat:'むきえび（えび・イカのシーフードミックスも可）',meatWt:'500g',
    veg:'冷凍ブロッコリー200g・冷凍パプリカ100g・しめじ100g',
    season:'にんにく（すりおろし）2片・オリーブオイル大1・レモン汁大1・塩 小さじ1/3（2食分）・黒胡椒（仕上げ）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'内鍋の底に水分の多い冷凍ブロッコリー・パプリカを敷く｜その上にしめじ、むきえび（またはシーフードミックス）をのせる｜にんにく・オリーブオイル・塩を混ぜて回しかけてスイッチON（えび・いかは加熱しすぎると硬くなるため短めの加熱設定を推奨、特にいかは縮みやすいので要注意）｜仕上げにレモン汁と黒胡椒、生のブロッコリースプラウトをひとつまみ｜えびは銅1.05mg・ビタミンC123mgと、栄養プロフィールが際立つ',
    category:'魚料理',menuName:'えびの香草蒸し',manualCat:'蒸す［まぜない］（えび・いかの加熱しすぎ注意）',
-   prot:51,cal:310,fat:7,carbs:10,fiber:6,na:485,k:1065,ca:163,mg2:140,fe:1.5,zn:3.7,cu:1.05,vitA:100,vitB1:0.13,vitB2:0.16,vitB6:0.29,vitC:123,vitD:0.25,vitE:6.3,satFat:0.9},
+   prot:51,cal:310,fat:7,carbs:10,fiber:6,na:485,k:1065,ca:163,mg2:140,fe:1.5,zn:3.7,cu:1.05,vitA:100,vitB1:0.13,vitB2:0.16,vitB6:0.29,vitC:123,vitD:0.25,vitE:6.3,satFat:0.9,vitB12:2.5,folate:204},
   {day:'木',name:'タラのねぎ生姜蒸し',emoji:'🐟',meat:'タラ切り身',meatWt:'560g',
    veg:'長ねぎ1本（100g）・冷凍キャベツ150g・しめじ100g',
    season:'醤油大1・ごま油小1・酒大1・生姜（せん切り）1片・塩：追加なし（醤油大1で調味・2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'内鍋の底に水分の多い冷凍キャベツを敷く｜その上にしめじ・長ねぎ・生姜をのせ、タラを重ならないように並べる｜醤油・酒を回しかけてスイッチON｜白身魚は低脂質・高たんぱくで、鮭・サバ・ぶりに続く4種目の魚として脂質を大きく抑えられる｜仕上げにごま油を数滴、生のブロッコリースプラウトをひとつまみ',
    category:'魚料理',menuName:'白身魚の香味蒸し',manualCat:'蒸す［まぜない］（魚は必ずまぜない）',
-   prot:51,cal:280,fat:3,carbs:10,fiber:4,na:740,k:1440,ca:128,mg2:86,fe:0.7,zn:1.5,cu:0.07,vitA:20,vitB1:0.36,vitB2:0.37,vitB6:0.6,vitC:35,vitD:3.0,vitE:2.3,satFat:0.4},
+   prot:51,cal:280,fat:3,carbs:10,fiber:4,na:740,k:1440,ca:128,mg2:86,fe:0.7,zn:1.5,cu:0.07,vitA:20,vitB1:0.36,vitB2:0.37,vitB6:0.6,vitC:35,vitD:3.0,vitE:2.3,satFat:0.4,vitB12:8.4,folate:125},
   {day:'金',name:'厚揚げの肉みそあえ（高野豆腐入り）',emoji:'🫘',meat:'厚揚げ・高野豆腐・豚ひき肉',meatWt:'厚揚げ300g・高野豆腐50g・豚ひき肉100g',
    veg:'ごぼう100g・にんじん100g・しめじ100g',
    season:'赤みそ大1.5（2食分）・酒大1・みりん大1・生姜少々・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'内鍋の底に水分の多いごぼう・にんじんを敷く｜その上にしめじ・厚揚げ・水で戻さずそのまま使える高野豆腐・豚ひき肉をのせる｜赤みそ・酒・みりん・生姜を混ぜて回しかけてスイッチON（公式メニュー「厚揚げの肉みそあえ」に準拠し、ひき肉の肉みそで大豆製品のたんぱく質を補完）｜大豆製品中心のためたんぱく質は他日より控えめ（38g）。不足分は15:00のプロテインで補う想定｜カルシウム555mg・鉄6.2mgは全20品中トップクラス｜仕上げに生のブロッコリースプラウトをひとつまみ',
    category:'煮物',menuName:'厚揚げの肉みそあえ',manualCat:'煮物を作る［まぜない］（豆腐製品の煮くずれ防止）',
-   prot:38,cal:532,fat:36,carbs:17,fiber:6,na:740,k:805,ca:555,mg2:130,fe:6.2,zn:2.9,cu:0.44,vitA:360,vitB1:0.43,vitB2:0.2,vitB6:0.18,vitC:5,vitD:0.25,vitE:2.7,satFat:7.5},
+   prot:38,cal:532,fat:36,carbs:17,fiber:6,na:740,k:805,ca:555,mg2:130,fe:6.2,zn:2.9,cu:0.44,vitA:360,vitB1:0.43,vitB2:0.2,vitB6:0.18,vitC:5,vitD:0.25,vitE:2.7,satFat:7.5,vitB12:0.3,folate:67},
 ];
 const HOTCOOK_C = [
   {day:'月',name:'鶏むね バンバンジー風蒸し鶏スープ',emoji:'🥢',meat:'鶏むね肉（皮なし）',meatWt:'450g',
@@ -1243,31 +1243,31 @@ const HOTCOOK_C = [
    season:'酒大1・塩 小さじ1/2（下味用・2食分）・生姜1片・にんにく1片・すりごま大2・醤油/酢/砂糖 各少々（ごまだれ用・食べる直前にかける）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'鶏むねに酒大さじ1・塩小さじ1/2を揉み込んでおく｜鍋底に冷凍もやし・にんじん・しめじ・ほうれん草を敷き詰め、蒸しトレイをセット｜トレイの上に鶏むね・生姜・にんにくをのせてスイッチON（鶏の旨味が野菜へ落ちて絶品スープに）｜取り出して手で割き、鍋に残ったスープ大さじ1〜2をごまだれに混ぜてから絡める｜残った野菜スープはそのまま汁物として楽しめる｜仕上げに生のブロッコリースプラウトをひとつまみ',
    category:'蒸し料理',menuName:'蒸し鶏',manualCat:'蒸す（蒸しトレイを使用）',
-   prot:58,cal:350,fat:8,carbs:15,fiber:6,na:880,k:1390,ca:171,mg2:130,fe:2.4,zn:2.5,cu:0.33,vitA:740,vitB1:0.40,vitB2:0.42,vitB6:1.7,vitC:22,vitD:0.5,vitE:2.0,satFat:1.5},
+   prot:58,cal:350,fat:8,carbs:15,fiber:6,na:880,k:1390,ca:171,mg2:130,fe:2.4,zn:2.5,cu:0.33,vitA:740,vitB1:0.40,vitB2:0.42,vitB6:1.7,vitC:22,vitD:0.5,vitE:2.0,satFat:1.5,vitB12:0.5,folate:107},
   {day:'火',name:'サバの無水トマト味噌煮',emoji:'🐟',meat:'サバ切り身',meatWt:'480g',
    veg:'冷凍たまねぎ150g（一番下に敷く）・冷凍ズッキーニ or なす150g・しめじ100g',
    season:'カットトマト缶200g・味噌大1.5・おろし生姜小さじ1・酒大1・みりん大1・塩：追加なし（味噌大1.5で調味・2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'【臭み消し・時短版】サバに塩をひとつまみ振り10〜15分置き、出たドリップをペーパーで拭き取る（塩締めで臭み成分を排出）／【フル版・休日】さらに希釈酢水に20分浸けてから塩締めするとより徹底｜内鍋の一番下に水分の多い冷凍たまねぎを敷く（無水調理は水分の多い野菜を下に＝焦げ付き防止・SHARP公式）、ズッキーニ・しめじをのせる｜サバ（骨取り済みが時短）を皮目を上に重ならないよう並べる｜トマト缶・味噌・生姜・酒・みりんを別容器で混ぜてソースを作りサバに回しかける｜生姜と酒で臭みマスキング、みりんで酸味緩和｜仕上げに生ブロッコリースプラウト',
    category:'魚料理',menuName:'さばの味噌煮',manualCat:'煮物を作る［まぜない］（魚は必ずまぜない）',
-   prot:55,cal:680,fat:42,carbs:23,fiber:6,na:940,k:1630,ca:71,mg2:128,fe:4.7,zn:3.6,cu:0.55,vitA:160,vitB1:0.67,vitB2:0.87,vitB6:1.8,vitC:26,vitD:12,vitE:4.9,satFat:11,epaDha:4400},
+   prot:55,cal:680,fat:42,carbs:23,fiber:6,na:940,k:1630,ca:71,mg2:128,fe:4.7,zn:3.6,cu:0.55,vitA:160,vitB1:0.67,vitB2:0.87,vitB6:1.8,vitC:26,vitD:12,vitE:4.9,satFat:11,epaDha:4400,vitB12:31,folate:56},
   {day:'水',name:'牛赤身の焼肉風炒め煮（すりおろし玉ねぎだれ）',emoji:'🥩',meat:'牛赤身肉（もも or 切り落とし）',meatWt:'450g',
    veg:'玉ねぎ200g（炒め用150g・すりおろしだれ用50g）・冷凍にんじん100g・冷凍もやし150g・しめじ100g',
    season:'醤油大1.5・酢大1・みりん大1・にんにく（すりおろし）1片・ごま油小1・塩：追加なし（醤油大1.5で調味・2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'内鍋の底に水分の多い冷凍もやし・玉ねぎを敷く｜その上ににんじん・しめじ・牛赤身をのせる｜すりおろし玉ねぎ・醤油・酢・みりん・にんにくを混ぜたタレを回しかけてスイッチON｜牛赤身は脂の多い部位より鉄・亜鉛が豊富で、鉄5.9mg・亜鉛9.0mgは全20品中トップクラス｜仕上げにごま油を数滴、生のブロッコリースプラウトをひとつまみ',
    category:'炒め物',menuName:'肉野菜炒め',manualCat:'炒め物を作る［まぜる］（野菜と一緒に炒め煮）',
-   prot:50,cal:470,fat:12,carbs:23,fiber:6,na:770,k:1280,ca:46,mg2:75,fe:5.9,zn:9.0,cu:0.15,vitA:360,vitB1:0.28,vitB2:0.54,vitB6:0.75,vitC:13,vitD:0.25,vitE:0.9,satFat:4.0},
+   prot:50,cal:470,fat:12,carbs:23,fiber:6,na:770,k:1280,ca:46,mg2:75,fe:5.9,zn:9.0,cu:0.15,vitA:360,vitB1:0.28,vitB2:0.54,vitB6:0.75,vitC:13,vitD:0.25,vitE:0.9,satFat:4.0,vitB12:4.5,folate:74},
   {day:'木',name:'豚肩ロースの回鍋肉風',emoji:'🥘',meat:'豚肩ロース肉',meatWt:'500g',
    veg:'キャベツ200g・ピーマン100g・しめじ100g',
    season:'甜面醤大1.5・味噌小1・醤油小1・にんにく1片・生姜少々・ごま油小1・塩：追加なし（2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'豚肩ロースを一口大に切って内鍋の底へ｜その上にキャベツ・ピーマン・しめじをのせる｜甜面醤・味噌・醤油・にんにく・生姜を混ぜたタレを回しかけてスイッチON｜公式メニュー「回鍋肉（ホイコーロー）」は豚バラ肉が正式食材だが、より高たんぱく・低脂質な豚肩ロースで代替（脂身の多いバラ肉より飽和脂肪を抑えられる）｜仕上げにごま油を数滴、生のブロッコリースプラウトをひとつまみ',
    category:'炒め物',menuName:'回鍋肉',manualCat:'炒め物を作る［まぜる］',
-   prot:51,cal:458,fat:16,carbs:13,fiber:4,na:625,k:1300,ca:47,mg2:75,fe:1.9,zn:7.0,cu:0.16,vitA:17,vitB1:1.65,vitB2:0.66,vitB6:0.8,vitC:78,vitD:0.25,vitE:0.75,satFat:4.7},
+   prot:51,cal:458,fat:16,carbs:13,fiber:4,na:625,k:1300,ca:47,mg2:75,fe:1.9,zn:7.0,cu:0.16,vitA:17,vitB1:1.65,vitB2:0.66,vitB6:0.8,vitC:78,vitD:0.25,vitE:0.75,satFat:4.7,vitB12:1.0,folate:96},
   {day:'金',name:'鶏もも 筑前煮風',emoji:'🍢',meat:'鶏もも肉（皮なし）',meatWt:'500g',
    veg:'冷凍ごぼう100g・冷凍れんこん100g・冷凍里芋 or にんじん100g・しいたけ100g',
    season:'だし100ml・食塩不使用だしの素小さじ1・醤油大1・みりん大1・酒大1・塩：追加なし（醤油大1で調味・2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'根菜・しいたけを内鍋の底に敷く｜だし・だしの素・醤油・みりん・酒を混ぜて回しかける｜鶏ももを一口大に切り、野菜を覆うように一番上にのせてスイッチON（鶏の脂と旨味が根菜に落ち、土臭さを旨味に変える）｜だしは200ml→100mlに削減（説明書に「一般的なレシピより約1/3減らせる」と記載。冷凍根菜が水分を出す前の焦げ付きを避けるため50mlまでは減らさず中間量に）｜完成後に水っぽければ手動「煮詰める」で3〜5分追加加熱すると照りが出る｜仕上げに生のブロッコリースプラウトをひとつまみ',
    category:'煮物',menuName:'筑前煮',manualCat:'煮物を作る［まぜない］',
-   prot:52,cal:430,fat:13,carbs:30,fiber:8,na:715,k:1720,ca:57,mg2:120,fe:2.7,zn:5.7,cu:0.38,vitA:48,vitB1:0.43,vitB2:0.51,vitB6:1.1,vitC:20,vitD:0.7,vitE:2.4,satFat:3.6},
+   prot:52,cal:430,fat:13,carbs:30,fiber:8,na:715,k:1720,ca:57,mg2:120,fe:2.7,zn:5.7,cu:0.38,vitA:48,vitB1:0.43,vitB2:0.51,vitB6:1.1,vitC:20,vitD:0.7,vitE:2.4,satFat:3.6,vitB12:0.8,folate:69},
 ];
 const HOTCOOK_D = [
   {day:'月',name:'鶏むね 黒酢あん（夏野菜と）',emoji:'🥘',meat:'鶏むね肉（皮なし）',meatWt:'450g',
@@ -1275,31 +1275,31 @@ const HOTCOOK_D = [
    season:'ケチャップ大2・黒酢（or穀物酢）大2・醤油大1・みりん大1・砂糖小1・片栗粉大1（とろみ用・仕上げに追加）・おろし生姜、おろしにんにく各少々・塩ひとつまみ（2食分）・ごま油小さじ1（仕上げ）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'鶏むねを一口大に切って内鍋の底へ｜その上に冷凍野菜（なす・ズッキーニ・パプリカ）・しめじ・ほうれん草を凍ったまま乗せる｜ケチャップ・黒酢・醤油・みりん・砂糖・生姜・にんにく・塩を混ぜたタレを回しかけてスイッチON｜加熱終了後にふたを開け、片栗粉を同量の水で溶いたものを加えて全体を混ぜ、決定キー→延長2〜3分でとろみをつける（甘酢あん仕立て・ご飯にかけても丼として成立）｜仕上げにごま油を数滴、生のブロッコリースプラウトをひとつまみ',
    category:'煮物',menuName:'酢豚',manualCat:'煮物を作る［まぜない］（仕上げのとろみ付けのみ手動で撹拌）',
-   prot:58,cal:394,fat:7,carbs:28,fiber:7,na:921,k:1869,ca:120,mg2:144,fe:2.7,zn:2.5,cu:0.35,vitA:472,vitB1:0.43,vitB2:0.48,vitB6:2.0,vitC:49,vitD:0.5,vitE:4.8,satFat:1.1},
+   prot:58,cal:394,fat:7,carbs:28,fiber:7,na:921,k:1869,ca:120,mg2:144,fe:2.7,zn:2.5,cu:0.35,vitA:472,vitB1:0.43,vitB2:0.48,vitB6:2.0,vitC:49,vitD:0.5,vitE:4.8,satFat:1.1,vitB12:0.5,folate:142},
   {day:'火',name:'サバの無水カレー煮（ターメリック）',emoji:'🍛',meat:'サバ切り身',meatWt:'480g',
    veg:'冷凍たまねぎ150g・冷凍パプリカ150g・しめじ100g',
    season:'カレー粉大1・ターメリック小1/2・黒胡椒少々・トマト缶100g・おろし生姜大1・おろしにんにく1片・塩 小さじ1/2弱（2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'【臭み消し・時短版】サバに塩（小さじ1/2弱の一部）を振り10〜15分置き、出たドリップをペーパーで拭き取る（塩締めで臭み排出）｜【フル版・休日推奨】さらに希釈酢水に20分浸ける→塩締め→水気を拭きカレー粉をまぶして両面を焼く（スパイスのブルーミング＋身が締まる）｜鍋底に水分の多い冷凍たまねぎを敷き（無水調理の鉄則・SHARP公式）、パプリカ・しめじ・スパイス・トマト缶で「カレーの素」を作る｜フル版は焼サバを調理完了5分前に投入（延長キー・煮崩れと臭み移りを防ぐ）／時短版は塩締めサバを最初から野菜の上に｜黒胡椒でクルクミン吸収最大化｜仕上げに生ブロッコリースプラウト',
    category:'カレー・シチュー',menuName:'無水カレー',manualCat:'煮物を作る［まぜない］（魚は必ずまぜない）',
-   prot:53,cal:655,fat:41,carbs:20,fiber:6,na:765,k:1470,ca:57,mg2:110,fe:5.1,zn:3.3,cu:0.45,vitA:190,vitB1:0.67,vitB2:0.94,vitB6:2.0,vitC:50,vitD:12,vitE:7.1,satFat:11,epaDha:4400},
+   prot:53,cal:655,fat:41,carbs:20,fiber:6,na:765,k:1470,ca:57,mg2:110,fe:5.1,zn:3.3,cu:0.45,vitA:190,vitB1:0.67,vitB2:0.94,vitB6:2.0,vitC:50,vitD:12,vitE:7.1,satFat:11,epaDha:4400,vitB12:31,folate:89},
   {day:'水',name:'あさりとタラのアクアパッツァ風スープ',emoji:'🍲',meat:'タラ切り身・あさり',meatWt:'タラ480g・あさり100g（むき身 or 砂抜き済み）',
    veg:'プチトマト200g・にんにく1片',
    season:'白ワイン大4・オリーブオイル大1・塩こしょう（あさりに自然な塩分があるため追加の塩は控えめに）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'内鍋の底に水分の多いプチトマトを敷く｜その上にあさり・にんにく、塩こしょうしたタラをのせる｜白ワイン・オリーブオイルを回しかけてスイッチON｜白ワインの酸とアルコールが魚介の臭みを飛ばす効果もある｜あさり自体に自然な塩分があるため追加の塩は不要｜公式メニュー集掲載の「アクアパッツァ」に準拠。地中海食パターン（PREDIMED試験でCVDリスク-30%）の核となるオリーブオイル・魚介・トマト・にんにくを凝縮｜仕上げに黒胡椒、お好みでパセリやレモンを添える',
    category:'魚料理',menuName:'アクアパッツァ',manualCat:'煮物を作る［まぜない］（あさり・魚は必ずまぜない）',
-   prot:46,cal:292,fat:7,carbs:7,fiber:1.4,na:700,k:1200,ca:110,mg2:108,fe:2.4,zn:1.7,cu:0.08,vitA:56,vitB1:0.24,vitB2:0.32,vitB6:0.48,vitC:32,vitD:2.4,vitE:2.6,satFat:0.9,epaDha:430},
+   prot:46,cal:292,fat:7,carbs:7,fiber:1.4,na:700,k:1200,ca:110,mg2:108,fe:2.4,zn:1.7,cu:0.08,vitA:56,vitB1:0.24,vitB2:0.32,vitB6:0.48,vitC:32,vitD:2.4,vitE:2.6,satFat:0.9,epaDha:430,vitB12:33,folate:54},
   {day:'木',name:'鶏もも 参鶏湯（サムゲタン）風スープ',emoji:'🍜',meat:'鶏もも肉（皮なし）',meatWt:'500g',
    veg:'長ねぎ1本・にんにく5片・しめじ100g・冷凍にんじん100g・乾燥きくらげ5g（天日干し推奨・戻さずそのまま投入可）',
    season:'干しエビ（アミエビ）10g・生姜1片・塩 ひとつまみ（約0.3g・2食分／干しエビのうま味で最小限に）・黒胡椒・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'鶏ももと丸ごとにんにく・生姜・長ねぎ・きくらげ・干しエビを内鍋へ。だしで煮るだけ（米は別添え大麦ご飯で代用）｜干しエビのうま味で塩を増やさず満足感アップ｜仕上げに生のブロッコリースプラウトをひとつまみ',
    category:'スープ・鍋',menuName:'鶏スープ',manualCat:'スープを作る［まぜない］（丸ごとにんにく・ねぎの大きめ食材のため）',
-   prot:54,cal:375,fat:13,carbs:16,fiber:7,na:290,k:1390,ca:350,mg2:104,fe:2.9,zn:5.5,cu:0.33,vitA:410,vitB1:0.38,vitB2:0.51,vitB6:1.1,vitC:15,vitD:4,vitE:1.9,satFat:3.6},
+   prot:54,cal:375,fat:13,carbs:16,fiber:7,na:290,k:1390,ca:350,mg2:104,fe:2.9,zn:5.5,cu:0.33,vitA:410,vitB1:0.38,vitB2:0.51,vitB6:1.1,vitC:15,vitD:4,vitE:1.9,satFat:3.6,vitB12:0.8,folate:47},
   {day:'金',name:'豚ヒレのみぞれ煮（大根おろし・生姜）',emoji:'🐷',meat:'豚ヒレ肉',meatWt:'450g',
    veg:'大根おろし300g・冷凍にんじん100g・しめじ100g・冷凍ほうれん草100g',
    season:'醤油大1.5・みりん大2・酒大1・生姜（すりおろし）1片・塩：追加なし（醤油大1.5で調味・2食分）・ブロッコリースプラウト少量（生・仕上げ用）',
    prep:'内鍋の底に水分の多い大根おろし・冷凍にんじんを敷く（無水調理の鉄則・SHARP公式）｜その上にしめじ・ほうれん草をのせ、一口大に切った豚ヒレを重ならないように並べる｜醤油・みりん・酒・生姜を混ぜて回しかけてスイッチON｜豚ヒレはビタミンB1が鶏むねの約10倍と圧倒的で、疲労回復・糖代謝サポートに最適｜大根おろしの消化酵素（アミラーゼ）が脂身の少ない赤身肉の消化を助ける｜仕上げに生のブロッコリースプラウトをひとつまみ',
    category:'煮物',menuName:'豚肉のみぞれ煮',manualCat:'煮物を作る［まぜない］（大根おろしの食感を保つ）',
-   prot:56,cal:390,fat:5,carbs:23,fiber:6,na:775,k:1850,ca:80,mg2:92,fe:2.8,zn:5.0,cu:0.20,vitA:530,vitB1:3.0,vitB2:0.70,vitB6:1.3,vitC:23,vitD:0.9,vitE:1.4,satFat:1.3},
+   prot:56,cal:390,fat:5,carbs:23,fiber:6,na:775,k:1850,ca:80,mg2:92,fe:2.8,zn:5.0,cu:0.20,vitA:530,vitB1:3.0,vitB2:0.70,vitB6:1.3,vitC:23,vitD:0.9,vitE:1.4,satFat:1.3,vitB12:0.9,folate:114},
 ];
 
 const SHOPPING_HC_A = [
@@ -1475,7 +1475,7 @@ function toggleNutrDetail(){
   const bEl  = document.getElementById('macro-bars');
   const tBtn = document.getElementById('nutr-toggle-btn');
   if(bEl)  bEl.style.display  = _nutrExpanded ? '' : 'none';
-  if(tBtn) tBtn.textContent   = _nutrExpanded ? '▲ 閉じる' : '▼ 全21項目を表示';
+  if(tBtn) tBtn.textContent   = _nutrExpanded ? '▲ 閉じる' : '▼ 全23項目を表示';
 }
 // ── 食事ごとの栄養内訳（どのメニューが何を補っているか） ──────
 const MEAL_GROUPS = [
@@ -1556,6 +1556,7 @@ function renderNutrition() {
   const na=r('na'),fca=r('ca'),fmg=r('mg2'),fk=r('k'),ffe=r('fe'),fcu=r('cu'),fvitE=r('vitE');
   const fsatFat=r('satFat'),fvitA=r('vitA'),fvitB1=r('vitB1'),fvitB2=r('vitB2');
   const fvitC=r('vitC'),fzn=r('zn'),fvitD=r('vitD'),fvitB6=r('vitB6'),fEpaDha=r('epaDha');
+  const fvitB12=r('vitB12'),fFolate=r('folate');
   const salt = parseFloat((na*2.54/1000).toFixed(1));
 
   // ── compact summary ──────────────────────────────────
@@ -1599,7 +1600,7 @@ function renderNutrition() {
       </div>
     </div>
     ${chipsHtml?`<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;">${chipsHtml}</div>`:''}
-    <button id="nutr-toggle-btn" onclick="toggleNutrDetail()" style="width:100%;background:var(--surface2);border:none;border-radius:8px;padding:9px;font-size:12px;color:var(--text3);cursor:pointer;-webkit-tap-highlight-color:transparent;">${_nutrExpanded?'▲ 閉じる':'▼ 全21項目を表示'}</button>`;
+    <button id="nutr-toggle-btn" onclick="toggleNutrDetail()" style="width:100%;background:var(--surface2);border:none;border-radius:8px;padding:9px;font-size:12px;color:var(--text3);cursor:pointer;-webkit-tap-highlight-color:transparent;">${_nutrExpanded?'▲ 閉じる':'▼ 全23項目を表示'}</button>`;
 
   const badge = document.getElementById('train-day-badge');
   if(badge){
@@ -1697,6 +1698,8 @@ function renderNutrition() {
     {lbl:'ビタミンC',   val:fvitC,        tgt:100,   unit:'mg'},
     {lbl:'ビタミンD',   val:fvitD,        tgt:8.5,   unit:'mcg',dec:true},
     {lbl:'ビタミンE',   val:fvitE,        tgt:6.5,   unit:'mg', dec:true},
+    {lbl:'ビタミンB12', val:fvitB12,      tgt:2.4,   unit:'mcg',dec:true},
+    {lbl:'葉酸',        val:fFolate,      tgt:240,   unit:'mcg'},
   ];
   document.getElementById('macro-bars').innerHTML =
     '<div class="mbsec-title">マクロ栄養素</div>'  + barHtml(MACROS)   +
@@ -1818,7 +1821,8 @@ function addPreset(i){
     cal:p.cal,prot:p.prot||0,fat:p.fat||0,carbs:p.carbs||0,fiber:p.fiber||0,na:p.na||0,
     ca:p.ca||0,mg2:p.mg2||0,k:p.k||0,fe:p.fe||0,cu:p.cu||0,vitE:p.vitE||0,
     satFat:p.satFat||0,vitA:p.vitA||0,vitB1:p.vitB1||0,vitB2:p.vitB2||0,
-    vitC:p.vitC||0,zn:p.zn||0,vitD:p.vitD||0,vitB6:p.vitB6||0,epaDha:p.epaDha||0});
+    vitC:p.vitC||0,zn:p.zn||0,vitD:p.vitD||0,vitB6:p.vitB6||0,epaDha:p.epaDha||0,
+    vitB12:p.vitB12||0,folate:p.folate||0});
   save(); renderNutrition(); renderToday();
 }
 
@@ -1832,6 +1836,7 @@ const SUPP = [
   {name:'カルシウム',   got:1200, tgt:750,  unit:'mg', src:'Multi 200mg + Cal/Mag 1,000mg', ok:true},
   {name:'マグネシウム', got:600,  tgt:370,  unit:'mg', src:'Multi 100mg + Cal/Mag 500mg',   ok:true},
   {name:'EPA+DHA',      got:1200, tgt:2000, unit:'mg', src:'🐔鶏の日(月水金)=4錠2,400mg／🐟魚の日(火木)=2錠1,200mg（魚から食事だけで2,000mg超のため）で使い分け',ok:true},
+  {name:'葉酸',         got:0,    tgt:240,  unit:'mcg',src:'❌ 専用サプリなし想定（Multiに含まれる可能性あり・要ラベル確認） — 食事から全量',ok:false},
   {name:'食物繊維',     got:0,    tgt:25,   unit:'g',  src:'❌ サプリゼロ — 食事から全量',  ok:false},
   {name:'カリウム',     got:50,   tgt:3000, unit:'mg', src:'❌ サプリほぼゼロ — 食事から全量',ok:false},
   {name:'鉄',           got:0,    tgt:7.5,  unit:'mg', src:'❌ 男性用Multi鉄なし — 食事から全量',ok:false},
@@ -1857,6 +1862,10 @@ const SUPP_ITEMS = [
    cover:'クレアチンモノハイドレート 5g（Nature In 99.9%）',
    cal:0, prot:0,fat:0, carbs:0,fiber:0,na:0, ca:0,mg2:0,k:0,fe:0,cu:0,vitE:0,
    satFat:0,vitA:0,vitB1:0,vitB2:0,vitC:0,zn:0,vitD:0,vitB6:0},
+  {name:'メチルコバラミン（ビタミンB12）',    emoji:'🧬',
+   cover:'ビタミンB12 300mcg',
+   cal:0, prot:0,fat:0, carbs:0,fiber:0,na:0, ca:0,mg2:0,k:0,fe:0,cu:0,vitE:0,
+   satFat:0,vitA:0,vitB1:0,vitB2:0,vitC:0,zn:0,vitD:0,vitB6:0,vitB12:300,folate:0},
 ];
 function isFishDay(dow){ return dow===2 || dow===4; } // 火・木＝魚の日（鮭・サバ主菜でEPA+DHAを食事から十分摂取）
 function toggleSupp(i){
@@ -1868,7 +1877,8 @@ function toggleSupp(i){
       cal:(s.cal||0)*mult,prot:0,fat:(s.fat||0)*mult,carbs:(s.carbs||0)*mult,fiber:0,na:0,
       ca:s.ca||0,mg2:s.mg2||0,k:0,fe:0,cu:0,vitE:s.vitE||0,
       satFat:(s.satFat||0)*mult,vitA:s.vitA||0,vitB1:s.vitB1||0,vitB2:s.vitB2||0,
-      vitC:s.vitC||0,zn:s.zn||0,vitD:s.vitD||0,vitB6:s.vitB6||0,epaDha:(s.epaDha||0)*mult});
+      vitC:s.vitC||0,zn:s.zn||0,vitD:s.vitD||0,vitB6:s.vitB6||0,epaDha:(s.epaDha||0)*mult,
+      vitB12:s.vitB12||0,folate:s.folate||0});
   }else{
     DB.meals.splice(idx,1);
   }
@@ -2006,7 +2016,7 @@ function addHotcookMeal(idx, when){
     ca:d.ca||0, mg2:d.mg2||0, fe:d.fe||0, zn:d.zn||0, cu:d.cu||0,
     vitA:d.vitA||0, vitB1:d.vitB1||0, vitB2:d.vitB2||0, vitB6:d.vitB6||0,
     vitC:d.vitC||0, vitD:d.vitD||0, vitE:d.vitE||0, satFat:d.satFat||0,
-    epaDha:d.epaDha||0, k:d.k||0});
+    epaDha:d.epaDha||0, k:d.k||0, vitB12:d.vitB12||0, folate:d.folate||0});
   save(); renderNutrition(); renderToday();
 }
 function quickAddTodayMeal(when){
@@ -2019,7 +2029,7 @@ function quickAddTodayMeal(when){
     ca:d.ca||0, mg2:d.mg2||0, fe:d.fe||0, zn:d.zn||0, cu:d.cu||0,
     vitA:d.vitA||0, vitB1:d.vitB1||0, vitB2:d.vitB2||0, vitB6:d.vitB6||0,
     vitC:d.vitC||0, vitD:d.vitD||0, vitE:d.vitE||0, satFat:d.satFat||0,
-    epaDha:d.epaDha||0, k:d.k||0});
+    epaDha:d.epaDha||0, k:d.k||0, vitB12:d.vitB12||0, folate:d.folate||0});
   save(); renderNutrition(); renderToday();
 }
 function quickAddTodayRice(when){
