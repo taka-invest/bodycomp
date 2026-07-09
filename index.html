@@ -1831,21 +1831,21 @@ const SUPP = [
   {name:'ビタミンC',    got:1470, tgt:100,  unit:'mg', src:'Multi 470mg + Gold C 1,000mg',ok:true},
   {name:'ビタミンD3',   got:2000, tgt:2000, unit:'IU', src:'Two-Per-Day 2,000 IU',         ok:true},
   {name:'ビタミンK1+K2',got:1100, tgt:150,  unit:'mcg',src:'K1 1,000mcg + K2(MK-7) 100mcg',ok:true},
-  {name:'ビタミンB12',  got:300,  tgt:2.4,  unit:'mcg',src:'メチルコバラミン 300mcg',       ok:true},
+  {name:'ビタミンB12',  got:300,  tgt:2.4,  unit:'mcg',src:'Two-Per-Day 300mcg（メチルコバラミン）', ok:true},
   {name:'亜鉛',         got:25,   tgt:11,   unit:'mg', src:'Two-Per-Day 25mg',              ok:true},
-  {name:'カルシウム',   got:1200, tgt:750,  unit:'mg', src:'Multi 200mg + Cal/Mag 1,000mg', ok:true},
+  {name:'カルシウム',   got:1000, tgt:750,  unit:'mg', src:'Cal/Mag 1,000mg（Multiにはカルシウム含まれず・ラベル確認済み）', ok:true},
   {name:'マグネシウム', got:600,  tgt:370,  unit:'mg', src:'Multi 100mg + Cal/Mag 500mg',   ok:true},
   {name:'EPA+DHA',      got:1200, tgt:2000, unit:'mg', src:'🐔鶏の日(月水金)=4錠2,400mg／🐟魚の日(火木)=2錠1,200mg（魚から食事だけで2,000mg超のため）で使い分け',ok:true},
-  {name:'葉酸',         got:0,    tgt:240,  unit:'mcg',src:'❌ 専用サプリなし想定（Multiに含まれる可能性あり・要ラベル確認） — 食事から全量',ok:false},
+  {name:'葉酸',         got:680,  tgt:240,  unit:'mcg',src:'Two-Per-Day 680mcg（L-5-メチルテトラヒドロ葉酸・活性型）', ok:true},
   {name:'食物繊維',     got:0,    tgt:25,   unit:'g',  src:'❌ サプリゼロ — 食事から全量',  ok:false},
   {name:'カリウム',     got:50,   tgt:3000, unit:'mg', src:'❌ サプリほぼゼロ — 食事から全量',ok:false},
   {name:'鉄',           got:0,    tgt:7.5,  unit:'mg', src:'❌ 男性用Multi鉄なし — 食事から全量',ok:false},
 ];
 const SUPP_ITEMS = [
   {name:'Two-Per-Day（マルチビタミン）',      emoji:'💊',
-   cover:'D3·C·E·A·K1·K2·B12·B群·Zn·Ca·Mg',
-   cal:5, prot:0,fat:0, carbs:1,fiber:0,na:0, ca:200,mg2:100,k:0,fe:0,cu:0,vitE:67,
-   satFat:0,vitA:750,vitB1:125,vitB2:50,vitC:470,zn:25,vitD:50,vitB6:75},
+   cover:'D3·C·E·A·B1·B2·B6·B12·葉酸·Zn·Mg（カルシウムは含まれず）',
+   cal:5, prot:0,fat:0, carbs:1,fiber:0,na:0, ca:0,mg2:100,k:0,fe:0,cu:0,vitE:67,
+   satFat:0,vitA:1500,vitB1:75,vitB2:50,vitC:470,zn:25,vitD:50,vitB6:75,vitB12:300,folate:680},
   {name:'Gold C 1,000mg',                   emoji:'🍊',
    cover:'ビタミンC 1,000mg',
    cal:4, prot:0,fat:0, carbs:1,fiber:0,na:0, ca:0,mg2:0,k:0,fe:0,cu:0,vitE:0,
@@ -1862,10 +1862,6 @@ const SUPP_ITEMS = [
    cover:'クレアチンモノハイドレート 5g（Nature In 99.9%）',
    cal:0, prot:0,fat:0, carbs:0,fiber:0,na:0, ca:0,mg2:0,k:0,fe:0,cu:0,vitE:0,
    satFat:0,vitA:0,vitB1:0,vitB2:0,vitC:0,zn:0,vitD:0,vitB6:0},
-  {name:'メチルコバラミン（ビタミンB12）',    emoji:'🧬',
-   cover:'ビタミンB12 300mcg',
-   cal:0, prot:0,fat:0, carbs:0,fiber:0,na:0, ca:0,mg2:0,k:0,fe:0,cu:0,vitE:0,
-   satFat:0,vitA:0,vitB1:0,vitB2:0,vitC:0,zn:0,vitD:0,vitB6:0,vitB12:300,folate:0},
 ];
 function isFishDay(dow){ return dow===2 || dow===4; } // 火・木＝魚の日（鮭・サバ主菜でEPA+DHAを食事から十分摂取）
 function toggleSupp(i){
