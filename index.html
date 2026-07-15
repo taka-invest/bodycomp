@@ -984,7 +984,7 @@ renderWeek();
 function showDayPlan(gridIdx) {
   document.querySelectorAll('#wgrid .day').forEach((el,j)=>el.classList.toggle('viewing',j===gridIdx));
   const jsDow = [1,2,3,4,5,6,0][gridIdx];
-  const PROGS = {2:PROGRAM_TUE, 3:PROGRAM_WED, 5:PROGRAM_FRI, 6:PROGRAM_SAT, 0:PROGRAM_SUN};
+  const PROGS = {2:(getTueMode()==='regular'?PROGRAM_TUE_REGULAR:PROGRAM_TUE_LIGHT), 3:PROGRAM_WED, 5:PROGRAM_FRI, 6:PROGRAM_SAT, 0:PROGRAM_SUN};
   const prog = PROGS[jsDow];
   const el = document.getElementById('prog-card-inner');
   // 今日のセルをタップ → インタラクティブ版に戻す
@@ -998,6 +998,7 @@ function showDayPlan(gridIdx) {
       <div class="prog-label">${prog.label}</div>
       <div class="prog-dur">⏱ ${prog.duration}</div>
     </div>
+    ${jsDow===2?tueModeToggleHtml():''}
     ${prog.note?`<div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">${prog.note}</div>`:''}
   `;
   prog.blocks.forEach(b=>{
@@ -2689,8 +2690,84 @@ if ('serviceWorker' in navigator) {
 }
 
 // ── PROGRAM DATA ──────────────────────────────────────
-const PROGRAM_TUE = {
-  label:'🏋️ 火曜｜上半身重点 + 後鎖',
+// 火曜＝下半身へ移設（水曜Norwegian4×4への影響を避けるため金曜から移動）。
+// 水上スポーツ（土日）にまだ慣れていない移行期は軽負荷版、慣れてきたら正規版に手動切替。
+const PROGRAM_TUE_LIGHT = {
+  label:'🦵 火曜｜下半身（移行期・軽負荷版）',
+  duration:'70〜80分',
+  type:'self',
+  note:'翌日水曜のNorwegian4×4への影響を最小化する設計。伸張性負荷（エキセントリック）の強いスクワット・デッドリフト・ランジ系を避け、マシン中心で関節への負担とDOMSを抑える｜各種目RPE6〜7（あと3〜4回はできる余力を残す）｜週末の水上スポーツに慣れてきたら「正規版」に切り替えてOK',
+  blocks:[
+    { name:'BLOCK A — 大腿四頭筋・臀部（マシン中心）', note:'↕ インターバル75秒',
+      exercises:[
+        {id:'tl1',name:'レッグプレス（マシン）',sets:'4',reps:'12-15',weight:'中重量（RPE6〜7・追い込みすぎない）',muscle:'大腿四頭筋・臀部'},
+        {id:'tl2',name:'レッグエクステンション（マシン）',sets:'3',reps:'12-15',weight:'軽〜中重量',muscle:'大腿四頭筋（アイソレーション）'},
+      ]},
+    { name:'BLOCK B — 後鎖（伸張性負荷を抑えたバリエーション）', note:'↕ インターバル75秒',
+      exercises:[
+        {id:'tl3',name:'レッグカール（マシン）',sets:'3',reps:'12-15',weight:'軽〜中重量',muscle:'ハムストリング'},
+        {id:'tl4',name:'グルートブリッジ',sets:'3',reps:'15-20',weight:'自重 or 軽負荷（バーベル軽め）',muscle:'臀部'},
+      ]},
+    { name:'BLOCK C — カーフ',
+      exercises:[
+        {id:'tl5',name:'シーテッドカーフレイズ',sets:'3',reps:'15-20',weight:'中重量',muscle:'下腿三頭筋'},
+      ]},
+    { name:'BLOCK D — コア・上半身軽め（下半身の回復を妨げず時間を調整）',
+      exercises:[
+        {id:'tl6',name:'プランク',sets:'3',reps:'40-60秒',weight:'自重',muscle:'体幹（腹横筋）'},
+        {id:'tl7',name:'ケーブルロウ（軽め）',sets:'3',reps:'12-15',weight:'軽〜中重量',muscle:'広背筋（下半身と独立・翌日の脚に影響しない）'},
+      ]},
+  ]
+};
+const PROGRAM_TUE_REGULAR = {
+  label:'🦵 火曜｜下半身（正規版）',
+  duration:'75〜90分',
+  type:'self',
+  note:'水上スポーツに慣れて週末の疲労が軽くなってきたら使用する通常強度版。それでも翌日の4×4があるため、毎回100%追い込むのではなくRPE8を目安に（あと2回はできる余力）',
+  blocks:[
+    { name:'BLOCK A — メインコンパウンド', note:'↕ インターバル2〜3分（高重量のため長めに確保）',
+      exercises:[
+        {id:'tr1',name:'バーベルスクワット',sets:'4',reps:'6-8',weight:'RPE8目安・追い込みすぎない',muscle:'大腿四頭筋・臀部・体幹'},
+        {id:'tr2',name:'ルーマニアンデッドリフト',sets:'3',reps:'8-10',weight:'80〜100 kg',muscle:'ハムストリング・臀部・脊柱起立筋'},
+      ]},
+    { name:'BLOCK B — 補助コンパウンド（片脚・安定性）', note:'↕ インターバル90秒',
+      exercises:[
+        {id:'tr3',name:'ランジ or ブルガリアンSQT',sets:'3',reps:'10-12（片側）',weight:'ダンベル 12〜16 kg（片手）',muscle:'大腿四頭筋・臀部'},
+      ]},
+    { name:'BLOCK C — アイソレーション', note:'↕ インターバル90秒',
+      exercises:[
+        {id:'tr4',name:'レッグカール（マシン）',sets:'3',reps:'10-12',weight:'中〜高重量',muscle:'ハムストリング'},
+        {id:'tr5',name:'レッグエクステンション（マシン）',sets:'3',reps:'10-12',weight:'中〜高重量',muscle:'大腿四頭筋'},
+      ]},
+    { name:'BLOCK D — カーフ',
+      exercises:[
+        {id:'tr6',name:'スタンディングカーフレイズ',sets:'4',reps:'12-15',weight:'中〜高重量',muscle:'下腿三頭筋'},
+      ]},
+    { name:'BLOCK E — コア',
+      exercises:[
+        {id:'tr7',name:'アブローラー',sets:'3',reps:'10-15',weight:'自重',muscle:'腹直筋・体幹'},
+      ]},
+  ]
+};
+function getTueMode(){ return (DB.profile && DB.profile.tueMode) || 'light'; }
+function setTueMode(mode){
+  if(!DB.profile) DB.profile = {};
+  DB.profile.tueMode = mode;
+  save();
+  if(todayDow===2){ renderProgram(); } else { showDayPlan(1); }
+}
+function tueModeToggleHtml(){
+  const mode = getTueMode();
+  const chip = (m,label)=>{
+    const active = m===mode;
+    return `<button onclick="setTueMode('${m}')" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;cursor:pointer;border:${active?'1.5px solid var(--blue)':'1px solid var(--border)'};background:${active?'rgba(0,122,255,.12)':'transparent'};color:${active?'var(--blue)':'var(--text3)'};">${label}</button>`;
+  };
+  return `<div style="display:flex;gap:6px;margin-bottom:10px;">${chip('light','🌱 移行期（軽負荷）')}${chip('regular','💪 正規版')}</div>`;
+}
+
+// 金曜＝上半身へ移設（元・火曜メニューをそのまま移動。トレーナーの曜日はそのまま金曜を想定）
+const PROGRAM_FRI = {
+  label:'🏋️ 金曜｜上半身重点 + 後鎖',
   duration:'70〜80分',
   type:'self',
   blocks:[
@@ -2721,24 +2798,6 @@ const PROGRAM_TUE = {
     { name:'BLOCK F — 後鎖',
       exercises:[
         {id:'f1',name:'レッグカール（マシン）',sets:'3',reps:'10-12',weight:'適切な重量でフルレンジ',muscle:'ハムストリング'},
-      ]},
-  ]
-};
-
-const PROGRAM_FRI = {
-  label:'👨‍🏫 金曜｜下半身 + 肩・三頭追加',
-  duration:'45分',
-  type:'personal',
-  blocks:[
-    { name:'メイン（トレーナー主導）',
-      exercises:[
-        {id:'p1',name:'バーベルスクワット', sets:'4',reps:'6-10', weight:'トレーナーと相談',muscle:'大腿四頭筋・臀部'},
-        {id:'p2',name:'ランジ or ブルガリアンSQT', sets:'3',reps:'10-12',weight:'トレーナーと相談',muscle:'大腿・臀部'},
-      ]},
-    { name:'追加提案（残り10分）', note:'トレーナーへ提案してみよう 💬',
-      exercises:[
-        {id:'p3',name:'ルーマニアンデッドリフト',sets:'3',reps:'8-10', weight:'80〜100 kg',muscle:'ハムストリング・臀部（トレーナー指導でフォーム確認）'},
-        {id:'p4',name:'ダンベルラテラルレイズ',  sets:'3',reps:'15',  weight:'8〜10 kg', muscle:'三角筋中部'},
       ]},
   ]
 };
@@ -2822,6 +2881,13 @@ const PROGRAM_SUN = {
 // ── Exercise media lookup (Wikimedia Commons + YouTube search) ─
 const W = 'https://upload.wikimedia.org/wikipedia/commons/thumb/';
 const EX_MEDIA = {
+  'レッグプレス（マシン）':                 {img:null,                                                                                                ph:'🦵', ytq:'レッグプレス マシン やり方 フォーム'},
+  'レッグエクステンション（マシン）':       {img:null,                                                                                                ph:'🦵', ytq:'レッグエクステンション マシン やり方 大腿四頭筋'},
+  'グルートブリッジ':                       {img:null,                                                                                                ph:'🍑', ytq:'グルートブリッジ やり方 臀部 フォーム'},
+  'シーテッドカーフレイズ':                 {img:null,                                                                                                ph:'🦵', ytq:'シーテッドカーフレイズ やり方 下腿三頭筋'},
+  'スタンディングカーフレイズ':             {img:null,                                                                                                ph:'🦵', ytq:'スタンディングカーフレイズ やり方 フォーム'},
+  'プランク':                               {img:null,                                                                                                ph:'🎯', ytq:'プランク やり方 体幹 フォーム'},
+  'ケーブルロウ（軽め）':                   {img:null,                                                                                                ph:'🔄', ytq:'ケーブルロウ シーテッドロー やり方 広背筋'},
   'バーベルベンチプレス':                   {img:W+'a/aa/Bench_press_1.jpg/330px-Bench_press_1.jpg',                                                ph:'🏋️', ytq:'バーベルベンチプレス フォーム やり方'},
   'ワンハンドダンベルロウ':                 {img:null,                                                                                                ph:'🔄', ytq:'ワンハンドダンベルロウ やり方 広背筋 フォーム'},
   'ダンベルショルダープレス':               {img:W+'6/62/Seated-military-shoulder-press-1.png/330px-Seated-military-shoulder-press-1.png',            ph:'🏋️', ytq:'ダンベルショルダープレス やり方 フォーム'},
@@ -2933,7 +2999,7 @@ function loadExImgs(){
 let pgChecked = {};
 
 function getTodayProg() {
-  if(todayDow===2) return PROGRAM_TUE;
+  if(todayDow===2) return getTueMode()==='regular' ? PROGRAM_TUE_REGULAR : PROGRAM_TUE_LIGHT;
   if(todayDow===5) return PROGRAM_FRI;
   if(todayDow===3) return PROGRAM_WED;
   if(todayDow===6) return PROGRAM_SAT;
@@ -2970,6 +3036,7 @@ function renderProgram() {
       <div class="prog-label">${prog.label}</div>
       <div class="prog-dur">⏱ ${prog.duration}</div>
     </div>
+    ${todayDow===2?tueModeToggleHtml():''}
     ${prog.note?`<div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">${prog.note}</div>`:''}
     <div class="prog-pbar-wrap"><div class="prog-pbar-fill" id="prog-fill" style="width:${pct}%"></div></div>
     <div class="prog-pcount" id="prog-count">${done} / ${allIds.length} 完了</div>
