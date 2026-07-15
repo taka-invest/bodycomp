@@ -2696,11 +2696,11 @@ const PROGRAM_TUE_LIGHT = {
   label:'🦵 火曜｜下半身（移行期・軽負荷版）',
   duration:'70〜80分',
   type:'self',
-  note:'翌日水曜のNorwegian4×4への影響を最小化する設計。伸張性負荷（エキセントリック）の強いスクワット・デッドリフト・ランジ系を避け、マシン中心で関節への負担とDOMSを抑える｜各種目RPE6〜7（あと3〜4回はできる余力を残す）｜週末の水上スポーツに慣れてきたら「正規版」に切り替えてOK',
+  note:'翌日水曜のNorwegian4×4への影響を最小化する設計。伸張性負荷（エキセントリック）の強いスクワット・デッドリフト・ランジ系を避け、低負荷コントロール中心で関節への負担とDOMSを抑える（マシン不要・ダンベル/自重で完結）｜各種目RPE6〜7（あと3〜4回はできる余力を残す）｜週末の水上スポーツに慣れてきたら「正規版」に切り替えてOK',
   blocks:[
-    { name:'BLOCK A — 大腿四頭筋・臀部（マシン中心）', note:'↕ インターバル75秒',
+    { name:'BLOCK A — 大腿四頭筋・臀部（マシン不要）', note:'↕ インターバル75秒',
       exercises:[
-        {id:'tl1',name:'レッグプレス（マシン）',sets:'4',reps:'12-15',weight:'中重量（RPE6〜7・追い込みすぎない）',muscle:'大腿四頭筋・臀部'},
+        {id:'tl1',name:'ステップアップ（台への昇降）',sets:'4',reps:'12-15（片側）',weight:'膝丈程度の低めの台・ダンベル軽め（片手 or 両手）or 自重。低い台＋軽負荷で伸張性負荷を抑える',muscle:'大腿四頭筋・臀部'},
         {id:'tl2',name:'レッグエクステンション（マシン）',sets:'3',reps:'12-15',weight:'軽〜中重量',muscle:'大腿四頭筋（アイソレーション）'},
       ]},
     { name:'BLOCK B — 後鎖（伸張性負荷を抑えたバリエーション）', note:'↕ インターバル75秒',
@@ -2708,9 +2708,9 @@ const PROGRAM_TUE_LIGHT = {
         {id:'tl3',name:'レッグカール（マシン）',sets:'3',reps:'12-15',weight:'軽〜中重量',muscle:'ハムストリング'},
         {id:'tl4',name:'グルートブリッジ',sets:'3',reps:'15-20',weight:'自重 or 軽負荷（バーベル軽め）',muscle:'臀部'},
       ]},
-    { name:'BLOCK C — カーフ',
+    { name:'BLOCK C — カーフ（マシン不要）',
       exercises:[
-        {id:'tl5',name:'シーテッドカーフレイズ',sets:'3',reps:'15-20',weight:'中重量',muscle:'下腿三頭筋'},
+        {id:'tl5',name:'スタンディングカーフレイズ（自重）',sets:'3',reps:'15-20',weight:'自重 or ダンベル軽め・段差の上で行うと可動域が広がる',muscle:'下腿三頭筋'},
       ]},
     { name:'BLOCK D — コア・上半身軽め（下半身の回復を妨げず時間を調整）',
       exercises:[
@@ -2881,10 +2881,10 @@ const PROGRAM_SUN = {
 // ── Exercise media lookup (Wikimedia Commons + YouTube search) ─
 const W = 'https://upload.wikimedia.org/wikipedia/commons/thumb/';
 const EX_MEDIA = {
-  'レッグプレス（マシン）':                 {img:null,                                                                                                ph:'🦵', ytq:'レッグプレス マシン やり方 フォーム'},
+  'ステップアップ（台への昇降）':           {img:null,                                                                                                ph:'🦵', ytq:'ステップアップ やり方 フォーム 大腿四頭筋'},
   'レッグエクステンション（マシン）':       {img:null,                                                                                                ph:'🦵', ytq:'レッグエクステンション マシン やり方 大腿四頭筋'},
   'グルートブリッジ':                       {img:null,                                                                                                ph:'🍑', ytq:'グルートブリッジ やり方 臀部 フォーム'},
-  'シーテッドカーフレイズ':                 {img:null,                                                                                                ph:'🦵', ytq:'シーテッドカーフレイズ やり方 下腿三頭筋'},
+  'スタンディングカーフレイズ（自重）':     {img:null,                                                                                                ph:'🦵', ytq:'スタンディングカーフレイズ 自重 やり方 フォーム'},
   'スタンディングカーフレイズ':             {img:null,                                                                                                ph:'🦵', ytq:'スタンディングカーフレイズ やり方 フォーム'},
   'プランク':                               {img:null,                                                                                                ph:'🎯', ytq:'プランク やり方 体幹 フォーム'},
   'ケーブルロウ（軽め）':                   {img:null,                                                                                                ph:'🔄', ytq:'ケーブルロウ シーテッドロー やり方 広背筋'},
