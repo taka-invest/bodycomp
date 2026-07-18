@@ -571,6 +571,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
       <button class="lib-tab" data-tab="ホルモン"      onclick="switchLibTab('ホルモン')">⚡ ホルモン</button>
       <button class="lib-tab" data-tab="社会"          onclick="switchLibTab('社会')">🤝 社会</button>
       <button class="lib-tab" data-tab="遺伝子"        onclick="switchLibTab('遺伝子')">🧬 遺伝子</button>
+      <button class="lib-tab" data-tab="体質検査"      onclick="switchLibTab('体質検査')">🧬 体質検査</button>
     </div>
     <div class="card" style="margin-top:0;">
       <div id="lib-content"></div>
@@ -2356,6 +2357,83 @@ const TAG_COLOR = {
   '社会':      'rgba(175,82,222,.12);color:var(--purple)',
   '遺伝子':    'rgba(52,199,89,.12);color:var(--green)',
 };
+// ── Genesis 2.0 遺伝子検査（体質カテゴリ・疾患リスクレベル・疾患カテゴリ一覧の3レポートより抽出） ──
+// 「標準」判定の項目は割愛し、平均から外れる項目のみ掲載。遺伝的傾向＝確定ではなく、生活習慣で大きく修正可能。
+const GENETIC_GROUPS = [
+  {key:'important', label:'🔴 今の取り組みと直結する重要項目'},
+  {key:'highrisk',  label:'🟠 病気の「高い」リスク'},
+  {key:'modrisk',   label:'🟡 病気の「やや高い」リスク'},
+  {key:'good',      label:'🟢 良い傾向'},
+  {key:'trait',     label:'⚪ その他の体質特性'},
+];
+const GENETIC_TRAITS = [
+  // ── 重要（今の食事・トレーニング設計と直結） ──
+  {group:'important', t:'乳糖不耐症：高い傾向',
+   b:'15:00のホエイプロテインなど乳製品由来の食品で、お腹の張り・ゆるさが出やすい可能性があります。気になる症状があれば、ソイプロテインへの切替や乳糖分解酵素の併用も選択肢です。'},
+  {group:'important', t:'塩分摂取による血圧変化：大きい傾向（食塩感受性高血圧）',
+   b:'摂取した塩分量に応じて血圧が変動しやすい体質。これまで一貫して減塩設計にこだわってきたホットクックメニューの方向性は、この体質に対してまさに正解と言えます。'},
+  {group:'important', t:'たんぱく質の摂取傾向：やや強い傾向／筋肉の発達：速筋タイプ',
+   b:'高タンパク・レジスタンストレーニング中心の今の食事・トレーニング設計と相性の良い体質です。'},
+  {group:'important', t:'運動能力（無酸素運動）：やや低い傾向',
+   b:'Norwegian4×4のようなHIIT系は人より苦手意識が出やすい体質。しんどく感じるのは怠慢ではなく体質的な要因もあります。'},
+  {group:'important', t:'睡眠時間：短い傾向',
+   b:'短時間睡眠でも回せる体質の可能性がありますが、睡眠の質を優先する重要性が下がるわけではありません。'},
+  {group:'important', t:'飲酒量：多い傾向／アルコール代謝：分解できる高い傾向／アルコール依存症：高いリスク',
+   b:'お酒に強く飲みすぎやすい体質に加え、依存症リスクも高い組み合わせです。現状「ほぼ飲まない」生活を維持できているのは、この体質的リスクをうまく行動でコントロールできている好例です。'},
+  {group:'important', t:'γGTP：高い傾向',
+   b:'肝機能・アルコール関連の指標。上記の飲酒体質と合わせて、低飲酒を続ける動機になります。'},
+  {group:'important', t:'空腹時血糖・インスリン濃度・中性脂肪：いずれも高い傾向／2型糖尿病：高いリスク',
+   b:'代謝症候群系のリスクがまとまって出ています。今のリコンポジション（体脂肪率12〜14%目標）の取り組みは、このリスク低減に直接効きます。'},
+  {group:'important', t:'内臓脂肪/皮下脂肪率：高い傾向',
+   b:'同じ体脂肪率でも内臓脂肪に偏りやすい体質。内臓脂肪はインフラメイジングの震源地であるため、体脂肪率の数字だけでなく体組成の中身にも注意が必要です。'},
+
+  // ── 高いリスク ──
+  {group:'highrisk', t:'代謝・循環器・消化器',
+   b:'2型糖尿病｜慢性腎臓病｜心房細動｜炎症性腸疾患'},
+  {group:'highrisk', t:'目・皮膚・アレルギー',
+   b:'緑内障（原発開放隅角）｜加齢黄斑変性症｜落屑症候群｜スギ花粉症｜男性型脱毛症'},
+  {group:'highrisk', t:'感染症・骨・その他',
+   b:'ノロウイルス感染｜髄膜炎｜骨パジェット病｜脊柱側弯症｜乳房外パジェット病'},
+
+  // ── やや高いリスク ──
+  {group:'modrisk', t:'循環器・代謝',
+   b:'高血圧｜痛風｜橋本病'},
+  {group:'modrisk', t:'消化器',
+   b:'十二指腸潰瘍｜潰瘍性大腸炎｜クローン病'},
+  {group:'modrisk', t:'呼吸器・耳鼻科',
+   b:'喘息｜副鼻腔炎｜加齢による難聴'},
+  {group:'modrisk', t:'皮膚・関節',
+   b:'乾癬｜乾癬性関節炎｜円形脱毛症｜職業性ジストニア'},
+  {group:'modrisk', t:'眼科',
+   b:'急性緑内障（原発閉塞隅角）｜バセドウ病眼症'},
+  {group:'modrisk', t:'がん（いずれも稀な疾患）',
+   b:'精巣がん｜神経膠腫'},
+  {group:'modrisk', t:'その他',
+   b:'高山病｜B型慢性肝炎｜小児ネフローゼ症候群（小児期のみ該当）'},
+
+  // ── 良い傾向 ──
+  {group:'good', t:'骨・心臓',
+   b:'骨密度やや高い・骨折しにくい傾向｜心臓に脂肪がつきにくい傾向'},
+  {group:'good', t:'免疫・抗酸化・長寿',
+   b:'アレルギー体質は低い傾向｜抗酸化物の産生が高い傾向｜やや長寿傾向'},
+  {group:'good', t:'がん・循環器：やや低いリスク',
+   b:'大腸がん｜前立腺がん｜脳卒中｜末梢動脈疾患'},
+  {group:'good', t:'低いリスク',
+   b:'骨粗鬆症｜代謝機能障害関連脂肪性肝疾患（NAFLD）'},
+
+  // ── その他の体質特性 ──
+  {group:'trait', t:'肌タイプIV・そばかすやや高い・肌が白い傾向',
+   b:'紫外線対策（日焼け止め等）の優先度が人より高めの体質です。'},
+  {group:'trait', t:'記憶力：やや低い傾向／加齢による"脳力"への影響：下がる傾向',
+   b:'認知トレーニング・生涯学習を継続する価値が特に高い体質と言えます。'},
+  {group:'trait', t:'情報処理速度：複数指標で速い傾向',
+   b:'Digit symbol・Symbol search・2-choice RTなど反応速度系の指標が総じて良好です。'},
+  {group:'trait', t:'匂い・苦味の感受性が独特',
+   b:'カフェインの苦味を感じにくい傾向｜麦芽・林檎の香りを感じやすい傾向｜ブルーチーズ・花の香りは感じにくい傾向'},
+  {group:'trait', t:'ビタミンE：やや低い傾向／マグネシウム・鉄分：やや高い傾向',
+   b:'サプリ・食事でのビタミンE摂取を意識する価値がある一方、Mg・鉄は元々高めに出やすい体質です。'},
+];
+
 const SCORECARD = [
   // ── S Tier ──
   {tier:'S', item:'有酸素能力（VO2max）',    status:'progress',
@@ -2535,6 +2613,23 @@ function renderLib(){
               </div>
             </div>`;
           }).join('')}
+        </div>`;
+      }).join('');
+    return;
+  }
+  if(_libTab === '体質検査'){
+    el.innerHTML =
+      `<div style="font-size:11px;color:var(--text3);margin-bottom:14px;line-height:1.5;">Genesis 2.0 遺伝子検査（体質カテゴリ・疾患リスクレベル・疾患カテゴリ一覧の3レポートより抽出）｜「標準」判定の項目は割愛し、平均から外れる項目のみ掲載｜⚠️ 遺伝的傾向＝確定ではなく、生活習慣で大きく修正可能です</div>` +
+      GENETIC_GROUPS.map(g=>{
+        const items = GENETIC_TRAITS.filter(x=>x.group===g.key);
+        if(!items.length) return '';
+        return `<div style="margin-bottom:4px;">
+          <div style="font-size:13px;font-weight:700;margin-bottom:8px;">${g.label}</div>
+          ${items.map(x=>`
+            <div class="libi">
+              <div class="libt">${x.t}</div>
+              <div class="libb">${x.b}</div>
+            </div>`).join('')}
         </div>`;
       }).join('');
     return;
