@@ -391,8 +391,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
         <div class="sstat"><div class="ssv" id="s-score">—</div><div class="ssl">筋肉保護スコア</div></div>
       </div>
       <div class="slgrp">
-        <div class="sllbl"><span>目標体脂肪率</span><span class="slv" id="sv-fat">13%</span></div>
-        <input type="range" id="sl-fat" min="12" max="20" value="13" step="0.5">
+        <div class="sllbl"><span>目標体脂肪率</span><span class="slv" id="sv-fat">12%</span></div>
+        <input type="range" id="sl-fat" min="12" max="20" value="12" step="0.5">
       </div>
       <div class="slgrp">
         <div class="sllbl"><span>1日カロリー赤字</span><span class="slv" id="sv-def">400 kcal</span></div>
@@ -779,7 +779,7 @@ refreshMetrics();
 // 起点は固定日（新システム移行日）。TODAYは毎日変わるのでここはハードコードする。
 const PLAN_START_DATE   = '2026-07-01';
 const PLAN_DURATION_DAYS = 100;
-const PLAN_TARGET_FAT    = 14.0; // 魅力度(10-12%)×アンチエイジング(12-17%)の重複ゾーン中心値
+const PLAN_TARGET_FAT    = 12.0; // 審美性を最優先し、明確な変化を体感できる12%に設定（2026-07-23改訂）
 function daysBetween(d1, d2){
   return Math.round((new Date(d2+'T00:00:00') - new Date(d1+'T00:00:00')) / 86400000);
 }
@@ -845,7 +845,7 @@ function renderCheckpoint(){
       </div>
     </div>
     <div style="font-size:11px;color:var(--text3);line-height:1.6;">
-      起点（${PLAN_START_DATE}）：${startWeight}kg / ${startFat}%　→　目標：${PLAN_TARGET_FAT}%（12〜17%ゾーンの中心）<br>
+      起点（${PLAN_START_DATE}）：${startWeight}kg / ${startFat}%　→　目標：${PLAN_TARGET_FAT}%（審美性を優先し明確な変化を狙う）<br>
       直近2週間平均・体重：${avgWeight!==null?avgWeight.toFixed(1)+'kg':'データ不足'}　｜　単発最新値（参考）：${latest.weight}kg / ${latest.fat}%<br>
       ※単発測定は水分量で±1〜2%ブレるため、判定は2週間移動平均を優先
     </div>`;
