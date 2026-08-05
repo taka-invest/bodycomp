@@ -1001,7 +1001,7 @@ renderWeek();
 function showDayPlan(gridIdx) {
   document.querySelectorAll('#wgrid .day').forEach((el,j)=>el.classList.toggle('viewing',j===gridIdx));
   const jsDow = [1,2,3,4,5,6,0][gridIdx];
-  const PROGS = {2:(getTueMode()==='regular'?PROGRAM_TUE_REGULAR:PROGRAM_TUE_LIGHT), 3:PROGRAM_WED, 5:PROGRAM_FRI, 6:PROGRAM_SAT, 0:PROGRAM_SUN};
+  const PROGS = {2:PROGRAM_TUE, 3:PROGRAM_WED, 5:PROGRAM_FRI, 6:PROGRAM_SAT, 0:PROGRAM_SUN};
   const prog = PROGS[jsDow];
   const el = document.getElementById('prog-card-inner');
   // 今日のセルをタップ → インタラクティブ版に戻す
@@ -1015,7 +1015,6 @@ function showDayPlan(gridIdx) {
       <div class="prog-label">${prog.label}</div>
       <div class="prog-dur">⏱ ${prog.duration}</div>
     </div>
-    ${jsDow===2?tueModeToggleHtml():''}
     ${prog.note?`<div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">${prog.note}</div>`:''}
   `;
   prog.blocks.forEach(b=>{
@@ -1095,7 +1094,7 @@ renderWklist();
 
 // ── NUTRITION ─────────────────────────────────────────
 const DAY_NAMES = ['日','月','火','水','木','金','土'];
-const TRAIN_DAYS = [2, 3, 5]; // 火=2(筋トレ), 水=3(4×4 Zone5・高強度), 金=5(筋トレ)
+const TRAIN_DAYS = [2, 3, 5]; // 火=2(筋トレ全身A), 水=3(Zone2・4×4は維持期まで休止), 金=5(筋トレ全身B)
 const todayDow = new Date(TODAY+'T00:00:00').getDay();
 const IS_TRAIN = TRAIN_DAYS.includes(todayDow);
 const CAL_TGT  = IS_TRAIN ? 2200 : 1850;
@@ -2984,120 +2983,79 @@ if ('serviceWorker' in navigator) {
 }
 
 // ── PROGRAM DATA ──────────────────────────────────────
-// 火曜＝下半身へ移設（水曜Norwegian4×4への影響を避けるため金曜から移動）。
-// 水上スポーツ（土日）にまだ慣れていない移行期は軽負荷版、慣れてきたら正規版に手動切替。
-const PROGRAM_TUE_LIGHT = {
-  label:'🦵 火曜｜下半身（移行期・軽負荷版）',
-  duration:'70〜80分',
+// 週末の水上スポーツ（SUP・ウェイクボード）終了に伴い全面改訂（2026-07-23）。
+// 火・金の週2回のみの筋トレになったため、上半身/下半身の分割からフルボディA/Bへ変更
+// （週2回頻度は週1回の部位別分割より筋肉維持に有利というエビデンスに基づく：Schoenfeld頻度研究）。
+// 毎セット追い込む必要はなく、前回から扱う重量・レップ数が落ちていないかだけが判断基準（RIR2〜3目安）。
+const PROGRAM_TUE = {
+  label:'🏋️ 火曜｜全身A（下半身メイン）',
+  duration:'75〜85分',
   type:'self',
-  note:'翌日水曜のNorwegian4×4への影響を最小化する設計。伸張性負荷（エキセントリック）の強いスクワット・デッドリフト・ランジ系を避け、低負荷コントロール中心で関節への負担とDOMSを抑える（マシン不要・ダンベル/自重で完結）｜各種目RPE6〜7（あと3〜4回はできる余力を残す）｜週末の水上スポーツに慣れてきたら「正規版」に切り替えてOK',
+  note:'フルボディ2分割の1日目。金曜の全身Bとは種目を変えて同じ部位を違う角度から刺激する｜毎回100%追い込む必要はなく、前回の重量・レップ数を維持できていればOK',
   blocks:[
-    { name:'BLOCK A — 大腿四頭筋・臀部（マシン不要）', note:'↕ インターバル75秒',
+    { name:'BLOCK A — 下半身メインコンパウンド', note:'↕ インターバル2〜3分（高重量のため長めに確保）',
       exercises:[
-        {id:'tl1',name:'ステップアップ（台への昇降）',sets:'4',reps:'12-15（片側）',weight:'膝丈程度の低めの台・ダンベル軽め（片手 or 両手）or 自重。低い台＋軽負荷で伸張性負荷を抑える',muscle:'大腿四頭筋・臀部'},
-        {id:'tl2',name:'レッグエクステンション（マシン）',sets:'3',reps:'12-15',weight:'軽〜中重量',muscle:'大腿四頭筋（アイソレーション）'},
+        {id:'ta1',name:'バーベルスクワット',sets:'4',reps:'6-8',weight:'RPE8目安・追い込みすぎない',muscle:'大腿四頭筋・臀部・体幹'},
       ]},
-    { name:'BLOCK B — 後鎖（伸張性負荷を抑えたバリエーション）', note:'↕ インターバル75秒',
+    { name:'BLOCK B — 上半身プッシュ/プル', note:'↕ B1→B2 スーパーセット｜インターバル2分',
       exercises:[
-        {id:'tl3',name:'レッグカール（マシン）',sets:'3',reps:'12-15',weight:'軽〜中重量',muscle:'ハムストリング'},
-        {id:'tl4',name:'グルートブリッジ',sets:'3',reps:'15-20',weight:'自重 or 軽負荷（バーベル軽め）',muscle:'臀部'},
+        {id:'ta2',name:'バーベルベンチプレス',sets:'4',reps:'5-6',weight:'87.5〜90 kg',muscle:'胸'},
+        {id:'ta3',name:'ワンハンドダンベルロウ',sets:'4',reps:'8-10',weight:'35〜40 kg（片側）',muscle:'広背筋・背中'},
       ]},
-    { name:'BLOCK C — カーフ（マシン不要）',
+    { name:'BLOCK C — サイドデルト（最重要）', note:'↕ インターバル90秒',
       exercises:[
-        {id:'tl5',name:'スタンディングカーフレイズ（自重）',sets:'3',reps:'15-20',weight:'自重 or ダンベル軽め・段差の上で行うと可動域が広がる',muscle:'下腿三頭筋'},
+        {id:'ta4',name:'ダンベルラテラルレイズ',sets:'4',reps:'15-20',weight:'8〜10 kg',muscle:'🔑 三角筋中部'},
       ]},
-    { name:'BLOCK D — コア・上半身軽め（下半身の回復を妨げず時間を調整）',
+    { name:'BLOCK D — 下半身アイソレーション', note:'↕ インターバル90秒',
       exercises:[
-        {id:'tl6',name:'プランク',sets:'3',reps:'40-60秒',weight:'自重',muscle:'体幹（腹横筋）'},
-        {id:'tl7',name:'ケーブルロウ（軽め）',sets:'3',reps:'12-15',weight:'軽〜中重量',muscle:'広背筋（下半身と独立・翌日の脚に影響しない）'},
-      ]},
-  ]
-};
-const PROGRAM_TUE_REGULAR = {
-  label:'🦵 火曜｜下半身（正規版）',
-  duration:'75〜90分',
-  type:'self',
-  note:'水上スポーツに慣れて週末の疲労が軽くなってきたら使用する通常強度版。それでも翌日の4×4があるため、毎回100%追い込むのではなくRPE8を目安に（あと2回はできる余力）',
-  blocks:[
-    { name:'BLOCK A — メインコンパウンド', note:'↕ インターバル2〜3分（高重量のため長めに確保）',
-      exercises:[
-        {id:'tr1',name:'バーベルスクワット',sets:'4',reps:'6-8',weight:'RPE8目安・追い込みすぎない',muscle:'大腿四頭筋・臀部・体幹'},
-        {id:'tr2',name:'ルーマニアンデッドリフト',sets:'3',reps:'8-10',weight:'80〜100 kg',muscle:'ハムストリング・臀部・脊柱起立筋'},
-      ]},
-    { name:'BLOCK B — 補助コンパウンド（片脚・安定性）', note:'↕ インターバル90秒',
-      exercises:[
-        {id:'tr3',name:'ランジ or ブルガリアンSQT',sets:'3',reps:'10-12（片側）',weight:'ダンベル 12〜16 kg（片手）',muscle:'大腿四頭筋・臀部'},
-      ]},
-    { name:'BLOCK C — アイソレーション', note:'↕ インターバル90秒',
-      exercises:[
-        {id:'tr4',name:'レッグカール（マシン）',sets:'3',reps:'10-12',weight:'中〜高重量',muscle:'ハムストリング'},
-        {id:'tr5',name:'レッグエクステンション（マシン）',sets:'3',reps:'10-12',weight:'中〜高重量',muscle:'大腿四頭筋'},
-      ]},
-    { name:'BLOCK D — カーフ',
-      exercises:[
-        {id:'tr6',name:'スタンディングカーフレイズ',sets:'4',reps:'12-15',weight:'中〜高重量',muscle:'下腿三頭筋'},
+        {id:'ta5',name:'レッグカール（マシン）',sets:'3',reps:'10-12',weight:'中〜高重量',muscle:'ハムストリング'},
+        {id:'ta6',name:'スタンディングカーフレイズ',sets:'3',reps:'12-15',weight:'中〜高重量',muscle:'下腿三頭筋'},
       ]},
     { name:'BLOCK E — コア',
       exercises:[
-        {id:'tr7',name:'アブローラー',sets:'3',reps:'10-15',weight:'自重',muscle:'腹直筋・体幹'},
+        {id:'ta7',name:'プランク',sets:'3',reps:'40-60秒',weight:'自重',muscle:'体幹（腹横筋）'},
       ]},
   ]
 };
-function getTueMode(){ return (DB.profile && DB.profile.tueMode) || 'light'; }
-function setTueMode(mode){
-  if(!DB.profile) DB.profile = {};
-  DB.profile.tueMode = mode;
-  save();
-  if(todayDow===2){ renderProgram(); } else { showDayPlan(1); }
-}
-function tueModeToggleHtml(){
-  const mode = getTueMode();
-  const chip = (m,label)=>{
-    const active = m===mode;
-    return `<button onclick="setTueMode('${m}')" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;cursor:pointer;border:${active?'1.5px solid var(--blue)':'1px solid var(--border)'};background:${active?'rgba(0,122,255,.12)':'transparent'};color:${active?'var(--blue)':'var(--text3)'};">${label}</button>`;
-  };
-  return `<div style="display:flex;gap:6px;margin-bottom:10px;">${chip('light','🌱 移行期（軽負荷）')}${chip('regular','💪 正規版')}</div>`;
-}
 
-// 金曜＝上半身へ移設（元・火曜メニューをそのまま移動。トレーナーの曜日はそのまま金曜を想定）
 const PROGRAM_FRI = {
-  label:'🏋️ 金曜｜上半身重点 + 後鎖',
-  duration:'70〜80分',
+  label:'🏋️ 金曜｜全身B（後鎖メイン）',
+  duration:'75〜85分',
   type:'self',
+  note:'フルボディ2分割の2日目。火曜の全身Aと種目を変えてバリエーションをつける（スクワット⇄RDL、ベンチ⇄ショルダープレス、ワンハンドロウ⇄ラットプルダウン）｜こちらも重量・レップ数の維持が唯一の判断基準',
   blocks:[
-    { name:'BLOCK A — コンパウンド', note:'↕ A1→A2 スーパーセット｜インターバル2分',
+    { name:'BLOCK A — 下半身後鎖メインコンパウンド', note:'↕ インターバル2〜3分',
       exercises:[
-        {id:'a1',name:'バーベルベンチプレス',      sets:'4',reps:'5-6', weight:'87.5〜90 kg', muscle:'胸'},
-        {id:'a2',name:'ワンハンドダンベルロウ', sets:'4',reps:'8-10', weight:'35〜40 kg（片側）',muscle:'広背筋・背中'},
+        {id:'fb1',name:'ルーマニアンデッドリフト',sets:'3',reps:'8-10',weight:'80〜100 kg',muscle:'ハムストリング・臀部・脊柱起立筋'},
       ]},
-    { name:'BLOCK B — 背中・肩', note:'↕ B1→B2 スーパーセット｜インターバル90秒',
+    { name:'BLOCK B — 上半身プル/プッシュ', note:'↕ B1→B2 スーパーセット｜インターバル90秒',
       exercises:[
-        {id:'b1',name:'ダンベルショルダープレス', sets:'3',reps:'10-12',weight:'18〜20 kg',muscle:'三角筋前・中'},
-        {id:'b2',name:'ラットプルダウン',   sets:'3',reps:'10-12',weight:'65〜70 kg',muscle:'広背筋'},
+        {id:'fb2',name:'ラットプルダウン',sets:'3',reps:'10-12',weight:'65〜70 kg',muscle:'広背筋'},
+        {id:'fb3',name:'ダンベルショルダープレス',sets:'3',reps:'10-12',weight:'18〜20 kg',muscle:'三角筋前・中'},
       ]},
-    { name:'BLOCK C — サイドデルト（最重要）', note:'↕ C1→C2 スーパーセット｜インターバル90秒',
+    { name:'BLOCK C — 後部デルト', note:'↕ インターバル90秒',
       exercises:[
-        {id:'c1',name:'ダンベルラテラルレイズ',          sets:'4',reps:'15-20',weight:'8〜10 kg',muscle:'🔑 三角筋中部'},
-        {id:'c2',name:'リアデルトレイズ（うつぶせ）',sets:'3',reps:'15-20',weight:'8〜10 kg',muscle:'後部三角筋'},
+        {id:'fb4',name:'リアデルトレイズ（うつぶせ）',sets:'3',reps:'15-20',weight:'8〜10 kg',muscle:'後部三角筋'},
       ]},
-    { name:'BLOCK D — アーム', note:'↕ D1→D2 スーパーセット｜インターバル60秒',
+    { name:'BLOCK D — 下半身アイソレーション', note:'↕ インターバル90秒',
       exercises:[
-        {id:'d1',name:'ダンベルトライセップスエクステンション',sets:'3',reps:'10-12',weight:'14〜16 kg',muscle:'三頭筋'},
-        {id:'d2',name:'インクラインダンベルカール',          sets:'3',reps:'10-12',weight:'12 kg',    muscle:'二頭筋'},
+        {id:'fb5',name:'レッグエクステンション（マシン）',sets:'3',reps:'10-12',weight:'中〜高重量',muscle:'大腿四頭筋'},
       ]},
-    { name:'BLOCK E — コア（必須）',
+    { name:'BLOCK E — アーム', note:'↕ E1→E2 スーパーセット｜インターバル60秒',
       exercises:[
-        {id:'e1',name:'アブローラー',sets:'3',reps:'12-15',weight:'自重',muscle:'腹直筋'},
+        {id:'fb6',name:'ダンベルトライセップスエクステンション',sets:'3',reps:'10-12',weight:'14〜16 kg',muscle:'三頭筋'},
+        {id:'fb7',name:'インクラインダンベルカール',sets:'3',reps:'10-12',weight:'12 kg',muscle:'二頭筋'},
       ]},
-    { name:'BLOCK F — 後鎖',
+    { name:'BLOCK F — コア',
       exercises:[
-        {id:'f1',name:'レッグカール（マシン）',sets:'3',reps:'10-12',weight:'適切な重量でフルレンジ',muscle:'ハムストリング'},
+        {id:'fb8',name:'アブローラー',sets:'3',reps:'10-15',weight:'自重',muscle:'腹直筋'},
       ]},
   ]
 };
 
-const PROGRAM_WED = {
-  label:'🚴 水曜｜エアロバイク Norwegian 4×4',
+// 体脂肪率13%達成→カロリー収支±0・グリコーゲン充填確認後の維持期に再開予定。それまでは下のPROGRAM_WED（Zone2）を使用。
+const PROGRAM_WED_4X4 = {
+  label:'🚴 水曜｜エアロバイク Norwegian 4×4（維持期に再開）',
   duration:'約45分',
   type:'hiit',
   note:'Zone5でVO2maxを直接刺激する高強度の日（ポラライズドの「高強度2割」）｜4分全力→3分リカバリー×4本｜1〜2本目はHR到達が遅れるのが正常（Helgerud 2007原典でも実証済み）｜Apple WatchでHR管理｜低衝撃なので金曜パーソナルに干渉しない',
@@ -3118,6 +3076,29 @@ const PROGRAM_WED = {
     { name:'クールダウン（10分）',
       exercises:[
         {id:'cd',name:'ゆっくり漕ぐ',sets:'',reps:'10分',weight:'負荷を最小に｜呼吸を整える（原典Helgerud 2007のクールダウン10分に統一）',muscle:'心拍を 110 bpm 以下へ'},
+      ]},
+  ]
+};
+
+const PROGRAM_WED = {
+  label:'🚴 水曜｜Zone 2（4×4は維持期まで休止）',
+  duration:'40分',
+  type:'cardio',
+  note:'火曜の全身Aとの負荷競合、および赤字期のグリコーゲン不足下での高強度インターバルを避けるため、体脂肪率13%達成・カロリー収支を戻すまではZone2に統一｜4×4はPROGRAM_WED_4X4として保存済み、維持期移行時に再開予定',
+  blocks:[
+    { name:'ウォームアップ（5分）',
+      exercises:[
+        {id:'w0',name:'ゆっくりスタート',sets:'',reps:'5分',weight:'軽い負荷から',muscle:'心拍 90〜110 bpm'},
+      ]},
+    { name:'Zone 2 メイン（30分） — HR 113〜132 bpm を維持', note:'エアロバイクで映画/ドラマを見ながら。会話できる強度を淡々と。',
+      exercises:[
+        {id:'w1',name:'Zone 2 ブロック 1',sets:'',reps:'10分',weight:'会話できる強度',muscle:'心拍 113〜132 bpm'},
+        {id:'w2',name:'Zone 2 ブロック 2',sets:'',reps:'10分',weight:'会話できる強度',muscle:'心拍 113〜132 bpm'},
+        {id:'w3',name:'Zone 2 ブロック 3',sets:'',reps:'10分',weight:'会話できる強度',muscle:'心拍 113〜132 bpm'},
+      ]},
+    { name:'クールダウン（5分）',
+      exercises:[
+        {id:'w4',name:'ゆっくり漕ぐ・ストレッチ',sets:'',reps:'5分',weight:'心拍を安静時へ',muscle:'全身'},
       ]},
   ]
 };
@@ -3293,7 +3274,7 @@ function loadExImgs(){
 let pgChecked = {};
 
 function getTodayProg() {
-  if(todayDow===2) return getTueMode()==='regular' ? PROGRAM_TUE_REGULAR : PROGRAM_TUE_LIGHT;
+  if(todayDow===2) return PROGRAM_TUE;
   if(todayDow===5) return PROGRAM_FRI;
   if(todayDow===3) return PROGRAM_WED;
   if(todayDow===6) return PROGRAM_SAT;
@@ -3330,7 +3311,6 @@ function renderProgram() {
       <div class="prog-label">${prog.label}</div>
       <div class="prog-dur">⏱ ${prog.duration}</div>
     </div>
-    ${todayDow===2?tueModeToggleHtml():''}
     ${prog.note?`<div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">${prog.note}</div>`:''}
     <div class="prog-pbar-wrap"><div class="prog-pbar-fill" id="prog-fill" style="width:${pct}%"></div></div>
     <div class="prog-pcount" id="prog-count">${done} / ${allIds.length} 完了</div>
