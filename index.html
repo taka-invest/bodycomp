@@ -1193,37 +1193,39 @@ const SHOPPING = [
 // 夜にまとめて調理 → その日の夕食＋翌日の昼食（1日ズレる・同じ料理）。15:00プロテイン込みでタンパク質160g/日を想定。
 // 主食（大麦ご飯・もち麦）は別添え — 下の「もち麦」プリセットを追加で使用。
 // ── 4週ローテーション再配分（毎日異なるタンパク源、コスト・脂質・塩分を週ごとに分散）────
+// A週＝地中海×和食フュージョン（フライパン/HotCock適材適所、2026-07-23改訂）
+// すりおろし不要（チューブ調味料使用）・冷凍野菜は煮る前に焼き付け・加熱用/仕上げ用オイルを分離
 const HOTCOOK_A = [
-  {day:'月',name:'鶏むねひき肉のキーマカレー',emoji:'🍛',meat:'鶏むねひき肉',meatWt:'500g',
-   veg:'冷凍パプリカ100g・玉ねぎ150g・なす100g・冷凍ほうれん草100g・しめじ100g',
-   season:'カットトマト缶200g・カレー粉大1.5・クミン小1・塩 小さじ1/3（2食分）・おろしにんにく・おろし生姜（多め）・かつお節1パック（2〜3g）・黒胡椒（仕上げ）・ブロッコリースプラウト少量（生・仕上げ用）',
-   prep:'内鍋の下段に水分の多い玉ねぎ・トマト缶・なす・パプリカ・ほうれん草を敷く｜その上に鶏むねひき肉をのせ、カレー粉・クミン・にんにく・生姜・塩・かつお節を加えてスイッチON（まぜ技ユニットでひき肉をほぐしながら加熱し、そぼろ状のキーマ食感に）｜かつお節のイノシン酸×トマトのグルタミン酸で塩分を増やさずうま味を底上げ｜公式メニュー集の「キーマカレー」に準拠｜仕上げに黒胡椒、お好みで生のブロッコリースプラウトをひとつまみ',
-   category:'カレー・シチュー',menuName:'キーマカレー',manualCat:'煮物を作る［まぜる］（ひき肉をほぐしながら加熱）',
-   prot:51,cal:455,fat:13,carbs:18,fiber:5,na:570,k:1395,ca:54,mg2:88,fe:2.1,zn:2.3,cu:0.15,vitA:240,vitB1:0.23,vitB2:0.49,vitB6:1.37,vitC:75,vitD:0,vitE:2.7,satFat:3.8,vitB12:0.8,folate:144},
-  {day:'火',name:'鮭の豆乳味噌煮（石狩風・減塩）',emoji:'🐟',meat:'鮭切り身',meatWt:'480g',
-   veg:'冷凍キャベツ150g・冷凍にんじん100g・しめじ100g・かつお節1パック（2〜3g）',
-   season:'無調整豆乳200ml（仕上げに後入れ）・味噌大1.5（減塩・2食分）・バター小さじ1（約4g）・おろし生姜小さじ1/2〜1（鮭に塗る）・酒大1（お好みで）・柚子皮少々（仕上げ・香りで減塩をカバー）・塩：追加なし・ブロッコリースプラウト少量（生・仕上げ用）',
-   prep:'鮭は水気を拭き取りおろし生姜を塗っておく（生臭さ対策）｜内鍋に野菜・しめじ・かつお節を敷き鮭をのせ、酒と味噌を豆乳大さじ2で溶いたものを回しかける｜手動「煮物を作る［まぜない］」で10〜15分加熱｜豆乳は長時間加熱で分離（モロモロ）しやすいため、加熱終了後にふたを開け残りの豆乳(150〜180ml)とバターを追加→決定キー→延長時間3〜5分を設定→スタートキーで延長加熱（沸騰させず温める程度に）｜かつお節のイノシン酸×味噌のグルタミン酸で塩分を増やさずうま味を底上げ｜味噌を大2→大1.5に減量し、仕上げに柚子皮少々を添えて香りで物足りなさを補う｜お好みでネギ・黒胡椒を散らす｜仕上げに生のブロッコリースプラウトをひとつまみ',
-   category:'魚料理',menuName:'鮭の味噌煮',manualCat:'煮物を作る［まぜない］（魚は必ずまぜない）',
-   prot:57,cal:600,fat:36,carbs:18,fiber:5,na:855,k:1600,ca:112,mg2:122,fe:3.3,zn:2.5,cu:0.38,vitA:470,vitB1:0.53,vitB2:0.51,vitB6:1.0,vitC:20,vitD:36,vitE:4.7,satFat:7.0,epaDha:4100,vitB12:14,folate:107},
-  {day:'水',name:'たこの洋風ガーリックバター炒め',emoji:'🐙',meat:'ボイルだこ',meatWt:'500g',
-   veg:'ズッキーニ150g・冷凍パプリカ100g・しめじ100g',
-   season:'にんにく（薄切り）1〜2片・バター15g・醤油小1・黒胡椒（仕上げ）・ブロッコリースプラウト少量（生・仕上げ用）',
-   prep:'内鍋の底に水分の多いズッキーニ・パプリカを敷く｜その上にしめじ、一口大に切ったたこ、にんにくをのせてスイッチON｜たこは加熱しすぎると硬くなるため短めの加熱設定を推奨｜たこ自体に下処理由来の塩分があるため醤油は控えめに｜仕上げにバターと黒胡椒、生のブロッコリースプラウトをひとつまみ｜たこはマグネシウム163mg・銅0.78mg・ビタミンE7.0mgが全20品中トップクラスの栄養価。ホタテ（相場250〜400円/100g）より価格が手頃なのもメリット',
-   category:'魚料理',menuName:'たことズッキーニのバター炒め',manualCat:'炒め物を作る［まぜる］（たこの加熱しすぎ注意）',
-   prot:55,cal:324,fat:9,carbs:8,fiber:4,na:670,k:1165,ca:54,mg2:163,fe:1.6,zn:4.1,cu:0.78,vitA:66,vitB1:0.15,vitB2:0.21,vitB6:0.26,vitC:75,vitD:0.25,vitE:7.0,satFat:4.6,vitB12:3.3,folate:60},
-  {day:'木',name:'トムヤムクン風 豚こま切れ肉ときのこの酸辣煮',emoji:'🌶️',meat:'豚こま切れ肉',meatWt:'400g',
-   veg:'しめじ100g・エリンギ100g・ミニトマト100g・玉ねぎ50g',
-   season:'ナンプラー大1・レモン汁大2・唐辛子（輪切り）1本・にんにく1片・生姜少々・砂糖小1・パクチー（仕上げ・お好みで）',
-   prep:'内鍋の底に水分の多い玉ねぎ・ミニトマトを敷く｜その上にしめじ・エリンギ・豚こま切れ肉・にんにく・生姜をのせる｜ナンプラー・砂糖を混ぜてまわしかけてスイッチON｜加熱後にレモン汁と唐辛子を加えて全体を混ぜる（酸味は加熱前に入れると飛びやすいため仕上げに）｜お好みでパクチーを添える｜公式メニュー集に掲載の「トムヤムクン」に準拠。豚こま切れ肉は脂質・飽和脂肪がやや高めなので、気になる場合は豚もも薄切り肉（赤身）に置き換え可能',
-   category:'スープ・鍋',menuName:'トムヤムクン',manualCat:'煮物を作る［まぜる］',
-   prot:39,cal:524,fat:38,carbs:11,fiber:4,na:710,k:1110,ca:10,mg2:54,fe:1.5,zn:4.3,cu:0.15,vitA:28,vitB1:1.5,vitB2:0.46,vitB6:0.65,vitC:28,vitD:0.6,vitE:0.9,satFat:13.1,vitB12:1.0,folate:66},
-  {day:'金',name:'鶏つくねの塩麹しょうが鍋',emoji:'🥟',meat:'鶏むねひき肉',meatWt:'500g',
-   veg:'れんこん150g・大根150g・しめじ100g',
-   season:'塩麹大2（同量の水で薄めて使用）・酒大1・片栗粉大1（つくねのつなぎ）・卵白1個分（つなぎ）・生姜（すりおろし）1片・ブロッコリースプラウト少量（生・仕上げ用）',
-   prep:'鶏むねひき肉・卵白・片栗粉・すりおろし生姜をよく練り、団子状に丸めておく｜内鍋の底に水分の多い大根・れんこんを敷く｜その上にしめじ、つくねを重ならないように並べる｜塩麹を同量の水で薄めたものと酒を回しかけてスイッチON（塩麹の発酵うま味で塩分を抑えつつコクを出す・全20品中最も塩分が低い）｜れんこんのビタミンCと食物繊維、塩麹の麹菌由来の消化酵素をプラス｜仕上げに生のブロッコリースプラウトをひとつまみ',
-   category:'スープ・鍋',menuName:'鶏団子鍋',manualCat:'スープを作る［まぜない］（つくねの形崩れ防止）',
-   prot:52,cal:468,fat:13,carbs:25,fiber:4,na:450,k:1425,ca:52,mg2:69,fe:1.7,zn:2.3,cu:0.15,vitA:20,vitB1:0.30,vitB2:0.51,vitB6:1.3,vitC:47,vitD:0.25,vitE:0.5,satFat:3.8,vitB12:0.8,folate:54},
+  {day:'月',name:'鶏むね肉の地中海風トマト煮 ― オレガノとレモンの香り',emoji:'🍅',device:'pan',meat:'鶏むね肉（皮なし）',meatWt:'480g',
+   veg:'冷凍パプリカ100g・冷凍ズッキーニ100g・しめじ100g',
+   season:'加熱用オリーブオイル大1・にんにくチューブ小1・カットトマト缶（食塩無添加）150g・オレガノ小1・塩ひとつまみ・黒胡椒・醤油小1/2（隠し味）',
+   prep:'①鶏むね肉は厚めのそぎ切りにし塩を軽く振って5分置き、表面の水分を拭き取る｜②フライパンにオリーブオイルを中火で熱し鶏むねを両面しっかり焼き色がつくまで焼き、中まで火が通ったら一度取り出す｜③同じフライパンでにんにくチューブを弱火で温めて香りを立たせ、しめじ→冷凍パプリカ・冷凍ズッキーニの順に焼き付けるように炒める（冷凍野菜は煮る前にしっかり水分を飛ばす）｜④カットトマト缶・オレガノ・黒胡椒・醤油を加えて3〜4分煮詰める｜⑤鶏むねを戻し入れて絡める｜⑥火を止めEXVオリーブオイル・レモン汁を回しかけ、パセリ or バジルを散らして完成',
+   finish:'EXVオリーブオイル小1・レモン汁小1・乾燥パセリ or 生バジル少々',
+   prot:58,cal:405,fat:15,carbs:11,fiber:3.5,na:230,k:850,ca:44,mg2:70,fe:1.2,zn:1.7,cu:0.15,vitA:120,vitB1:0.20,vitB2:0.30,vitB6:1.1,vitC:90,vitD:0.1,vitE:2.5,satFat:2.5,vitB12:0.4,folate:70},
+  {day:'火',name:'鮭と野菜の味噌ハーブ煮 ― レモンオリーブ仕上げ',emoji:'🐟',device:'hotcock',meat:'鮭切り身',meatWt:'500g',
+   veg:'冷凍キャベツ150g・冷凍にんじん100g・しめじ100g',
+   season:'味噌大1（加熱用）・みりん大1・酒大1・生姜チューブ小1',
+   prep:'①内鍋に冷凍キャベツ・にんじん・しめじを敷き、鮭をのせる｜②味噌（加熱用）・みりん・酒・生姜チューブを混ぜて回しかけ、手動「煮物を作る［まぜない］」でスイッチON｜③加熱完了後、取り分けておいた仕上げ用味噌をお湯少々で溶いて回しかける（風味を飛ばさず残す）｜④オリーブオイルとレモン汁を仕上げにかけ、ディルまたは大葉を添える',
+   finish:'仕上げ用味噌小1.5・オリーブオイル小1・レモン汁小1・ディル or 大葉',
+   prot:54,cal:560,fat:30,carbs:19,fiber:4.3,na:448,k:1180,ca:95,mg2:100,fe:1.5,zn:1.8,cu:0.25,vitA:520,vitB1:0.35,vitB2:0.40,vitB6:0.9,vitC:25,vitD:20,vitE:3.0,satFat:5.5,epaDha:2200,vitB12:8.5,folate:90},
+  {day:'水',name:'シーフードミックスの彩り野菜ガーリックオリーブ炒め ― レモン醤油',emoji:'🦐',device:'pan',meat:'冷凍シーフードミックス（えび・いか等）',meatWt:'610g',
+   veg:'冷凍パプリカ150g・しめじ100g',
+   season:'加熱用オリーブオイル大1・にんにくチューブ小1・唐辛子少々',
+   prep:'①フライパンにオリーブオイル・にんにく・唐辛子を入れ弱火で香りを立たせる｜②強火にしてシーフードミックスを30〜60秒だけ炒め、硬くなる前に一度取り出す（「炒める」のではなく「香ばしさをまとわせる」イメージ）｜③同じフライパンでしめじ→冷凍パプリカを焼き付けるように炒める｜④シーフードを戻し入れ、醤油とレモン汁を回しかけて完成。パセリを散らす',
+   finish:'醤油小1・レモン汁小1・パセリ',
+   prot:57,cal:346,fat:8,carbs:7,fiber:2.7,na:165,k:620,ca:110,mg2:75,fe:1.0,zn:1.9,cu:0.9,vitA:60,vitB1:0.10,vitB2:0.12,vitB6:0.25,vitC:130,vitD:0.2,vitE:2.0,satFat:1.2,vitB12:2.8,folate:55},
+  {day:'木',name:'豚もも肉と根菜の地中海風きんぴら ― バルサミコ醤油',emoji:'🥘',device:'pan',meat:'豚もも薄切り肉（赤身）',meatWt:'520g',
+   veg:'冷凍ごぼう100g・冷凍れんこん100g・しめじ100g',
+   season:'加熱用オリーブオイル小2・にんにくチューブ少々・唐辛子・醤油大1・みりん大1',
+   prep:'①フライパンにオリーブオイルとにんにくを熱し、豚ももを炒める｜②冷凍ごぼう・れんこん・しめじを加え、シャキッとした食感が残る程度に炒め合わせる（無水調理の蒸し煮より食感が保たれる）｜③醤油・みりんを加えて絡める｜④火を止めてバルサミコ酢と黒胡椒を加えて完成',
+   finish:'バルサミコ酢小1・黒胡椒',
+   prot:58,cal:500,fat:17,carbs:23,fiber:5.5,na:540,k:1050,ca:50,mg2:65,fe:1.8,zn:3.5,cu:0.20,vitA:15,vitB1:1.1,vitB2:0.35,vitB6:0.6,vitC:15,vitD:0.25,vitE:0.9,satFat:4.0,vitB12:0.7,folate:60},
+  {day:'金',name:'白身魚と豆腐のレモンハーブ蒸し ― オリーブ醤油ソース',emoji:'🐟',device:'pan',meat:'タラ切り身・木綿豆腐',meatWt:'タラ560g・豆腐160g',
+   veg:'冷凍ほうれん草100g・冷凍ブロッコリー100g',
+   season:'加熱用オリーブオイル大1・醤油小1・にんにくチューブ小1・酒大1・塩少々',
+   prep:'①フライパンにオリーブオイルを熱し、タラと豆腐を並べて焼き目をつける｜②冷凍ほうれん草・ブロッコリーをのせ、酒を回しかけて蓋をし3〜4分蒸し焼き｜③魚・豆腐・野菜を取り出して盛り付け｜④フライパンに残った汁に醤油・レモン汁・EXVオリーブオイルを加えて軽く乳化させ、上からかける｜⑤ディルまたは大葉を散らして完成',
+   finish:'醤油小1・レモン汁小1・EXVオリーブオイル小1・ディル or 大葉',
+   prot:58,cal:375,fat:12,carbs:5.5,fiber:3.6,na:310,k:900,ca:130,mg2:95,fe:1.7,zn:1.3,cu:0.20,vitA:280,vitB1:0.18,vitB2:0.22,vitB6:0.45,vitC:35,vitD:1.2,vitE:2.2,satFat:1.8,vitB12:2.0,folate:147},
 ];
 const HOTCOOK_B = [
   {day:'月',name:'鶏むね 無水ポトフ',emoji:'🍲',meat:'鶏むね肉（皮なし）',meatWt:'450g',
@@ -1367,47 +1369,42 @@ const UNIVERSAL_RECIPE = [
 
 const SHOPPING_HC_A = [
   {cat:'🥩 タンパク質', items:[
-    {name:'鶏むねひき肉',      qty:'500g',note:'月分'},
-    {name:'鮭切り身',          qty:'480g',note:'火分'},
-    {name:'ボイルだこ',        qty:'500g',note:'水分'},
-    {name:'豚こま切れ肉',      qty:'400g',note:'木分'},
-    {name:'鶏むねひき肉',      qty:'500g',note:'金分'},
-    {name:'卵',                qty:'1個',note:'金分（卵白のみ使用）'},
+    {name:'鶏むね肉（皮なし）',      qty:'480g',note:'月分'},
+    {name:'鮭切り身',                qty:'500g',note:'火分'},
+    {name:'冷凍シーフードミックス',  qty:'610g',note:'水分'},
+    {name:'豚もも薄切り肉（赤身）',  qty:'520g',note:'木分'},
+    {name:'タラ切り身',              qty:'560g',note:'金分'},
+    {name:'木綿豆腐',                qty:'160g',note:'金分'},
   ]},
-  {cat:'🥬 冷凍野菜・生鮮', items:[
-    {name:'冷凍パプリカ',      qty:'100g',note:'月分'},
-    {name:'玉ねぎ',            qty:'150g',note:'月分'},
-    {name:'なす',              qty:'100g',note:'月分'},
-    {name:'冷凍ほうれん草',    qty:'100g',note:'月分'},
+  {cat:'🥬 冷凍野菜', items:[
+    {name:'冷凍パプリカ',      qty:'250g',note:'月分100g・水分150g'},
+    {name:'冷凍ズッキーニ',    qty:'100g',note:'月分'},
     {name:'冷凍キャベツ',      qty:'150g',note:'火分'},
     {name:'冷凍にんじん',      qty:'100g',note:'火分'},
-    {name:'ズッキーニ',        qty:'150g',note:'水分'},
-    {name:'エリンギ',          qty:'100g',note:'木分'},
-    {name:'ミニトマト',        qty:'100g',note:'木分'},
-    {name:'玉ねぎ',            qty:'50g',note:'木分'},
-    {name:'れんこん',          qty:'150g',note:'金分'},
-    {name:'大根',              qty:'150g',note:'金分'},
+    {name:'冷凍ごぼう',        qty:'100g',note:'木分'},
+    {name:'冷凍れんこん',      qty:'100g',note:'木分'},
+    {name:'冷凍ほうれん草',    qty:'100g',note:'金分'},
+    {name:'冷凍ブロッコリー',  qty:'100g',note:'金分'},
   ]},
   {cat:'🍄 きのこ', items:[
-    {name:'しめじ or えのき',  qty:'500g（5袋）',note:'各日100g'},
+    {name:'しめじ',            qty:'400g（4袋）',note:'月・火・水・木分（各100g）'},
   ]},
-  {cat:'🧂 調味料・その他', items:[
-    {name:'カットトマト缶',    qty:'1缶',note:'月分'},
-    {name:'無調整豆乳',        qty:'200ml',note:'火分'},
-    {name:'味噌',              qty:'—',note:'常備・火分（大1.5に減量）'},
-    {name:'柚子皮',            qty:'少々',note:'火分・あれば（減塩の香り付け）'},
-    {name:'カレー粉・クミン',  qty:'—',note:'常備・月分'},
-    {name:'生姜',              qty:'2〜3片',note:'月分（多め）・木分'},
-    {name:'かつお節パック',    qty:'2パック（2〜3g×2）',note:'月・火分'},
-    {name:'みりん',            qty:'—',note:'常備・月分'},
-    {name:'料理酒',            qty:'—',note:'常備・火分'},
-    {name:'バター',            qty:'—',note:'常備・火・水分'},
-    {name:'片栗粉',            qty:'—',note:'常備・月・金分'},
-    {name:'ナンプラー',        qty:'—',note:'追加購入・木分'},
-    {name:'レモン',            qty:'1個',note:'木分'},
-    {name:'唐辛子',            qty:'1本',note:'木分'},
-    {name:'パクチー',          qty:'—',note:'木分・お好みで'},
-    {name:'塩麹',              qty:'—',note:'追加購入・金分'},
+  {cat:'🧂 調味料・その他（常備）', items:[
+    {name:'オリーブオイル（加熱用）', qty:'—',note:'常備・月〜金全日'},
+    {name:'EXVオリーブオイル（仕上げ用）', qty:'—',note:'常備・月・火・金分（風味用の高品質タイプを1本）'},
+    {name:'にんにくチューブ',  qty:'—',note:'常備・月・水・木・金分'},
+    {name:'生姜チューブ',      qty:'—',note:'常備・火分'},
+    {name:'カットトマト缶（食塩無添加）', qty:'1缶',note:'月分'},
+    {name:'オレガノ',          qty:'—',note:'常備・月分'},
+    {name:'味噌',              qty:'—',note:'常備・火分'},
+    {name:'みりん',            qty:'—',note:'常備・火・木分'},
+    {name:'料理酒',            qty:'—',note:'常備・火・金分'},
+    {name:'醤油',              qty:'—',note:'常備・月・水・木・金分'},
+    {name:'バルサミコ酢',      qty:'—',note:'追加購入・木分'},
+    {name:'唐辛子',            qty:'—',note:'常備・水分'},
+    {name:'レモン',            qty:'2個',note:'月・火・水・金分'},
+    {name:'ディル or 大葉',    qty:'—',note:'火・金分・お好みで'},
+    {name:'パセリ or バジル',  qty:'—',note:'月・水分・お好みで'},
   ]},
 ];
 const SHOPPING_HC_B = [
@@ -2127,13 +2124,16 @@ function renderHotcookMenu(){
         <span id="hc-arr-${i}" style="color:var(--text3);font-size:10px;display:inline-block;transition:transform .2s;">▼</span>
       </div>
       <div id="hc-detail-${i}" style="display:none;padding:0 0 12px 32px;font-size:12px;line-height:1.6;">
+        <div style="display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;margin-bottom:8px;background:${d.device==='pan'?'rgba(255,149,0,.12)':'rgba(0,122,255,.12)'};color:${d.device==='pan'?'var(--orange)':'var(--blue)'};">${d.device==='pan'?'🍳 フライパン':'🍲 HotCock（無水調理）'}</div>
         <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">🥬 材料（2食分）</div>
         <div style="color:var(--text3);margin-bottom:8px;">${d.meat} ${d.meatWt}・${d.veg}</div>
         <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">🧂 調味料</div>
         <div style="color:var(--text3);margin-bottom:8px;">${d.season}</div>
-        <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">📝 仕込み（10分以内）</div>
-        <div style="color:var(--text3);margin-bottom:10px;">${d.prep}</div>
+        <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">📝 手順</div>
+        <div style="color:var(--text3);margin-bottom:${d.finish?'8':'10'}px;">${d.prep}</div>
+        ${d.finish?`<div style="color:var(--text2);font-weight:600;margin-bottom:2px;">✨ 仕上げ</div><div style="color:var(--text3);margin-bottom:10px;">${d.finish}</div>`:''}
 
+        ${d.device==='pan' ? '' : `
         <div onclick="event.stopPropagation();toggleHotcookSteps(${i})" style="display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:10px;background:rgba(0,122,255,.08);cursor:pointer;margin-bottom:2px;">
           <span style="font-size:14px;">🎛</span>
           <span style="flex:1;font-size:12px;font-weight:600;color:var(--blue);">ヘルシオ 操作手順（KN-HW16G-B）</span>
@@ -2144,7 +2144,7 @@ function renderHotcookMenu(){
             ${hcSteps(d.category, d.menuName, d.manualCat).map(s=>`<li style="margin-bottom:6px;">${s}</li>`).join('')}
           </ol>
           <div style="font-size:10px;color:var(--text3);margin-top:4px;">※取扱説明書（KN-HW16G/24G）で操作フロー・キー名を確認済み。自動メニューの正確な収録名は個体差の可能性あり</div>
-        </div>
+        </div>`}
 
         <div style="display:flex;gap:8px;margin-top:10px;">
           <button onclick="event.stopPropagation();addHotcookMeal(${i},'昼')" style="flex:1;background:var(--surface2);border:none;border-radius:10px;padding:8px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;">🍱 昼食に追加</button>
