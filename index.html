@@ -497,9 +497,19 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
         <div id="hc-list"></div>
       </div>
       <div class="card">
-        <div class="card-title" style="margin-bottom:8px;">🍗 万能レシピ（楽したい日用）</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">材料は完全固定（鶏むね肉・冷凍ほうれん草・冷凍ブロッコリー・にんじん・しめじ・オリーブオイル）。調味料だけ差し替えて気分で味変できます。買い物リストは既存の調味料補充に塩麹を追加するだけ｜曜日ローテが面倒な日はこちらをどうぞ｜タップで材料・操作手順を展開</div>
-        <div id="uni-list"></div>
+        <div class="card-title" style="margin-bottom:8px;">🍙 炊き込みご飯おにぎり バリエーション</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">もち麦炊き込み・2個分の栄養価。基準は「サバひじき」、他は栄養素の被りを避けたバリエーション｜タップで材料・作り方を展開</div>
+        <div id="onigiri-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:8px;">🍲 スープジャー バリエーション</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">昼食テンプレートの具材（玉ねぎ・きのこ・トマト等）。夕食テンプレート（チキン・ブロッコリー・しめじ・にんじん）と栄養素が被らない構成｜タップで材料・作り方を展開</div>
+        <div id="soup-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:8px;">🍗 チキンステーキのタレ バリエーション</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">夕食テンプレートの鶏むね肉1枚（皮なし・約250g・cal275/P57.5g/F4.75g、下記に含まず別計上）用のタレ。焼き方は共通：塩を振って中火でしっかり両面焼き色をつけるだけ｜タップで材料・作り方を展開</div>
+        <div id="sauce-list"></div>
       </div>
       <div class="card">
         <div class="card-title" style="margin-bottom:8px;">🍚 ご飯の作り置き（マーナ冷凍ごはん容器）</div>
@@ -1156,8 +1166,10 @@ const PRESETS = [
   {name:'乾燥わかめ 5g',                  cal:8,  prot:1, fat:0, carbs:1, fiber:1, na:370, ca:41, mg2:55, k:245, fe:0.2,cu:0.02,vitE:0.4, satFat:0,  vitA:5,  vitB1:0,  vitB2:0,  vitC:1, zn:0,  vitD:0,  vitB6:0,vitB12:0,folate:1,   emoji:'🌊',cat:'追加',
    recipe:'乾燥わかめ 5g｜水で戻してプロテイン鍋に投入。ヨウ素約200mcg（1日RDA 130mcg超）を補完'},
   {name:'こんにゃく 100g（食物繊維）',    cal:5,  prot:0, fat:0, carbs:3, fiber:2, na:10,  ca:43, mg2:2,  k:33,  fe:0.4,cu:0.02,vitE:0,   satFat:0,  vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0,  vitD:0,  vitB6:0,vitB12:0,folate:0,   emoji:'🌿',cat:'追加'},
-  {name:'オリーブオイル追加 大2（トレ日・万能レシピ用）',cal:216,prot:0,fat:24,carbs:0,fiber:0,na:0,ca:0,mg2:0,k:0,fe:0,cu:0,vitE:3.4,satFat:3.4,vitA:0,vitB1:0,vitB2:0,vitC:0,zn:0,vitD:0,vitB6:0,vitB12:0,folate:0, emoji:'🫒',cat:'追加',
-   recipe:'万能レシピ（楽したい日用）をトレ日に使う日、仕上げのオリーブオイルを大2→大4（2食分）に倍増する差分を1回で記録｜これでトレ日の赤字が約645kcal→約429kcalに是正され、脂質目標(65g)にもほぼ到達'},
+  {name:'ミックスナッツ20g（トレ日・朝食用）',cal:140,prot:4,fat:13,carbs:4,fiber:2,na:2,ca:20,mg2:30,k:130,fe:0.6,cu:0.15,vitE:3.5,satFat:1.2,vitA:0,vitB1:0.02,vitB2:0.05,vitC:0,zn:0.5,vitD:0,vitB6:0.05,vitB12:0,folate:10, emoji:'🥜',cat:'追加',
+   recipe:'トレ日の朝食に片手一掴み（20g）追加。カロリー赤字619kcal→約476kcalに是正、脂質不足（-20g）も半分程度カバー'},
+  {name:'バナナ1本（トレ日・間食用）',cal:103,prot:1.3,fat:0.3,carbs:27,fiber:3.1,na:0,ca:6,mg2:32,k:420,fe:0.3,cu:0.1,vitE:0.3,satFat:0.1,vitA:5,vitB1:0.05,vitB2:0.04,vitC:16,zn:0.2,vitD:0,vitB6:0.38,vitB12:0,folate:26, emoji:'🍌',cat:'追加',
+   recipe:'トレ日の15時プロテインに添えて1本。ミックスナッツと合わせるとカロリー赤字619kcal→約376kcal、炭水化物不足（-48g）も大幅にカバー'},
 ];
 
 const SHOPPING = [
@@ -1185,7 +1197,6 @@ const SHOPPING = [
     {name:'カレー粉',          qty:'—',note:''},
     {name:'ナンプラー',        qty:'—',note:''},
     {name:'トマト缶',          qty:'2缶',note:'金曜分'},
-    {name:'塩麹',              qty:'—',note:'万能レシピ（塩麹ハーブ・コチュジャン等）用'},
   ]},
 ];
 
@@ -1329,47 +1340,76 @@ const HOTCOOK_D = [
    prot:46,cal:301,fat:7,carbs:8,fiber:2.5,na:420,k:1445,ca:135,mg2:128,fe:2.9,zn:1.7,cu:0.08,vitA:230,vitB1:0.24,vitB2:0.38,vitB6:0.55,vitC:37,vitD:2.4,vitE:2.6,satFat:0.9,epaDha:430,vitB12:33,folate:104},
 ];
 
-// ── 万能レシピ（楽したい日用）────────────────────────
-// 材料は完全固定（鶏むね肉500g・冷凍ほうれん草150g・冷凍ブロッコリー150g・にんじん100g・しめじ100g・オリーブオイル大2）
-// 調味料だけ差し替えて気分で味変。買い物リストは既存の「調味料（月1補充）」に塩麹を追加するだけで完結。
-// 2食分（当日夕食＋翌日昼食）｜栄養価は1食分の数値
-const UNIVERSAL_RECIPE = [
-  {day:'和',name:'鶏むね万能蒸し（塩麹ハーブ）',emoji:'🌿',meat:'鶏むね肉（皮なし）',meatWt:'500g',
-   veg:'冷凍ほうれん草150g・冷凍ブロッコリー150g・にんじん100g（乱切り）・しめじ100g',
-   season:'塩麹大2（同量の水で薄める）・酒大1・おろしにんにく1片・おろし生姜1片・オリーブオイル大2（仕上げ）・黒胡椒（仕上げ）・お好みでレモン汁少々',
-   prep:'内鍋の底に水分の多い冷凍ほうれん草・冷凍ブロッコリーを敷く｜その上ににんじん・しめじをのせる｜一番上に鶏むね肉を重ならないように並べ、にんにく・生姜をのせる｜塩麹を薄めた水と酒を回しかけてスイッチON（塩麹の発酵うま味で塩を増やさずコクを出す）｜取り出したら黒胡椒とオリーブオイルを回しかけ、お好みでレモン汁を絞って完成｜トレ日は仕上げのオリーブオイルを大2→大4（2食分）に倍増（アプリの「オリーブオイル追加（トレ日・万能レシピ用）」プリセットで記録可能。カロリーと脂質目標の両方を同時に埋められる）',
-   category:'蒸し料理',menuName:'蒸し鶏',manualCat:'蒸す（蒸しトレイを使用）',
-   prot:59,cal:428,fat:16,carbs:9,fiber:3,na:354,k:1330,ca:132,mg2:111,fe:1.8,zn:2.0,cu:0.18,vitA:740,vitB1:0.30,vitB2:0.35,vitB6:1.7,vitC:45,vitD:0.2,vitE:3.5,satFat:2.0,vitB12:0.5,folate:142},
-  {day:'韓',name:'鶏むね万能蒸し（コチュジャンごま油）',emoji:'🌶️',meat:'鶏むね肉（皮なし）',meatWt:'500g',
-   veg:'冷凍ほうれん草150g・冷凍ブロッコリー150g・にんじん100g（乱切り）・しめじ100g',
-   season:'コチュジャン大1・ごま油大1・醤油小1・おろしにんにく1片・いりごま大1・オリーブオイル大2（仕上げ）・黒胡椒（仕上げ）',
-   prep:'内鍋の底に水分の多い冷凍ほうれん草・冷凍ブロッコリーを敷く｜その上ににんじん・しめじをのせる｜一番上に鶏むね肉を重ならないように並べ、にんにくをのせる｜コチュジャン・ごま油・醤油を混ぜたタレを回しかけてスイッチON（醤油は小1に抑え、コチュジャンの辛味とごま油のコクで満足感を出す）｜取り出したらいりごまと黒胡椒、オリーブオイルを回しかけて完成｜トレ日は仕上げのオリーブオイルを大2→大4（2食分）に倍増（アプリの「オリーブオイル追加（トレ日・万能レシピ用）」プリセットで記録可能）',
-   category:'蒸し料理',menuName:'蒸し鶏',manualCat:'蒸す（蒸しトレイを使用）',
-   prot:59,cal:428,fat:16,carbs:10,fiber:3,na:394,k:1330,ca:150,mg2:120,fe:1.9,zn:2.1,cu:0.20,vitA:740,vitB1:0.31,vitB2:0.36,vitB6:1.7,vitC:42,vitD:0.2,vitE:3.7,satFat:2.1,vitB12:0.5,folate:142},
-  {day:'中',name:'鶏むね万能蒸し（オイスターねぎ生姜）',emoji:'🥢',meat:'鶏むね肉（皮なし）',meatWt:'500g',
-   veg:'冷凍ほうれん草150g・冷凍ブロッコリー150g・にんじん100g（乱切り）・しめじ100g',
-   season:'オイスターソース大1.5・ごま油小1・生姜（せん切り）1片・水大2（伸ばす用）・オリーブオイル大2（仕上げ）・黒胡椒（仕上げ）',
-   prep:'内鍋の底に水分の多い冷凍ほうれん草・冷凍ブロッコリーを敷く｜その上ににんじん・しめじをのせる｜一番上に鶏むね肉を重ならないように並べ、生姜をのせる｜オイスターソースを水で伸ばしたタレを回しかけてスイッチON（オイスターソースは醤油より塩分が控えめ、水で薄めて全体に行き渡らせる）｜取り出したらごま油と黒胡椒、オリーブオイルを回しかけて完成｜トレ日は仕上げのオリーブオイルを大2→大4（2食分）に倍増（アプリの「オリーブオイル追加（トレ日・万能レシピ用）」プリセットで記録可能）',
-   category:'蒸し料理',menuName:'蒸し鶏',manualCat:'蒸す（蒸しトレイを使用）',
-   prot:59,cal:428,fat:16,carbs:10,fiber:3,na:315,k:1330,ca:135,mg2:115,fe:1.8,zn:2.0,cu:0.19,vitA:740,vitB1:0.30,vitB2:0.35,vitB6:1.7,vitC:44,vitD:0.2,vitE:3.5,satFat:2.0,vitB12:0.5,folate:142},
-  {day:'洋',name:'鶏むね万能蒸し（トマトバジル）',emoji:'🍅',meat:'鶏むね肉（皮なし）',meatWt:'500g',
-   veg:'冷凍ほうれん草150g・冷凍ブロッコリー150g・にんじん100g（乱切り）・しめじ100g・トマト缶（無塩）150g',
-   season:'おろしにんにく1片・オレガノ or バジル小1・黒胡椒（仕上げ）・オリーブオイル大2（仕上げ）｜塩は使わない',
-   prep:'内鍋の底に水分の多い冷凍ほうれん草・冷凍ブロッコリー・トマト缶を敷く｜その上ににんじん・しめじをのせる｜一番上に鶏むね肉を重ならないように並べ、にんにく・オレガノをのせてスイッチON（地中海食パターン＝オリーブオイル・トマト・にんにくの組み合わせ、PREDIMED試験でCVDリスク-30%）｜取り出したら黒胡椒とオリーブオイルを回しかけて完成｜塩を使わず最も低塩｜トレ日は仕上げのオリーブオイルを大2→大4（2食分）に倍増（アプリの「オリーブオイル追加（トレ日・万能レシピ用）」プリセットで記録可能）',
-   category:'煮物',menuName:'アクアパッツァ',manualCat:'煮物を作る［まぜない］',
-   prot:59,cal:428,fat:16,carbs:13,fiber:4,na:118,k:1420,ca:140,mg2:118,fe:2.0,zn:2.0,cu:0.19,vitA:760,vitB1:0.31,vitB2:0.36,vitB6:1.7,vitC:55,vitD:0.2,vitE:3.8,satFat:2.0,vitB12:0.5,folate:150},
-  {day:'印',name:'鶏むね万能蒸し（カレースパイス）',emoji:'🍛',meat:'鶏むね肉（皮なし）',meatWt:'500g',
-   veg:'冷凍ほうれん草150g・冷凍ブロッコリー150g・にんじん100g（乱切り）・しめじ100g',
-   season:'カレー粉大1・ターメリック小1/2・おろし生姜1片・黒胡椒（クルクミン吸収UP）・オリーブオイル大2（仕上げ）｜塩は使わない',
-   prep:'内鍋の底に水分の多い冷凍ほうれん草・冷凍ブロッコリーを敷く｜その上ににんじん・しめじをのせる｜一番上に鶏むね肉を重ならないように並べ、カレー粉・ターメリック・生姜をまぶしてスイッチON（スパイスはナトリウムほぼゼロ、香りだけで満足感を作る）｜取り出したら黒胡椒とオリーブオイルを回しかけて完成（黒胡椒がクルクミンの吸収を高める）｜トレ日は仕上げのオリーブオイルを大2→大4（2食分）に倍増（アプリの「オリーブオイル追加（トレ日・万能レシピ用）」プリセットで記録可能）',
-   category:'カレー・シチュー',menuName:'無水カレー',manualCat:'煮物を作る［まぜない］',
-   prot:59,cal:428,fat:16,carbs:12,fiber:3,na:79,k:1350,ca:135,mg2:120,fe:2.0,zn:2.1,cu:0.20,vitA:745,vitB1:0.32,vitB2:0.36,vitB6:1.8,vitC:44,vitD:0.2,vitE:4.0,satFat:2.0,vitB12:0.5,folate:143},
-  {day:'タ',name:'鶏むね万能蒸し（ナンプラーライム）',emoji:'🌶️',meat:'鶏むね肉（皮なし）',meatWt:'500g',
-   veg:'冷凍ほうれん草150g・冷凍ブロッコリー150g・にんじん100g（乱切り）・しめじ100g',
-   season:'ナンプラー大1・レモン汁大2（仕上げ）・唐辛子（輪切り）1本・おろしにんにく1片・砂糖少々（仕上げ）・オリーブオイル大2（仕上げ）',
-   prep:'内鍋の底に水分の多い冷凍ほうれん草・冷凍ブロッコリーを敷く｜その上ににんじん・しめじをのせる｜一番上に鶏むね肉を重ならないように並べ、にんにくをのせる｜ナンプラーを回しかけてスイッチON｜取り出したらレモン汁・唐辛子・砂糖少々・オリーブオイルを和えて完成（酸味で薄めた塩気を補う）｜6種の中で最も塩分が高め（1食約1.5g）なので、この日は朝食・間食側で追加の調味料を控えめに｜トレ日は仕上げのオリーブオイルを大2→大4（2食分）に倍増（アプリの「オリーブオイル追加（トレ日・万能レシピ用）」プリセットで記録可能）',
-   category:'スープ・鍋',menuName:'トムヤムクン',manualCat:'煮物を作る［まぜる］',
-   prot:59,cal:428,fat:16,carbs:12,fiber:3,na:591,k:1330,ca:132,mg2:111,fe:1.8,zn:2.0,cu:0.18,vitA:740,vitB1:0.30,vitB2:0.35,vitB6:1.7,vitC:40,vitD:0.2,vitE:3.5,satFat:2.0,vitB12:0.5,folate:142},
+// ── 忙しい日テンプレート：バリュエーション集（2026-08-08新設） ──────
+// 朝食固定・昼食（おにぎり+スープジャー+サラダチキン）・夕食（チキンステーキ+おにぎり）
+// テンプレートに変化と栄養の網羅性を持たせるための3カテゴリ
+
+// ① 炊き込みご飯おにぎり（もち麦300g+具材、2個分＝バッチの半量の栄養価）
+const TAKIKOMI_ONIGIRI = [
+  {name:'サバひじき（基準）',emoji:'🐟',
+   ingredients:'サバ水煮缶（食塩無添加）1缶・乾燥ひじき大2・生姜1かけ（千切り）・油揚げ1/2枚・もち麦300g',
+   prep:'①もち麦を炊く際にサバ缶を汁ごと・戻したひじき・千切り生姜・刻んだ油揚げを一緒に加えて炊く｜②炊き上がったら全体を混ぜ、粗熱を取って2個ずつ握り冷凍｜EPA・DHA・ビタミンD・鉄・カルシウムに強い、和食系の基準レシピ',
+   prot:26.6,cal:451,fat:12.8,carbs:51,fiber:7.4,na:250,k:900,ca:150,mg2:90,fe:2.3,zn:1.5,cu:0.3,vitA:10,vitB1:0.15,vitB2:0.25,vitB6:0.3,vitC:2,vitD:20,vitE:2.5,satFat:2.5,epaDha:4200,vitB12:18,folate:40},
+  {name:'鮭ときのこ',emoji:'🐟',
+   ingredients:'鮭フレーク or 鮭缶100g・舞茸 or しめじ50g・生姜少々・もち麦300g',
+   prep:'①もち麦を炊く際に鮭・きのこ・生姜を一緒に加えて炊く｜②ほぐしながら混ぜ、2個ずつ握り冷凍｜サバひじきよりビタミンD・カルシウムに寄せたバリエーション、EPA/DHAは控えめ',
+   prot:16.9,cal:362,fat:7.5,carbs:49,fiber:6,na:180,k:550,ca:90,mg2:60,fe:0.8,zn:1.0,cu:0.15,vitA:15,vitB1:0.12,vitB2:0.15,vitB6:0.25,vitC:2,vitD:6.3,vitE:1.2,satFat:1.2,epaDha:1200,vitB12:6,folate:35},
+  {name:'鶏ごぼう五目',emoji:'🍗',
+   ingredients:'鶏むねひき肉100g・ごぼう50g（冷凍可）・にんじん30g・しいたけ30g・醤油/みりん少々・もち麦300g',
+   prep:'①もち麦を炊く際に鶏むねひき肉・根菜・調味料を一緒に加えて炊く｜②混ぜて2個ずつ握り冷凍｜低脂質・高たんぱくで、鉄・食物繊維を強化したバリエーション。EPA/DHAはゼロなのでこの日はサプリで補う',
+   prot:17,cal:314,fat:1,carbs:54,fiber:7.9,na:200,k:480,ca:30,mg2:45,fe:1.5,zn:1.2,cu:0.15,vitA:250,vitB1:0.1,vitB2:0.15,vitB6:0.35,vitC:3,vitD:0,vitE:0.5,satFat:0.3,epaDha:0,vitB12:0.2,folate:30},
+  {name:'大豆とわかめ',emoji:'🫘',
+   ingredients:'蒸し大豆ドライパック（食塩無添加）100g・乾燥わかめ5g・すりごま大1・もち麦300g',
+   prep:'①もち麦を炊く際に大豆・わかめ・すりごまを一緒に加えて炊く｜②混ぜて2個ずつ握り冷凍｜ヨウ素・イソフラボン・植物性たんぱく質を補う、月内唯一の海藻メインバリエーション',
+   prot:14.2,cal:351,fat:6.9,carbs:53.5,fiber:10,na:150,k:520,ca:130,mg2:70,fe:1.5,zn:1.2,cu:0.25,vitA:5,vitB1:0.15,vitB2:0.1,vitB6:0.2,vitC:1,vitD:0,vitE:1.0,satFat:1.0,epaDha:0,vitB12:0,folate:60},
+  {name:'桜えびと枝豆',emoji:'🦐',
+   ingredients:'桜えび（乾燥）10g・冷凍枝豆50g（正味）・もち麦300g',
+   prep:'①もち麦を炊く際に桜えび・枝豆を一緒に加えて炊く｜②混ぜて2個ずつ握り冷凍｜カルシウム・葉酸・ビタミンKに寄せた軽めのバリエーション',
+   prot:10.4,cal:283,fat:0.25,carbs:50.75,fiber:6.5,na:120,k:400,ca:100,mg2:55,fe:0.8,zn:0.8,cu:0.1,vitA:5,vitB1:0.1,vitB2:0.08,vitB6:0.15,vitC:5,vitD:0,vitE:0.3,satFat:0.05,epaDha:0,vitB12:0.5,folate:70},
+];
+
+// ② スープジャー（1杯分の目安。夕食テンプレートの野菜と被らない構成）
+const SOUP_JAR = [
+  {name:'トマトコンソメ×玉ねぎ・エリンギ',emoji:'🍅',
+   ingredients:'玉ねぎ50g・エリンギ50g・カットトマト缶100g・コンソメ1/2個',
+   prep:'①野菜を切ってスープジャーに入れる｜②熱湯とコンソメを注いで蓋をし保温調理｜リコピン・血液サラサラ成分（玉ねぎ）を補う',
+   prot:2,cal:61,fat:0.5,carbs:10,fiber:2.5,na:600,k:350,ca:20,mg2:15,fe:0.5,zn:0.3,cu:0.1,vitA:5,vitB1:0.05,vitB2:0.05,vitB6:0.1,vitC:15,vitD:0,vitE:0.3,satFat:0.1,vitB12:0,folate:25},
+  {name:'和風だし×白菜・厚揚げ',emoji:'🥬',
+   ingredients:'白菜80g・厚揚げ50g・和風だし（食塩不使用）・醤油少々・塩ひとつまみ',
+   prep:'①白菜・厚揚げを切ってスープジャーに入れる｜②熱々のだし汁を注いで保温調理｜ビタミンU・ビタミンC（白菜）とたんぱく質・カルシウム（厚揚げ）を補う',
+   prot:6,cal:87,fat:5.7,carbs:2,fiber:1,na:300,k:250,ca:50,mg2:25,fe:0.8,zn:0.5,cu:0.15,vitA:10,vitB1:0.05,vitB2:0.05,vitB6:0.08,vitC:20,vitD:0,vitE:0.5,satFat:0.8,vitB12:0,folate:30},
+  {name:'中華だし×小松菜・卵',emoji:'🥚',
+   ingredients:'小松菜50g・卵1個・中華だし・生姜チューブ少々',
+   prep:'①小松菜を切りスープジャーに卵を溶き入れる｜②熱々の中華だしを注いで蓋をし保温調理（半熟卵スープ状に仕上がる）｜鉄・カルシウム（小松菜）と完全たんぱく質（卵）でアミノ酸バランスを補強',
+   prot:7,cal:83,fat:5.2,carbs:0.6,fiber:1,na:500,k:280,ca:110,mg2:15,fe:2.15,zn:0.7,cu:0.08,vitA:150,vitB1:0.06,vitB2:0.2,vitB6:0.08,vitC:15,vitD:1,vitE:1.0,satFat:1.6,vitB12:0.4,folate:44},
+  {name:'味噌×根菜（大根・にんじん・ごぼう）',emoji:'🥕',
+   ingredients:'大根50g・にんじん30g・ごぼう30g（冷凍可）・味噌大1',
+   prep:'①根菜を切ってスープジャーに入れる｜②味噌を溶いた熱湯を注いで保温調理｜発酵食品由来のうま味とミネラル・食物繊維を補う｜味噌の分だけ他の食事の塩分を少し控えめに',
+   prot:3.1,cal:75,fat:0.3,carbs:13.6,fiber:2.8,na:700,k:400,ca:35,mg2:20,fe:0.5,zn:0.4,cu:0.1,vitA:250,vitB1:0.05,vitB2:0.04,vitB6:0.1,vitC:8,vitD:0,vitE:0.4,satFat:0.05,vitB12:0,folate:20},
+];
+
+// ③ チキンステーキのタレ（鶏むね肉250g・皮なし・cal275/P57.5g/F4.75gは別計上、タレ単体の栄養価）
+const CHICKEN_SAUCE = [
+  {name:'和風おろしポン酢',emoji:'🌸',
+   ingredients:'大根おろし50g・ポン酢大1',
+   prep:'①鶏むね肉を塩を振って中火でしっかり両面焼き色をつける｜②大根おろしをのせてポン酢をかけて完成｜さっぱり系、消化も助ける定番',
+   prot:0.5,cal:18,fat:0,carbs:3.5,fiber:0.5,na:400,k:80,ca:10,mg2:5,fe:0.1,zn:0,cu:0,vitA:0,vitB1:0,vitB2:0,vitB6:0,vitC:5,vitD:0,vitE:0,satFat:0,vitB12:0,folate:5},
+  {name:'ガーリック醤油バター',emoji:'🧄',
+   ingredients:'にんにくチューブ小1・醤油小1・バター5g',
+   prep:'①鶏むね肉を焼く際ににんにくチューブを一緒に加え香りを出す｜②焼き上がりに醤油とバターを絡めて完成｜コクを足したい日に',
+   prot:0.2,cal:47,fat:4,carbs:1,fiber:0,na:290,k:20,ca:2,mg2:2,fe:0.1,zn:0,cu:0,vitA:15,vitB1:0,vitB2:0,vitB6:0,vitC:0,vitD:0,vitE:0.1,satFat:2.5,vitB12:0,folate:2},
+  {name:'アボカドサルサ',emoji:'🥑',
+   ingredients:'アボカド1/4個・トマト30g・レモン汁少々',
+   prep:'①鶏むね肉を焼く｜②アボカド・トマトを角切りにしレモン汁と和えて上にのせて完成｜良質な脂質・ビタミンEを補う、月内で唯一の生野菜系ソース',
+   prot:0.8,cal:69,fat:6.4,carbs:1.1,fiber:2.7,na:5,k:180,ca:5,mg2:10,fe:0.2,zn:0.2,cu:0.05,vitA:10,vitB1:0.02,vitB2:0.02,vitB6:0.1,vitC:8,vitD:0,vitE:1.0,satFat:1.0,vitB12:0,folate:15},
+  {name:'味噌マスタード',emoji:'🍯',
+   ingredients:'味噌小1・粒マスタード小1・はちみつ小1/2',
+   prep:'①鶏むね肉を焼く｜②味噌・粒マスタード・はちみつを混ぜて焼き上がりに絡めて完成｜発酵の旨味と酸味・甘みのバランスが良い',
+   prot:0.6,cal:30,fat:0.5,carbs:3.5,fiber:0.2,na:230,k:30,ca:5,mg2:3,fe:0.1,zn:0.1,cu:0.02,vitA:0,vitB1:0,vitB2:0,vitB6:0,vitC:0,vitD:0,vitE:0,satFat:0.1,vitB12:0,folate:3},
+  {name:'カレーヨーグルト',emoji:'🍛',
+   ingredients:'カレー粉小1/2・無糖ヨーグルト大2',
+   prep:'①鶏むね肉を焼く前にカレー粉をまぶしておく｜②焼き上がりに無糖ヨーグルトを添えて完成｜スパイスの抗酸化作用とヨーグルトの酸味、地中海×スパイスの流れを継承',
+   prot:1.8,cal:12,fat:0.3,carbs:1.5,fiber:0.1,na:15,k:40,ca:20,mg2:3,fe:0.1,zn:0.1,cu:0.01,vitA:2,vitB1:0.01,vitB2:0.02,vitB6:0.02,vitC:0,vitD:0,vitE:0,satFat:0.1,vitB12:0.05,folate:3},
 ];
 
 const SHOPPING_HC_A = [
@@ -2178,25 +2218,19 @@ function renderHotcookMenu(){
       </div>
     </div>`).join('');
 }
-function toggleUniversalDetail(idx){
-  const panel = document.getElementById('uni-detail-'+idx);
-  const arr = document.getElementById('uni-arr-'+idx);
+// ── 忙しい日バリュエーション：汎用レンダラー（炊き込みおにぎり／スープジャー／チキンステーキのタレ）
+function toggleVarietyDetail(prefix, idx){
+  const panel = document.getElementById(prefix+'-detail-'+idx);
+  const arr = document.getElementById(prefix+'-arr-'+idx);
   if(!panel) return;
   const open = panel.style.display !== 'none';
   panel.style.display = open ? 'none' : '';
   if(arr) arr.style.transform = open ? '' : 'rotate(180deg)';
 }
-function toggleUniversalSteps(idx){
-  const panel = document.getElementById('uni-steps-'+idx);
-  const arr = document.getElementById('uni-steps-arr-'+idx);
-  if(!panel) return;
-  const open = panel.style.display !== 'none';
-  panel.style.display = open ? 'none' : '';
-  if(arr) arr.style.transform = open ? '' : 'rotate(180deg)';
-}
-function addUniversalMeal(idx, when){
-  const d = UNIVERSAL_RECIPE[idx];
-  DB.meals.push({date:TODAY, name:`${d.name}（${when}）`,
+function addVarietyMeal(arrName, idx, label){
+  const arr = {onigiri:TAKIKOMI_ONIGIRI, soup:SOUP_JAR, sauce:CHICKEN_SAUCE}[arrName];
+  const d = arr[idx];
+  DB.meals.push({date:TODAY, name:`${d.name}（${label}）`,
     cal:d.cal, prot:d.prot||0, fat:d.fat||0, carbs:d.carbs||0, fiber:d.fiber||0, na:d.na||0,
     ca:d.ca||0, mg2:d.mg2||0, fe:d.fe||0, zn:d.zn||0, cu:d.cu||0,
     vitA:d.vitA||0, vitB1:d.vitB1||0, vitB2:d.vitB2||0, vitB6:d.vitB6||0,
@@ -2204,54 +2238,31 @@ function addUniversalMeal(idx, when){
     epaDha:d.epaDha||0, k:d.k||0, vitB12:d.vitB12||0, folate:d.folate||0});
   save(); renderNutrition(); renderToday();
 }
-function renderUniversalMenu(){
-  const list = document.getElementById('uni-list');
+function renderVarietyList(containerId, prefix, arrName, dataArr, addLabel){
+  const list = document.getElementById(containerId);
   if(!list) return;
-  list.innerHTML = UNIVERSAL_RECIPE.map((d,i)=>`
-    <div style="border-bottom:0.5px solid var(--border);${i===UNIVERSAL_RECIPE.length-1?'border-bottom:none;':''}">
-      <div onclick="toggleUniversalDetail(${i})" style="display:flex;align-items:center;gap:10px;padding:10px 0;cursor:pointer;">
-        <div style="width:22px;font-size:12px;font-weight:700;color:var(--blue);text-align:center;">${d.day}</div>
+  list.innerHTML = dataArr.map((d,i)=>`
+    <div style="border-bottom:0.5px solid var(--border);${i===dataArr.length-1?'border-bottom:none;':''}">
+      <div onclick="toggleVarietyDetail('${prefix}',${i})" style="display:flex;align-items:center;gap:10px;padding:10px 0;cursor:pointer;">
         <span style="font-size:20px;">${d.emoji}</span>
         <div style="flex:1;min-width:0;">
           <div style="font-size:14px;font-weight:500;">${d.name}</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:1px;">${d.meat} ${d.meatWt}</div>
         </div>
         <div style="text-align:right;font-size:11px;color:var(--text3);margin-right:6px;">P${d.prot}g<br>${d.cal}kcal</div>
-        <span id="uni-arr-${i}" style="color:var(--text3);font-size:10px;display:inline-block;transition:transform .2s;">▼</span>
+        <span id="${prefix}-arr-${i}" style="color:var(--text3);font-size:10px;display:inline-block;transition:transform .2s;">▼</span>
       </div>
-      <div id="uni-detail-${i}" style="display:none;padding:0 0 12px 32px;font-size:12px;line-height:1.6;">
-        <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">🥬 材料（2食分）</div>
-        <div style="color:var(--text3);margin-bottom:8px;">${d.meat} ${d.meatWt}・${d.veg}</div>
-        <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">🧂 調味料</div>
-        <div style="color:var(--text3);margin-bottom:8px;">${d.season}</div>
-        <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">📝 仕込み（10分以内）</div>
+      <div id="${prefix}-detail-${i}" style="display:none;padding:0 0 12px 30px;font-size:12px;line-height:1.6;">
+        <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">🥬 材料</div>
+        <div style="color:var(--text3);margin-bottom:8px;">${d.ingredients}</div>
+        <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">📝 作り方</div>
         <div style="color:var(--text3);margin-bottom:10px;">${d.prep}</div>
-
-        <div onclick="event.stopPropagation();toggleUniversalSteps(${i})" style="display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:10px;background:rgba(0,122,255,.08);cursor:pointer;margin-bottom:2px;">
-          <span style="font-size:14px;">🎛</span>
-          <span style="flex:1;font-size:12px;font-weight:600;color:var(--blue);">ヘルシオ 操作手順（KN-HW16G-B）</span>
-          <span id="uni-steps-arr-${i}" style="color:var(--blue);font-size:10px;display:inline-block;transition:transform .2s;">▼</span>
-        </div>
-        <div id="uni-steps-${i}" style="display:none;padding:10px 4px 4px;">
-          <ol style="padding-left:18px;color:var(--text2);">
-            ${hcSteps(d.category, d.menuName, d.manualCat).map(s=>`<li style="margin-bottom:6px;">${s}</li>`).join('')}
-          </ol>
-          <div style="font-size:10px;color:var(--text3);margin-top:4px;">※取扱説明書（KN-HW16G/24G）で操作フロー・キー名を確認済み。自動メニューの正確な収録名は個体差の可能性あり</div>
-        </div>
-
-        <div style="display:flex;gap:8px;margin-top:10px;">
-          <button onclick="event.stopPropagation();addUniversalMeal(${i},'昼')" style="flex:1;background:var(--surface2);border:none;border-radius:10px;padding:8px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;">🍱 昼食に追加</button>
-          <button onclick="event.stopPropagation();addUniversalMeal(${i},'夕')" style="flex:1;background:var(--surface2);border:none;border-radius:10px;padding:8px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;">🌙 夕食に追加</button>
-        </div>
-        ${IS_TRAIN ? `
-        <div style="display:flex;align-items:center;gap:8px;margin-top:8px;padding:8px 10px;border-radius:10px;background:rgba(52,199,89,.08);">
-          <span style="font-size:16px;">🫒</span>
-          <span style="flex:1;font-size:11px;color:var(--text2);">今日はトレ日：オリーブオイル大2→大4に倍増分（+216kcal）</span>
-          <button onclick="event.stopPropagation();quickAddPresetByName('オリーブオイル追加 大2（トレ日・万能レシピ用）')" style="background:var(--green);color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;">+ 追加</button>
-        </div>` : ''}
+        <button onclick="event.stopPropagation();addVarietyMeal('${arrName}',${i},'${addLabel}')" style="width:100%;background:var(--surface2);border:none;border-radius:10px;padding:8px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;">+ 今日の${addLabel}に追加</button>
       </div>
     </div>`).join('');
 }
+function renderOnigiriList(){ renderVarietyList('onigiri-list','onigiri','onigiri',TAKIKOMI_ONIGIRI,'食事'); }
+function renderSoupList(){ renderVarietyList('soup-list','soup','soup',SOUP_JAR,'食事'); }
+function renderSauceList(){ renderVarietyList('sauce-list','sauce','sauce',CHICKEN_SAUCE,'食事'); }
 function toggleHotcookShopItem(key){
   if(!DB.shopping) DB.shopping=[];
   const idx = DB.shopping.indexOf(key);
@@ -2332,7 +2343,9 @@ function delMeal(i){
 renderNutrition();
 renderSuppChecklist();
 renderHotcookMenu();
-renderUniversalMenu();
+renderOnigiriList();
+renderSoupList();
+renderSauceList();
 
 // ── SLEEP ─────────────────────────────────────────────
 const slColor = h => h>=7?'#34c759':h>=6?'#ff9500':'#ff3b30';
