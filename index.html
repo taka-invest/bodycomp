@@ -497,6 +497,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
         <div id="hc-list"></div>
       </div>
       <div class="card">
+        <div class="card-title" style="margin-bottom:8px;">📊 全メニュー栄養価一覧（A〜D週）</div>
+        <div id="all-nutri-list"></div>
+      </div>
+      <div class="card">
         <div class="card-title" style="margin-bottom:8px;">🍙 炊き込みご飯おにぎり バリエーション</div>
         <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">もち麦炊き込み・2個分の栄養価。基準は「サバひじき」、他は栄養素の被りを避けたバリエーション｜タップで材料・作り方を展開</div>
         <div id="onigiri-list"></div>
@@ -2168,6 +2172,39 @@ function quickAddPresetByName(name){
   if(idx<0) return;
   addPreset(idx);
 }
+// 1食分の栄養価ブロック（詳細パネル用）。塩分(g)＝ナトリウム(mg)×2.54÷1000
+function nutriDetailHtml(d){
+  const salt = ((d.na||0)*2.54/1000).toFixed(1);
+  const cell = (lbl,val)=>`<div style="display:flex;justify-content:space-between;gap:6px;"><span style="color:var(--text3);">${lbl}</span><span style="font-weight:600;color:var(--text2);">${val}</span></div>`;
+  const rows = [
+    ['カロリー', d.cal+' kcal'], ['タンパク質(P)', d.prot+' g'], ['脂質(F)', d.fat+' g'], ['炭水化物(C)', d.carbs+' g'],
+    ['食物繊維', (d.fiber||0)+' g'], ['塩分', salt+' g'], ['飽和脂肪酸', (d.satFat||0)+' g'], ['EPA+DHA', (d.epaDha||0)+' mg'],
+    ['カルシウム', (d.ca||0)+' mg'], ['鉄', (d.fe||0)+' mg'], ['ビタミンC', (d.vitC||0)+' mg'], ['ビタミンD', (d.vitD||0)+' mcg'],
+    ['葉酸', (d.folate||0)+' mcg'], ['ビタミンB12', (d.vitB12||0)+' mcg'],
+  ];
+  return `<div style="margin:8px 0 6px;padding:8px 10px;border-radius:10px;background:var(--surface2);">
+    <div style="color:var(--text2);font-weight:600;margin-bottom:4px;">📊 栄養価（1食分・主菜のみ）</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 14px;font-size:11px;">${rows.map(r=>cell(r[0],r[1])).join('')}</div>
+  </div>`;
+}
+// 全20品の栄養一覧（A〜D週）
+function renderAllNutrition(){
+  const el = document.getElementById('all-nutri-list');
+  if(!el) return;
+  const weeks = {A:HOTCOOK_A, B:HOTCOOK_B, C:HOTCOOK_C, D:HOTCOOK_D};
+  const short = n => n.split(' ― ')[0];
+  const head = `<div style="display:grid;grid-template-columns:22px 1fr 40px 30px 30px 30px 34px;gap:4px;font-size:10px;color:var(--text3);padding:4px 0;border-bottom:0.5px solid var(--border);">
+    <span></span><span>料理</span><span style="text-align:right;">kcal</span><span style="text-align:right;">P</span><span style="text-align:right;">F</span><span style="text-align:right;">C</span><span style="text-align:right;">塩分</span></div>`;
+  el.innerHTML = Object.keys(weeks).map(w=>{
+    const rows = weeks[w].map(d=>`<div style="display:grid;grid-template-columns:22px 1fr 40px 30px 30px 30px 34px;gap:4px;font-size:11px;padding:5px 0;border-bottom:0.5px solid var(--border);align-items:center;">
+      <span style="color:var(--blue);font-weight:700;">${d.day}</span>
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${short(d.name)}</span>
+      <span style="text-align:right;">${d.cal}</span><span style="text-align:right;">${Math.round(d.prot)}</span><span style="text-align:right;">${Math.round(d.fat)}</span><span style="text-align:right;">${Math.round(d.carbs)}</span>
+      <span style="text-align:right;color:var(--text3);">${((d.na||0)*2.54/1000).toFixed(1)}</span></div>`).join('');
+    const avg = k => Math.round(weeks[w].reduce((a,d)=>a+(d[k]||0),0)/weeks[w].length);
+    return `<div style="font-size:12px;font-weight:700;margin:10px 0 2px;">${w}週<span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:8px;">平均 ${avg('cal')}kcal・P${avg('prot')} F${avg('fat')} C${avg('carbs')}</span></div>${w==='A'?head:''}${rows}`;
+  }).join('') + `<div style="font-size:10px;color:var(--text3);margin-top:8px;line-height:1.5;">1食分・主菜のみの数値（もち麦・朝食・間食は別）。P/F/C＝g、塩分＝g</div>`;
+}
 function renderHotcookMenu(){
   const list = document.getElementById('hc-list');
   const badge = document.getElementById('hc-week-badge');
@@ -2185,7 +2222,7 @@ function renderHotcookMenu(){
           <div style="font-size:14px;font-weight:500;">${d.name}</div>
           <div style="font-size:11px;color:var(--text3);margin-top:1px;">${d.meat} ${d.meatWt}</div>
         </div>
-        <div style="text-align:right;font-size:11px;color:var(--text3);margin-right:6px;">P${d.prot}g<br>${d.cal}kcal</div>
+        <div style="text-align:right;font-size:11px;color:var(--text3);margin-right:6px;line-height:1.4;">${d.cal}kcal<br>P${d.prot} F${d.fat} C${d.carbs}</div>
         <span id="hc-arr-${i}" style="color:var(--text3);font-size:10px;display:inline-block;transition:transform .2s;">▼</span>
       </div>
       <div id="hc-detail-${i}" style="display:none;padding:0 0 12px 32px;font-size:12px;line-height:1.6;">
@@ -2197,6 +2234,7 @@ function renderHotcookMenu(){
         <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">📝 手順</div>
         <div style="color:var(--text3);margin-bottom:${d.finish?'8':'10'}px;">${d.prep}</div>
         ${d.finish?`<div style="color:var(--text2);font-weight:600;margin-bottom:2px;">✨ 仕上げ</div><div style="color:var(--text3);margin-bottom:10px;">${d.finish}</div>`:''}
+        ${nutriDetailHtml(d)}
 
         ${d.device==='pan' ? '' : `
         <div onclick="event.stopPropagation();toggleHotcookSteps(${i})" style="display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:10px;background:rgba(0,122,255,.08);cursor:pointer;margin-bottom:2px;">
@@ -2248,7 +2286,7 @@ function renderVarietyList(containerId, prefix, arrName, dataArr, addLabel){
         <div style="flex:1;min-width:0;">
           <div style="font-size:14px;font-weight:500;">${d.name}</div>
         </div>
-        <div style="text-align:right;font-size:11px;color:var(--text3);margin-right:6px;">P${d.prot}g<br>${d.cal}kcal</div>
+        <div style="text-align:right;font-size:11px;color:var(--text3);margin-right:6px;line-height:1.4;">${d.cal}kcal<br>P${d.prot} F${d.fat} C${d.carbs}</div>
         <span id="${prefix}-arr-${i}" style="color:var(--text3);font-size:10px;display:inline-block;transition:transform .2s;">▼</span>
       </div>
       <div id="${prefix}-detail-${i}" style="display:none;padding:0 0 12px 30px;font-size:12px;line-height:1.6;">
@@ -2256,6 +2294,7 @@ function renderVarietyList(containerId, prefix, arrName, dataArr, addLabel){
         <div style="color:var(--text3);margin-bottom:8px;">${d.ingredients}</div>
         <div style="color:var(--text2);font-weight:600;margin-bottom:2px;">📝 作り方</div>
         <div style="color:var(--text3);margin-bottom:10px;">${d.prep}</div>
+        ${nutriDetailHtml(d)}
         <button onclick="event.stopPropagation();addVarietyMeal('${arrName}',${i},'${addLabel}')" style="width:100%;background:var(--surface2);border:none;border-radius:10px;padding:8px;font-size:12px;font-weight:600;color:var(--text);cursor:pointer;">+ 今日の${addLabel}に追加</button>
       </div>
     </div>`).join('');
@@ -2343,6 +2382,7 @@ function delMeal(i){
 renderNutrition();
 renderSuppChecklist();
 renderHotcookMenu();
+renderAllNutrition();
 renderOnigiriList();
 renderSoupList();
 renderSauceList();
