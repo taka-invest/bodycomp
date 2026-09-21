@@ -489,20 +489,29 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
         </div>
       </div>
       <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <div class="card-title" style="margin-bottom:0;">🍲 平日ホットクック献立</div>
-          <div id="hc-week-badge" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;"></div>
-        </div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">夜にまとめて調理 → その日の夕食＋翌日の昼食に（1日ズレます）。A週・B週・C週・D週が4週サイクルで切り替わります（毎日異なるタンパク源・飽き対策）｜上のA/B/C/D週ボタンでどれも確認できます｜タップで材料・操作手順を展開</div>
-        <div id="hc-list"></div>
+        <div class="card-title" style="margin-bottom:8px;">📅 固定ローテ（毎週同じ・考えなくていい）</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">昼＝おにぎり2個＋スープジャー／夕＝チキンステーキ＋タレ＋おにぎり2個。曜日ごとに味が決まっています。全曜日で全栄養素・PFCを検証済み（下の曜日別栄養価を参照）</div>
+        <div id="week-plan-list"></div>
       </div>
       <div class="card">
-        <div class="card-title" style="margin-bottom:8px;">📊 全メニュー栄養価一覧（A〜D週）</div>
+        <div class="card-title" style="margin-bottom:8px;">🧊 仕込み計画（毎日は調理しない）</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.7;">
+          <b>日曜（60〜90分）まとめ仕込み</b><br>
+          ① もち麦を炊く（1バッチ＝炊き上がり300g／乾物約100g）→ 上の固定ローテ通りに具を混ぜて<b>7バッチ＝おにぎり28個</b>を握り、2個ずつラップ→冷凍<br>
+          ② 鶏むね（皮なし）<b>7枚</b>に塩を振り、1枚ずつ冷凍<br>
+          ③ スープ具材を<b>7食分</b>カットして冷凍袋（曜日ラベル付き）<br>
+          <b>毎朝（5分）</b>：昼用おにぎり2個（冷凍のまま）＋スープ袋に熱湯・調味料を注いでジャーへ<br>
+          <b>毎夕（10分）</b>：前夜に冷蔵へ移した鶏を中火で両面焼く（オイル大1）→同じフライパンでブロッコリー・しめじ・人参→タレ→おにぎり2個をレンジ<br>
+          <span style="color:var(--text3);">さらに楽にしたい場合：鶏を日・水に3〜4枚ずつまとめて焼いて冷蔵（3日以内）→夕食は温め直してタレをかけるだけ</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:8px;">📊 曜日別の栄養価（サプリ除く）</div>
         <div id="all-nutri-list"></div>
       </div>
       <div class="card">
         <div class="card-title" style="margin-bottom:8px;">🍙 炊き込みご飯おにぎり バリエーション</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">もち麦炊き込み・2個分の栄養価。基準は「サバひじき」、他は栄養素の被りを避けたバリエーション｜タップで材料・作り方を展開</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">もち麦炊き込み・2個分の栄養価（もち麦300g＝炊き上がり重量）。基準は「サバひじき」、他は栄養素の被りを避けたバリエーション。桜えびと枝豆は低脂質のため、固定ローテには入れず入れ替え用（トレ日のナッツ・バナナ追加が前提）｜タップで材料・作り方を展開</div>
         <div id="onigiri-list"></div>
       </div>
       <div class="card">
@@ -515,42 +524,36 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;heigh
         <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">夕食テンプレートの鶏むね肉1枚（皮なし・約250g・cal275/P57.5g/F4.75g、下記に含まず別計上）用のタレ。焼き方は共通：塩を振って中火でしっかり両面焼き色をつけるだけ｜タップで材料・作り方を展開</div>
         <div id="sauce-list"></div>
       </div>
-      <div class="card">
-        <div class="card-title" style="margin-bottom:8px;">🍚 ご飯の作り置き（マーナ冷凍ごはん容器）</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:10px;line-height:1.5;">日曜に5日分×昼夕2食＝10個をまとめて炊いて容器へ。曜日はA週・B週・C週・D週共通（高需要日＝火・水・金は変わらないため）</div>
-        <div style="display:flex;gap:10px;">
-          <div style="flex:1;padding:12px;border-radius:12px;background:rgba(0,122,255,.08);">
-            <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px;">小容器（280ml）× 4個</div>
-            <div style="font-size:12px;color:var(--text2);margin-bottom:2px;">真のオフ日：月・木</div>
-            <div style="font-size:18px;font-weight:700;">150g<span style="font-size:11px;font-weight:400;color:var(--text3);"> ／食</span></div>
-          </div>
-          <div style="flex:1;padding:12px;border-radius:12px;background:rgba(255,149,0,.08);">
-            <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:4px;">大容器（390ml）× 6個</div>
-            <div style="font-size:12px;color:var(--text2);margin-bottom:2px;">高需要日：火（筋トレ）・水（4×4 Zone5）・金（筋トレ）</div>
-            <div style="font-size:18px;font-weight:700;">200g<span style="font-size:11px;font-weight:400;color:var(--text3);"> ／食</span></div>
-          </div>
+      <details class="card" style="margin-top:12px;">
+        <summary style="font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;">🗄 旧・平日ホットクック献立（A〜D週・保管用）</summary>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 8px;">
+          <div style="font-size:11px;color:var(--text3);line-height:1.5;">固定ローテ導入前の献立。気分転換の入れ替え用に残してあります（毎日調理が必要）</div>
+          <div id="hc-week-badge" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;"></div>
         </div>
-        <div style="font-size:10px;color:var(--text3);margin-top:8px;">水曜はNorwegian 4×4（Zone5高強度）でグリコーゲン消費が大きく、翌々日の金曜パーソナルへの回復需要もあるため、筋トレ日と同じ高炭水化物枠に統一。カロリー目標(2200kcal)も火・水・金で統一</div>
-      </div>
+        <div id="hc-list"></div>
+      </details>
     </div>
 
     <!-- 買い物リストビュー -->
     <div id="view-shop" style="display:none;">
       <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <div class="card-title" style="margin-bottom:4px;">🛒 週間買い物リスト（固定ローテ・7日分）</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:8px;">日曜のまとめ仕込み用。数量は固定ローテ（おにぎり28個・鶏7枚・スープ7食・タレ7食）と朝食・間食・トレ日追加分の合計です</div>
+        <div id="wk-shop-list"></div>
+        <button class="shop-reset" onclick="resetWeekShopping()">✗ チェックをすべてリセット</button>
+      </div>
+      <details class="card" style="margin-top:12px;">
+        <summary style="font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;">🗄 旧リスト（ホットクックA〜D週・週末プロテイン鍋）</summary>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 4px;">
           <div class="card-title" style="margin-bottom:0;">🍲 ホットクック買い出し</div>
           <div id="hc-shop-week-badge" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;"></div>
         </div>
-        <div style="font-size:12px;color:var(--text3);margin-bottom:8px;">平日5日分（昼・夜×5日＝10食）｜4週サイクルでA週・B週・C週・D週の材料に切り替わります｜上のボタンで来週分の下見も可能</div>
         <div id="hc-shop-list"></div>
         <button class="shop-reset" onclick="resetHotcookShopping()">✗ チェックをすべてリセット</button>
-      </div>
-      <div class="card">
-        <div class="card-title">買い物リスト（週末・朝食など）</div>
-        <div style="font-size:12px;color:var(--text3);margin-bottom:8px;">土・日のプロテイン鍋＋朝食分</div>
+        <div class="card-title" style="margin-top:14px;">買い物リスト（週末・朝食など）</div>
         <div id="shop-list"></div>
         <button class="shop-reset" onclick="resetShopping()">✗ チェックをすべてリセット</button>
-      </div>
+      </details>
     </div>
   </div>
 
@@ -1114,30 +1117,6 @@ const IS_TRAIN = TRAIN_DAYS.includes(todayDow);
 const CAL_TGT  = IS_TRAIN ? 2200 : 1850;
 const PROT_TGT = 160;
 
-const ROTATION = [
-  {day:'日',name:'タイ風チキン',   emoji:'🍗',cal:570,prot:57,train:false,
-   season:'ナンプラー・レモン・唐辛子',
-   recipe:'鶏もも250g・卵2個・冷凍ほうれん草100g・しめじ100g｜ナンプラー大1.5・レモン汁大2・唐辛子1本・にんにく1片・はちみつ小1'},
-  {day:'月',name:'和風生姜チキン', emoji:'🍗',cal:585,prot:57,train:false,
-   season:'醤油・みりん・生姜',
-   recipe:'鶏もも250g・卵2個・冷凍ほうれん草100g・しめじ100g｜醤油大2・みりん大2・生姜1片（すりおろし）・ごま油小1'},
-  {day:'火',name:'韓国風サーモン', emoji:'🐟',cal:550,prot:51,train:true,
-   season:'コチュジャン・ごま油・いりごま',
-   recipe:'鮭200g・卵2個・冷凍ほうれん草100g・しめじ100g｜コチュジャン大1・ごま油大1・醤油小1・いりごま小2・にんにく1片'},
-  {day:'水',name:'中華オイスター', emoji:'🍗',cal:580,prot:57,train:false,
-   season:'オイスターソース・ごま油・ねぎ',
-   recipe:'鶏もも250g・卵2個・冷凍ほうれん草100g・しめじ100g｜オイスターソース大2・ごま油小1・ねぎ1/2本・水大2'},
-  {day:'木',name:'照り焼きチキン', emoji:'🍗',cal:578,prot:57,train:false,
-   season:'醤油・はちみつ・にんにく',
-   recipe:'鶏もも250g・卵2個・冷凍ほうれん草100g・しめじ100g｜醤油大2・みりん大2・はちみつ大1・にんにく1片'},
-  {day:'金',name:'地中海サーモン', emoji:'🐟',cal:555,prot:51,train:true,
-   season:'トマト缶・オレガノ・オリーブオイル',
-   recipe:'鮭200g・卵2個・冷凍ほうれん草100g・しめじ100g｜トマト缶1/2缶・オリーブオイル大1・にんにく1片・オレガノ小1・塩少々'},
-  {day:'土',name:'カレーチキン',   emoji:'🍗',cal:592,prot:57,train:false,
-   season:'カレー粉・ヨーグルト',
-   recipe:'鶏もも250g・卵2個・冷凍ほうれん草100g・しめじ100g｜カレー粉大1・無糖ヨーグルト大3・にんにく1片・生姜1片・塩少々'},
-];
-
 const PRESETS = [
   // macro: cal prot fat carbs fiber na(mg) | micro: ca mg2 k fe cu vitE(mg) | vit: satFat(g) vitA(mcgRAE) vitB1 vitB2 vitC(mg) zn vitD(mcg) vitB6(mg)
   {name:'ナイトオーツ（朝食）',          cal:470,prot:32,fat:12,carbs:70,fiber:11,na:250, ca:132,mg2:171,k:836, fe:4.9,cu:0.34,vitE:2.1, satFat:1.6,vitA:310,vitB1:0.54,vitB2:0.47,vitC:50,zn:1.7,vitD:2.0,vitB6:0.92,vitB12:0.3,folate:57, emoji:'🌾',cat:'朝食',
@@ -1170,6 +1149,10 @@ const PRESETS = [
   {name:'乾燥わかめ 5g',                  cal:8,  prot:1, fat:0, carbs:1, fiber:1, na:370, ca:41, mg2:55, k:245, fe:0.2,cu:0.02,vitE:0.4, satFat:0,  vitA:5,  vitB1:0,  vitB2:0,  vitC:1, zn:0,  vitD:0,  vitB6:0,vitB12:0,folate:1,   emoji:'🌊',cat:'追加',
    recipe:'乾燥わかめ 5g｜水で戻してプロテイン鍋に投入。ヨウ素約200mcg（1日RDA 130mcg超）を補完'},
   {name:'こんにゃく 100g（食物繊維）',    cal:5,  prot:0, fat:0, carbs:3, fiber:2, na:10,  ca:43, mg2:2,  k:33,  fe:0.4,cu:0.02,vitE:0,   satFat:0,  vitA:0,  vitB1:0,  vitB2:0,  vitC:0, zn:0,  vitD:0,  vitB6:0,vitB12:0,folate:0,   emoji:'🌿',cat:'追加'},
+  {name:'朝食（固定）',                  cal:456,prot:33,fat:10,carbs:64,fiber:10,na:90, ca:70, mg2:160,k:850, fe:3.7,cu:0.5,vitE:1.0, satFat:1.5,vitA:5,  vitB1:0.3,vitB2:0.25,vitC:16,zn:2.0,vitD:0,  vitB6:0.5,vitB12:0.3,folate:75, emoji:'🌅',cat:'朝食',
+   recipe:'オートミール40g・無調整豆乳150ml・ソイプロテイン1杯(P20g)・チアシード小1・カカオニブ小1・バナナ1本｜前夜に混ぜて冷蔵、または朝に混ぜるだけ（加熱不要）'},
+  {name:'プロテイン1スクープ（15:00・P30g）',cal:160,prot:30,fat:2,carbs:5,fiber:0,na:100,ca:40,mg2:10,k:60,fe:0.3,cu:0,vitE:0,satFat:1,vitA:0,vitB1:0,vitB2:0.1,vitC:0,zn:0.4,vitD:0,vitB6:0,vitB12:0.4,folate:0, emoji:'💪',cat:'15:00補完',
+   recipe:'プロテイン1スクープ（P30g）｜水 or 豆乳で溶く'},
   {name:'ミックスナッツ20g（トレ日・朝食用）',cal:140,prot:4,fat:13,carbs:4,fiber:2,na:2,ca:20,mg2:30,k:130,fe:0.6,cu:0.15,vitE:3.5,satFat:1.2,vitA:0,vitB1:0.02,vitB2:0.05,vitC:0,zn:0.5,vitD:0,vitB6:0.05,vitB12:0,folate:10, emoji:'🥜',cat:'追加',
    recipe:'トレ日の朝食に片手一掴み（20g）追加。カロリー赤字619kcal→約476kcalに是正、脂質不足（-20g）も半分程度カバー'},
   {name:'バナナ1本（トレ日・間食用）',cal:103,prot:1.3,fat:0.3,carbs:27,fiber:3.1,na:0,ca:6,mg2:32,k:420,fe:0.3,cu:0.1,vitE:0.3,satFat:0.1,vitA:5,vitB1:0.05,vitB2:0.04,vitC:16,zn:0.2,vitD:0,vitB6:0.38,vitB12:0,folate:26, emoji:'🍌',cat:'追加',
@@ -1353,11 +1336,11 @@ const TAKIKOMI_ONIGIRI = [
   {name:'サバひじき（基準）',emoji:'🐟',
    ingredients:'サバ水煮缶（食塩無添加）1缶・乾燥ひじき大2・生姜1かけ（千切り）・油揚げ1/2枚・もち麦300g',
    prep:'①もち麦を炊く際にサバ缶を汁ごと・戻したひじき・千切り生姜・刻んだ油揚げを一緒に加えて炊く｜②炊き上がったら全体を混ぜ、粗熱を取って2個ずつ握り冷凍｜EPA・DHA・ビタミンD・鉄・カルシウムに強い、和食系の基準レシピ',
-   prot:26.6,cal:451,fat:12.8,carbs:51,fiber:7.4,na:250,k:900,ca:150,mg2:90,fe:2.3,zn:1.5,cu:0.3,vitA:10,vitB1:0.15,vitB2:0.25,vitB6:0.3,vitC:2,vitD:20,vitE:2.5,satFat:2.5,epaDha:4200,vitB12:18,folate:40},
+   prot:26.6,cal:451,fat:12.8,carbs:51,fiber:7.4,na:250,k:900,ca:150,mg2:90,fe:2.3,zn:1.5,cu:0.3,vitA:10,vitB1:0.15,vitB2:0.25,vitB6:0.3,vitC:2,vitD:10,vitE:2.5,satFat:2.5,epaDha:2100,vitB12:9,folate:40},
   {name:'鮭ときのこ',emoji:'🐟',
    ingredients:'鮭フレーク or 鮭缶100g・舞茸 or しめじ50g・生姜少々・もち麦300g',
    prep:'①もち麦を炊く際に鮭・きのこ・生姜を一緒に加えて炊く｜②ほぐしながら混ぜ、2個ずつ握り冷凍｜サバひじきよりビタミンD・カルシウムに寄せたバリエーション、EPA/DHAは控えめ',
-   prot:16.9,cal:362,fat:7.5,carbs:49,fiber:6,na:180,k:550,ca:90,mg2:60,fe:0.8,zn:1.0,cu:0.15,vitA:15,vitB1:0.12,vitB2:0.15,vitB6:0.25,vitC:2,vitD:6.3,vitE:1.2,satFat:1.2,epaDha:1200,vitB12:6,folate:35},
+   prot:16.9,cal:362,fat:7.5,carbs:49,fiber:6,na:180,k:550,ca:90,mg2:60,fe:0.8,zn:1.0,cu:0.15,vitA:15,vitB1:0.12,vitB2:0.15,vitB6:0.25,vitC:2,vitD:6.3,vitE:1.2,satFat:1.2,epaDha:700,vitB12:6,folate:35},
   {name:'鶏ごぼう五目',emoji:'🍗',
    ingredients:'鶏むねひき肉100g・ごぼう50g（冷凍可）・にんじん30g・しいたけ30g・醤油/みりん少々・もち麦300g',
    prep:'①もち麦を炊く際に鶏むねひき肉・根菜・調味料を一緒に加えて炊く｜②混ぜて2個ずつ握り冷凍｜低脂質・高たんぱくで、鉄・食物繊維を強化したバリエーション。EPA/DHAはゼロなのでこの日はサプリで補う',
@@ -1415,6 +1398,39 @@ const CHICKEN_SAUCE = [
    prep:'①鶏むね肉を焼く前にカレー粉をまぶしておく｜②焼き上がりに無糖ヨーグルトを添えて完成｜スパイスの抗酸化作用とヨーグルトの酸味、地中海×スパイスの流れを継承',
    prot:1.8,cal:12,fat:0.3,carbs:1.5,fiber:0.1,na:15,k:40,ca:20,mg2:3,fe:0.1,zn:0.1,cu:0.01,vitA:2,vitB1:0.01,vitB2:0.02,vitB6:0.02,vitC:0,vitD:0,vitE:0,satFat:0.1,vitB12:0.05,folate:3},
 ];
+
+// ── 固定ローテ（2026-09-21〜）：昼＝おにぎり2個＋スープジャー／夕＝チキンステーキ＋タレ＋おにぎり2個 ──
+// 毎日調理は続かないため「日曜まとめ仕込み＋平日は焼く/注ぐだけ」を前提にした固定運用。
+// チキンステーキ＋野菜プレート（鶏むね皮なし250g・調理用オリーブオイル大1・ブロッコリー4房・しめじ50g・人参1/3）。タレは別計上。
+// ※鶏むね・野菜の微量栄養素は一般的な食品成分値からの概算。
+const CHICKEN_PLATE = {name:'チキンステーキ＋野菜', emoji:'🍗',
+  prot:62.5,cal:436,fat:17,carbs:9.5,fiber:6,na:165,k:1350,ca:60,mg2:100,fe:1.8,zn:2.1,cu:0.2,vitA:295,vitB1:0.4,vitB2:0.55,vitB6:1.7,vitC:102,vitD:0.5,vitE:3.5,satFat:3.0,vitB12:0.5,folate:140};
+// 曜日(0=日…6=土)ごとの固定割り当て：o=おにぎり/s=スープ/c=タレ（各配列のindex）
+// ・休養日(月木土日)に低脂質のおにぎり(鶏ごぼう/桜えび)を置かない　・魚介の日はサバ/鮭で分散　・全日で全栄養素・PFCを検証済み
+const WEEK_PLAN = {
+  1:{o:0,s:0,c:0}, // 月：サバひじき／トマトコンソメ／和風おろしポン酢
+  2:{o:2,s:2,c:2}, // 火：鶏ごぼう五目／中華だし小松菜卵／アボカドサルサ
+  3:{o:1,s:1,c:1}, // 水：鮭ときのこ／和風だし白菜厚揚げ／ガーリック醤油バター
+  4:{o:3,s:3,c:3}, // 木：大豆とわかめ／味噌根菜／味噌マスタード
+  5:{o:0,s:0,c:4}, // 金：サバひじき／トマトコンソメ／カレーヨーグルト
+  6:{o:1,s:2,c:0}, // 土：鮭ときのこ／中華だし小松菜卵／和風おろしポン酢
+  0:{o:0,s:1,c:1}, // 日：サバひじき／和風だし白菜厚揚げ／ガーリック醤油バター
+};
+const DAY_JP = ['日','月','火','水','木','金','土'];
+function getDayPlan(dow){
+  const p = WEEK_PLAN[dow];
+  return {onigiri:TAKIKOMI_ONIGIRI[p.o], soup:SOUP_JAR[p.s], sauce:CHICKEN_SAUCE[p.c]};
+}
+// その日の食事（サプリ除く）の合計：朝固定＋昼(おにぎり2個＋スープ)＋15:00＋夕(プレート＋タレ＋おにぎり2個)＋トレ日のナッツ・バナナ
+const _NUT_KEYS = ['cal','prot','fat','carbs','fiber','na','k','fe','zn','ca','mg2','cu','vitA','vitB1','vitB2','vitB6','vitC','vitD','vitE','satFat','epaDha','vitB12','folate'];
+function planDayTotals(dow){
+  const {onigiri,soup,sauce} = getDayPlan(dow);
+  const parts = [PRESETS.find(p=>p.name==='朝食（固定）'), PRESETS.find(p=>p.name==='プロテイン1スクープ（15:00・P30g）'), onigiri, onigiri, soup, CHICKEN_PLATE, sauce];
+  if(TRAIN_DAYS.includes(dow)) parts.push(PRESETS.find(p=>p.name.startsWith('ミックスナッツ')), PRESETS.find(p=>p.name.startsWith('バナナ1本')));
+  const t = {};
+  parts.forEach(o=>_NUT_KEYS.forEach(k=>t[k]=(t[k]||0)+(o[k]||0)));
+  return t;
+}
 
 const SHOPPING_HC_A = [
   {cat:'🥩 タンパク質', items:[
@@ -1582,7 +1598,7 @@ const SHOPPING_HC_D = [
   ]},
 ];
 
-// CAL_TGT / PROT_TGT は ROTATION ブロック内の IS_TRAIN で動的設定済み
+// CAL_TGT / PROT_TGT は上部の IS_TRAIN で動的設定済み
 const FAT_TGT   = IS_TRAIN ? 65  : 55;
 const CARB_TGT  = IS_TRAIN ? 244 : 179;
 const FIBER_TGT = 25;
@@ -1844,62 +1860,29 @@ function renderNutrition() {
       </div>
       <div class="lright" onclick="delMeal(${i})" style="color:var(--red);font-size:22px;padding:4px 0 4px 12px;">×</div>
     </div>`).join(''); }
-  // 今日のクイック追加バナー：昼食＝前日仕込み／夕食＝今日仕込み（1日ズレるモデル）
-  const hcDinner = getTodayDinner(todayDow);
-  const hcLunch  = getTodayLunch(todayDow);
+  // 今日のクイック追加バナー：固定ローテ（曜日ごとにおにぎり・スープ・タレが決まっている）
+  const plan = getDayPlan(todayDow);
   const trainBg = IS_TRAIN ? 'rgba(52,199,89,.08)' : 'rgba(0,122,255,.08)';
   const trainColor = IS_TRAIN ? 'var(--green)' : 'var(--blue)';
   const todayMeals = DB.meals.filter(m=>m.date===TODAY);
-  const riceLabel = IS_TRAIN ? 'トレ日' : '休養日';
-  const riceAmt = IS_TRAIN ? '200g' : '150g';
-  const breakfastDone = todayMeals.some(m=>m.name==='ナイトオーツ（朝食）');
-  const shakeDone = todayMeals.some(m=>m.name==='ホエイプロテイン 1スクープ（15:00）');
-  const qaRow = (label, done, fn) => `
+  const done = name => todayMeals.some(m=>m.name===name);
+  const qaRow = (label, isDone, fn) => `
     <div style="display:flex;align-items:center;gap:8px;padding:5px 0;">
       <span style="font-size:12px;color:var(--text2);flex:1;">${label}</span>
-      ${done
+      ${isDone
         ? `<span style="font-size:11px;color:var(--green);font-weight:600;">✅ 記録済み</span>`
         : `<button onclick="${fn}" style="background:var(--blue);color:#fff;border:none;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;">+ 追加</button>`}
     </div>`;
-
-  const lunchD = hcLunch ? hcLunch.dish : null;
-  const dinnerD = hcDinner ? hcDinner.dish : null;
-  const lunchDishDone  = lunchD  ? todayMeals.some(m=>m.name===`${lunchD.name}（昼）`) : false;
-  const dinnerDishDone = dinnerD ? todayMeals.some(m=>m.name===`${dinnerD.name}（夕）`) : false;
-  const lunchRiceDone  = todayMeals.some(m=>m.name.includes('もち麦') && m.name.includes(`（${riceLabel}・昼）`));
-  const dinnerRiceDone = todayMeals.some(m=>m.name.includes('もち麦') && m.name.includes(`（${riceLabel}・夕）`));
-
-  const lunchSection = lunchD ? `
-    <div style="font-size:11px;font-weight:600;color:var(--text3);margin:6px 0 2px;">🍱 昼食（前日仕込み${hcLunch.legacy?'・旧ローテ':''}）：${lunchD.name}</div>
-    ${qaRow('主菜（'+lunchD.name+'）', lunchDishDone, `quickAddTodayMeal('昼')`)}
-    ${hcLunch.legacy ? '' : qaRow('もち麦 '+riceAmt, lunchRiceDone, `quickAddTodayRice('昼')`)}
-  ` : `
-    <div style="font-size:11px;font-weight:600;color:var(--text3);margin:6px 0 2px;">🍱 昼食</div>
-    <div style="font-size:12px;color:var(--text3);padding:4px 0;">前日の仕込みなし（自由枠・外食OK）</div>
-  `;
-  const dinnerSection = dinnerD ? `
-    <div style="font-size:11px;font-weight:600;color:var(--text3);margin:6px 0 2px;">🌙 夕食（今夜仕込み${hcDinner.legacy?'・旧ローテ':''}）：${dinnerD.name}</div>
-    ${qaRow('主菜（'+dinnerD.name+'）', dinnerDishDone, `quickAddTodayMeal('夕')`)}
-    ${hcDinner.legacy ? '' : qaRow('もち麦 '+riceAmt, dinnerRiceDone, `quickAddTodayRice('夕')`)}
-  ` : `
-    <div style="font-size:11px;font-weight:600;color:var(--text3);margin:6px 0 2px;">🌙 夕食</div>
-    <div style="font-size:12px;color:var(--text3);padding:4px 0;">仕込みなし（自由枠・外食OK）</div>
-  `;
-
-  const headD = dinnerD || lunchD;
-  const headEmoji = headD ? headD.emoji : '🍽';
-  const headName  = headD ? headD.name  : 'フリー枠の日';
-  const headWeek  = (hcDinner && !hcDinner.legacy) ? hcDinner.week : ((hcLunch && !hcLunch.legacy) ? hcLunch.week : null);
-  const wkColor = headWeek==='A' ? 'var(--blue)' : (headWeek==='B' ? 'var(--purple)' : 'var(--text3)');
-  const headLabel = headWeek ? `🍲 ホットクック（${headWeek}週）` : (headD ? '🍗 週末ローテーション' : '🍽 今日は仕込みなし');
+  const secTitle = t => `<div style="font-size:11px;font-weight:600;color:var(--text3);margin:6px 0 2px;">${t}</div>`;
+  const N = planMealNames(todayDow);
 
   const bannerHtml = `
   <div class="rot-banner" style="background:${trainBg};flex-direction:column;align-items:stretch;">
     <div style="display:flex;align-items:center;gap:10px;">
-      <span style="font-size:24px;">${headEmoji}</span>
+      <span style="font-size:24px;">${plan.onigiri.emoji}</span>
       <div style="flex:1;min-width:0;">
-        <div class="rot-day" style="color:${wkColor};">${headLabel}</div>
-        <div class="rot-name">${headName}</div>
+        <div class="rot-day" style="color:var(--blue);">📌 ${DAY_JP[todayDow]}曜の固定メニュー</div>
+        <div class="rot-name">${plan.onigiri.name}おにぎり／${plan.soup.name.split('×')[0]}スープ／${plan.sauce.name}</div>
       </div>
       <div style="text-align:right;flex-shrink:0;">
         <div style="font-size:10px;color:var(--text3);">目標</div>
@@ -1907,12 +1890,19 @@ function renderNutrition() {
       </div>
     </div>
     <div style="border-top:0.5px solid var(--border);margin-top:8px;padding-top:6px;">
-      <div style="font-size:11px;font-weight:600;color:var(--text3);margin-bottom:2px;">🌅 朝食</div>
-      ${qaRow('ナイトオーツ（ソイ1杯＋バナナ＋チアシード）', breakfastDone, `quickAddPresetByName('ナイトオーツ（朝食）')`)}
-      ${lunchSection}
-      <div style="font-size:11px;font-weight:600;color:var(--text3);margin:6px 0 2px;">🕒 15:00</div>
-      ${qaRow('ホエイプロテイン 1杯（ブルーベリー）', shakeDone, `quickAddPresetByName('ホエイプロテイン 1スクープ（15:00）')`)}
-      ${dinnerSection}
+      ${secTitle('🌅 朝食（固定）')}
+      ${qaRow('オートミール＋豆乳＋ソイP＋チア＋カカオニブ＋バナナ', done('朝食（固定）'), `quickAddPresetByName('朝食（固定）')`)}
+      ${IS_TRAIN ? qaRow('🥜 トレ日：ミックスナッツ20g（朝食に追加）', done('ミックスナッツ20g（トレ日・朝食用）'), `quickAddPresetByName('ミックスナッツ20g（トレ日・朝食用）')`) : ''}
+      ${secTitle('🍱 昼食：おにぎり2個＋スープジャー')}
+      ${qaRow(plan.onigiri.name+'おにぎり 2個', done(N.lunchO), `quickAddPlan('lunchO')`)}
+      ${qaRow('スープ：'+plan.soup.name, done(N.lunchS), `quickAddPlan('lunchS')`)}
+      ${secTitle('🕒 15:00')}
+      ${qaRow('プロテイン1スクープ（P30g）', done('プロテイン1スクープ（15:00・P30g）'), `quickAddPresetByName('プロテイン1スクープ（15:00・P30g）')`)}
+      ${IS_TRAIN ? qaRow('🍌 トレ日：バナナ1本（間食に追加）', done('バナナ1本（トレ日・間食用）'), `quickAddPresetByName('バナナ1本（トレ日・間食用）')`) : ''}
+      ${secTitle('🌙 夕食：チキンステーキ＋おにぎり2個')}
+      ${qaRow('チキンステーキ＋野菜（鶏むね250g・オイル大1）', done(N.dinP), `quickAddPlan('dinP')`)}
+      ${qaRow('タレ：'+plan.sauce.name, done(N.dinS), `quickAddPlan('dinS')`)}
+      ${qaRow(plan.onigiri.name+'おにぎり 2個', done(N.dinO), `quickAddPlan('dinO')`)}
     </div>
   </div>`;
   document.getElementById('rot-banner-wrap').innerHTML = bannerHtml;
@@ -1961,7 +1951,7 @@ const SUPP = [
   {name:'亜鉛',         got:25,   tgt:11,   unit:'mg', src:'Two-Per-Day 25mg',              ok:true},
   {name:'カルシウム',   got:1000, tgt:750,  unit:'mg', src:'Cal/Mag 1,000mg（Multiにはカルシウム含まれず・ラベル確認済み）', ok:true},
   {name:'マグネシウム', got:600,  tgt:370,  unit:'mg', src:'Multi 100mg + Cal/Mag 500mg',   ok:true},
-  {name:'EPA+DHA',      got:1200, tgt:2000, unit:'mg', src:'🐔鶏の日(月水金)=4錠2,400mg／🐟魚の日(火木)=2錠1,200mg（魚から食事だけで2,000mg超のため）で使い分け',ok:true},
+  {name:'EPA+DHA',      got:1200, tgt:2000, unit:'mg', src:'その日のおにぎりのEPA+DHAで自動判定：サバひじきの日(月金日)=2錠1,200mg／それ以外=4錠2,400mg',ok:true},
   {name:'葉酸',         got:680,  tgt:240,  unit:'mcg',src:'Two-Per-Day 680mcg（L-5-メチルテトラヒドロ葉酸・活性型）', ok:true},
   {name:'食物繊維',     got:0,    tgt:25,   unit:'g',  src:'❌ サプリゼロ — 食事から全量',  ok:false},
   {name:'カリウム',     got:50,   tgt:3000, unit:'mg', src:'❌ サプリほぼゼロ — 食事から全量',ok:false},
@@ -1990,11 +1980,8 @@ const SUPP_ITEMS = [
    satFat:0,vitA:0,vitB1:0,vitB2:0,vitC:0,zn:0,vitD:0,vitB6:0},
 ];
 function isFishDay(dow){
-  // 週によって魚介の曜日が変わる（A〜D週フュージョン化以降）ため、曜日固定ではなく
-  // その日の実際の食事（前日仕込みの昼食＋当日仕込みの夕食）のEPA+DHA合計で判定する
-  const lunch = getTodayLunch(dow);
-  const dinner = getTodayDinner(dow);
-  const epa = (lunch && lunch.dish ? (lunch.dish.epaDha||0) : 0) + (dinner && dinner.dish ? (dinner.dish.epaDha||0) : 0);
+  // 固定ローテのその日のおにぎり（昼2個＋夕2個＝1バッチ）に含まれるEPA+DHA合計で判定する
+  const epa = (getDayPlan(dow).onigiri.epaDha||0) * 2;
   return epa >= 1500; // 1日の目標2000mgに対し、食事から大半を賄えている目安
 }
 function toggleSupp(i){
@@ -2058,7 +2045,7 @@ function switchFoodTab(tab){
     document.getElementById('view-'+t).style.display = t===tab?'':'none';
     document.getElementById('tab-'+t).classList.toggle('active', t===tab);
   });
-  if(tab==='shop'){ renderShopping(); renderHotcookShopping(); }
+  if(tab==='shop'){ renderWeekShopping(); renderShopping(); renderHotcookShopping(); }
 }
 
 // ── ホットクック A/B週判定・レンダー ─────────────────────
@@ -2075,20 +2062,6 @@ function hotcookDishesForWeek(week){
 }
 function hotcookShoppingForWeek(week){
   return week==='A' ? SHOPPING_HC_A : week==='B' ? SHOPPING_HC_B : week==='C' ? SHOPPING_HC_C : SHOPPING_HC_D;
-}
-function getHotcookDish(dow){ // dow: 1=月 … 5=金
-  if(dow < 1 || dow > 5) return null;
-  const week = hotcookWeekLetter();
-  return { week, dish: hotcookDishesForWeek(week)[dow-1] };
-}
-// 仕込みモデル：その日の夜に仕込んだ分＝その日の夕食＋翌日の昼食（1日ズレる）
-function getTodayDinner(dow){ // dow: 0=日…6=土。その晩に仕込んで食べる夕食
-  if(dow>=1 && dow<=5) return getHotcookDish(dow); // 月〜金＝ホットクック
-  if(dow===0) return { dish: ROTATION[0], legacy:true }; // 日＝旧ローテーション（タイ風チキン）
-  return null; // 土＝仕込みなし（フリー枠）
-}
-function getTodayLunch(dow){ // 昼食＝前日夜に仕込んだものの残り
-  return getTodayDinner((dow+6)%7);
 }
 function hcSteps(category, menuName, manualCat){
   return [
@@ -2148,24 +2121,23 @@ function addHotcookMeal(idx, when){
     epaDha:d.epaDha||0, k:d.k||0, vitB12:d.vitB12||0, folate:d.folate||0});
   save(); renderNutrition(); renderToday();
 }
-function quickAddTodayMeal(when){
-  // 昼食＝前日仕込み／夕食＝今日仕込み（_hcViewWeekの閲覧トグルとは独立、常に実際の今日基準）
-  const src = when==='昼' ? getTodayLunch(todayDow) : getTodayDinner(todayDow);
-  if(!src) return;
-  const d = src.dish;
-  DB.meals.push({date:TODAY, name:`${d.name}（${when}）`,
+// 固定ローテの記録名（昼＝…（昼）／夕＝…（夕）で終わる名前にすると食事内訳が自動で昼食・夕食に分類される）
+function planMealNames(dow){
+  const {onigiri,soup,sauce} = getDayPlan(dow);
+  return {lunchO:`${onigiri.name}おにぎり2個（昼）`, lunchS:`スープ：${soup.name}（昼）`,
+          dinP:`${CHICKEN_PLATE.name}（夕）`, dinS:`タレ：${sauce.name}（夕）`, dinO:`${onigiri.name}おにぎり2個（夕）`};
+}
+function quickAddPlan(kind){
+  const {onigiri,soup,sauce} = getDayPlan(todayDow);
+  const N = planMealNames(todayDow);
+  const d = {lunchO:onigiri, lunchS:soup, dinP:CHICKEN_PLATE, dinS:sauce, dinO:onigiri}[kind];
+  DB.meals.push({date:TODAY, name:N[kind],
     cal:d.cal, prot:d.prot||0, fat:d.fat||0, carbs:d.carbs||0, fiber:d.fiber||0, na:d.na||0,
     ca:d.ca||0, mg2:d.mg2||0, fe:d.fe||0, zn:d.zn||0, cu:d.cu||0,
     vitA:d.vitA||0, vitB1:d.vitB1||0, vitB2:d.vitB2||0, vitB6:d.vitB6||0,
     vitC:d.vitC||0, vitD:d.vitD||0, vitE:d.vitE||0, satFat:d.satFat||0,
     epaDha:d.epaDha||0, k:d.k||0, vitB12:d.vitB12||0, folate:d.folate||0});
   save(); renderNutrition(); renderToday();
-}
-function quickAddTodayRice(when){
-  const label = IS_TRAIN ? 'トレ日' : '休養日';
-  const idx = PRESETS.findIndex(p=>p.name.includes('もち麦') && p.name.includes(`（${label}・${when}）`));
-  if(idx<0) return;
-  addPreset(idx);
 }
 function quickAddPresetByName(name){
   const idx = PRESETS.findIndex(p=>p.name===name);
@@ -2187,23 +2159,123 @@ function nutriDetailHtml(d){
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 14px;font-size:11px;">${rows.map(r=>cell(r[0],r[1])).join('')}</div>
   </div>`;
 }
-// 全20品の栄養一覧（A〜D週）
+// 週間買い物リスト（固定ローテ7日分。おにぎり28個＝サバ3・鮭2・鶏ごぼう1・大豆1バッチ／スープ＝トマト2・中華2・和風2・味噌1／タレ＝ポン酢2・ガーリック2・アボカド1・味噌マスタード1・カレー1）
+const WEEK_SHOPPING = [
+  {cat:'🥩 タンパク質', items:[
+    {name:'鶏むね肉（皮なし）',            qty:'7枚（約1.75kg）', note:'夕食のチキンステーキ・冷凍'},
+    {name:'サバ水煮缶（食塩無添加タイプ必須）', qty:'3缶', note:'サバひじきおにぎり（月・金・日）'},
+    {name:'鮭フレーク or 鮭缶',            qty:'200g', note:'鮭ときのこ（水・土）'},
+    {name:'鶏むねひき肉',                  qty:'100g', note:'鶏ごぼう五目（火）'},
+    {name:'蒸し大豆ドライパック（食塩無添加）', qty:'100g', note:'大豆とわかめ（木）'},
+    {name:'油揚げ',                        qty:'2枚', note:'サバひじき×3バッチ（各1/2枚）'},
+    {name:'厚揚げ',                        qty:'100g', note:'和風スープ×2'},
+    {name:'卵',                            qty:'2個', note:'中華スープ×2'},
+  ]},
+  {cat:'🥬 野菜・海藻', items:[
+    {name:'ブロッコリー',                  qty:'約4株（28房・冷凍可）', note:'夕食プレート'},
+    {name:'しめじ（or 舞茸）',             qty:'約450g', note:'プレート350g＋鮭ときのこ100g'},
+    {name:'人参',                          qty:'3本', note:'プレート＋鶏ごぼう＋味噌根菜'},
+    {name:'大根',                          qty:'200g', note:'味噌根菜＋おろしポン酢×2'},
+    {name:'ごぼう（冷凍可）',              qty:'80g', note:'鶏ごぼう50g＋味噌根菜30g'},
+    {name:'白菜',                          qty:'160g', note:'和風スープ×2'},
+    {name:'小松菜',                        qty:'100g', note:'中華スープ×2'},
+    {name:'玉ねぎ',                        qty:'100g', note:'トマトスープ×2'},
+    {name:'エリンギ',                      qty:'100g', note:'トマトスープ×2'},
+    {name:'しいたけ',                      qty:'30g', note:'鶏ごぼう'},
+    {name:'アボカド＋トマト',              qty:'各1個', note:'アボカドサルサ（火）'},
+    {name:'生姜',                          qty:'4かけ', note:'サバひじき×3＋鮭ときのこ'},
+    {name:'レモン',                        qty:'1個', note:'サルサ・カレーヨーグルト'},
+    {name:'乾燥ひじき',                    qty:'30g', note:'サバひじき×3（各大2）'},
+    {name:'乾燥わかめ',                    qty:'5g', note:'大豆とわかめ'},
+  ]},
+  {cat:'🍚 主食・朝食・間食', items:[
+    {name:'もち麦',                        qty:'約700g（乾物）', note:'7バッチ（炊き上がり各300g）'},
+    {name:'オートミール',                  qty:'280g', note:'朝食×7'},
+    {name:'無調整豆乳',                    qty:'1,050ml', note:'朝食×7（150ml）'},
+    {name:'ソイプロテイン（P20g）',        qty:'7杯分', note:'朝食'},
+    {name:'プロテイン（P30g）',            qty:'7スクープ', note:'15:00間食'},
+    {name:'バナナ',                        qty:'10本', note:'朝食7＋トレ日間食3'},
+    {name:'チアシード・カカオニブ',        qty:'小さじ7ずつ', note:'朝食'},
+    {name:'ミックスナッツ',                qty:'60g', note:'トレ日（火水金）朝食に20g'},
+  ]},
+  {cat:'🧂 調味料（常備・切れたら補充）', items:[
+    {name:'オリーブオイル',                qty:'大7（約100ml）', note:'チキンステーキ調理用'},
+    {name:'ポン酢／醤油／みりん／味噌',    qty:'—', note:'ポン酢・味噌マスタード・鶏ごぼう用'},
+    {name:'粒マスタード・はちみつ',        qty:'—', note:'味噌マスタード'},
+    {name:'バター・にんにくチューブ',      qty:'—', note:'ガーリック醤油バター×2'},
+    {name:'カレー粉・無糖ヨーグルト',      qty:'—', note:'カレーヨーグルト'},
+    {name:'カットトマト缶（食塩無添加）',  qty:'1缶', note:'トマトスープ×2（各100g）'},
+    {name:'コンソメ／和風だし（食塩不使用）／中華だし', qty:'—', note:'スープ用'},
+  ]},
+];
+function renderWeekShopping(){
+  const el = document.getElementById('wk-shop-list');
+  if(!el) return;
+  const checked = new Set(DB.shopping||[]);
+  el.innerHTML = WEEK_SHOPPING.map(sec=>
+    `<div class="shop-cat">${sec.cat}</div>` + sec.items.map(item=>{
+      const key = 'WK:'+item.name, isDone = checked.has(key);
+      return `<div class="shop-item" onclick="toggleWeekShopItem('${key.replace(/'/g,"\\'")}')">
+        <div class="shop-check${isDone?' done':''}"></div>
+        <div class="shop-label">
+          <div class="shop-name${isDone?' done':''}">${item.name}</div>
+          <div class="shop-qty">${item.qty}${item.note?' · '+item.note:''}</div>
+        </div>
+      </div>`;
+    }).join('')).join('');
+}
+function toggleWeekShopItem(key){
+  if(!DB.shopping) DB.shopping = [];
+  const i = DB.shopping.indexOf(key);
+  if(i>=0) DB.shopping.splice(i,1); else DB.shopping.push(key);
+  save(); renderWeekShopping();
+}
+function resetWeekShopping(){
+  DB.shopping = (DB.shopping||[]).filter(k=>!k.startsWith('WK:'));
+  save(); renderWeekShopping();
+}
+// 固定ローテの曜日別メニュー表
+function renderWeekPlan(){
+  const el = document.getElementById('week-plan-list');
+  if(!el) return;
+  el.innerHTML = [1,2,3,4,5,6,0].map(dow=>{
+    const p = getDayPlan(dow), train = TRAIN_DAYS.includes(dow), isToday = dow===todayDow;
+    return `<div style="border-bottom:0.5px solid var(--border);padding:8px ${isToday?'8px':'0'};${isToday?'background:rgba(0,122,255,.06);border-radius:8px;':''}">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="width:22px;font-size:14px;font-weight:700;color:var(--blue);">${DAY_JP[dow]}</span>
+        <span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;background:${train?'rgba(52,199,89,.15)':'rgba(0,122,255,.12)'};color:${train?'var(--green)':'var(--blue)'};">${train?'トレ日':'休養日'}</span>
+        <span style="flex:1;"></span>${isToday?'<span style="font-size:10px;color:var(--blue);font-weight:700;">● 今日</span>':''}
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.7;">🍙 ${p.onigiri.name}　🍲 ${p.soup.name}<br>🍗 タレ：${p.sauce.name}</div>
+    </div>`;
+  }).join('');
+}
+// 曜日別の栄養価（サプリ除く食事分）＋サプリ込みの全項目チェック
+const _PLAN_TARGETS = {prot:160,fiber:25,k:3000,fe:7.5,zn:11,ca:750,mg2:370,cu:0.9,vitA:900,vitB1:1.4,vitB2:1.6,vitB6:1.4,vitC:100,vitD:8.5,vitE:6.5,vitB12:2.4,folate:240};
+const _PLAN_LABEL = {prot:'タンパク質',fiber:'食物繊維',k:'カリウム',fe:'鉄',zn:'亜鉛',ca:'Ca',mg2:'Mg',cu:'銅',vitA:'VitA',vitB1:'B1',vitB2:'B2',vitB6:'B6',vitC:'VitC',vitD:'VitD',vitE:'VitE',vitB12:'B12',folate:'葉酸'};
+function planDayCheck(dow){
+  const t = planDayTotals(dow);
+  const omegaMult = isFishDay(dow) ? 1 : 2;
+  SUPP_ITEMS.forEach(s=>{ const m = s.omega3 ? omegaMult : 1; _NUT_KEYS.forEach(k=>t[k]=(t[k]||0)+(s[k]||0)*m); });
+  return Object.keys(_PLAN_TARGETS).filter(k=>t[k] < _PLAN_TARGETS[k]*0.9).map(k=>_PLAN_LABEL[k]);
+}
 function renderAllNutrition(){
   const el = document.getElementById('all-nutri-list');
   if(!el) return;
-  const weeks = {A:HOTCOOK_A, B:HOTCOOK_B, C:HOTCOOK_C, D:HOTCOOK_D};
-  const short = n => n.split(' ― ')[0];
-  const head = `<div style="display:grid;grid-template-columns:22px 1fr 40px 30px 30px 30px 34px;gap:4px;font-size:10px;color:var(--text3);padding:4px 0;border-bottom:0.5px solid var(--border);">
-    <span></span><span>料理</span><span style="text-align:right;">kcal</span><span style="text-align:right;">P</span><span style="text-align:right;">F</span><span style="text-align:right;">C</span><span style="text-align:right;">塩分</span></div>`;
-  el.innerHTML = Object.keys(weeks).map(w=>{
-    const rows = weeks[w].map(d=>`<div style="display:grid;grid-template-columns:22px 1fr 40px 30px 30px 30px 34px;gap:4px;font-size:11px;padding:5px 0;border-bottom:0.5px solid var(--border);align-items:center;">
-      <span style="color:var(--blue);font-weight:700;">${d.day}</span>
-      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${short(d.name)}</span>
-      <span style="text-align:right;">${d.cal}</span><span style="text-align:right;">${Math.round(d.prot)}</span><span style="text-align:right;">${Math.round(d.fat)}</span><span style="text-align:right;">${Math.round(d.carbs)}</span>
-      <span style="text-align:right;color:var(--text3);">${((d.na||0)*2.54/1000).toFixed(1)}</span></div>`).join('');
-    const avg = k => Math.round(weeks[w].reduce((a,d)=>a+(d[k]||0),0)/weeks[w].length);
-    return `<div style="font-size:12px;font-weight:700;margin:10px 0 2px;">${w}週<span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:8px;">平均 ${avg('cal')}kcal・P${avg('prot')} F${avg('fat')} C${avg('carbs')}</span></div>${w==='A'?head:''}${rows}`;
-  }).join('') + `<div style="font-size:10px;color:var(--text3);margin-top:8px;line-height:1.5;">1食分・主菜のみの数値（もち麦・朝食・間食は別）。P/F/C＝g、塩分＝g</div>`;
+  const cols = 'grid-template-columns:22px 1fr 34px 34px 34px 34px 38px;';
+  const head = `<div style="display:grid;${cols}gap:4px;font-size:10px;color:var(--text3);padding:4px 0;border-bottom:0.5px solid var(--border);">
+    <span></span><span>目標kcal</span><span style="text-align:right;">kcal</span><span style="text-align:right;">P</span><span style="text-align:right;">F</span><span style="text-align:right;">C</span><span style="text-align:right;">塩分g</span></div>`;
+  let sum = 0;
+  const rows = [1,2,3,4,5,6,0].map(dow=>{
+    const t = planDayTotals(dow), train = TRAIN_DAYS.includes(dow); sum += t.cal;
+    const miss = planDayCheck(dow);
+    return `<div style="display:grid;${cols}gap:4px;font-size:11px;padding:6px 0;border-bottom:0.5px solid var(--border);align-items:center;">
+      <span style="color:var(--blue);font-weight:700;">${DAY_JP[dow]}</span>
+      <span style="color:var(--text3);">${train?2200:1850}　<span style="color:${miss.length?'var(--orange)':'var(--green)'};">${miss.length?'⚠'+miss.join('・')+'不足':'✅全項目OK'}</span></span>
+      <span style="text-align:right;">${Math.round(t.cal)}</span><span style="text-align:right;">${Math.round(t.prot)}</span><span style="text-align:right;">${Math.round(t.fat)}</span><span style="text-align:right;">${Math.round(t.carbs)}</span>
+      <span style="text-align:right;color:var(--text3);">${(t.na*2.54/1000).toFixed(1)}</span></div>`;
+  }).join('');
+  el.innerHTML = head + rows + `<div style="font-size:10px;color:var(--text3);margin-top:8px;line-height:1.6;">週平均 ${Math.round(sum/7)}kcal｜P/F/C・塩分はサプリ除く食事分（トレ日はナッツ20g＋バナナ1本を含む）｜「全項目OK」はサプリ込みで17栄養素すべてが目標の90%以上。おにぎり4個/日（昼2＋夕2）前提</div>`;
 }
 function renderHotcookMenu(){
   const list = document.getElementById('hc-list');
@@ -2382,6 +2454,7 @@ function delMeal(i){
 renderNutrition();
 renderSuppChecklist();
 renderHotcookMenu();
+renderWeekPlan();
 renderAllNutrition();
 renderOnigiriList();
 renderSoupList();
